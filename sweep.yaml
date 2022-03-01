@@ -5,15 +5,15 @@ metric:
   name: Val loss
 parameters:
   lr:
-    min: 0.0001  # learning rate
-    max: 0.01
+    value: 0.001
   epochs:
-    value: 30  # maximum number of epochs
+    value: 20  # maximum number of epochs
   BS:
-    values: [16, 32, 64, 128]  # batch size
+    value: 16  # batch size
+  nr_sets:
+    value: 4
   nr_cells:
-      min: 200
-      max: 1000 # also input dim // nr of cells sampled from each well (no more than 1200 found in compound plates)
+      values: [200, 400, 600, 800, 1000]
   latent_dim:
     values: [128, 256, 512, 1028]
   output_dim:
@@ -24,4 +24,4 @@ early_terminate:
   type: hyperband
   s: 2
   eta: 3
-  max_iter: 30
+  max_iter: 20

@@ -2,7 +2,6 @@
 import os
 import random
 import numpy as np
-import time
 import pandas as pd
 
 ## tqdm for loading bars
@@ -19,7 +18,7 @@ from pytorch_metric_learning import regularizers, losses, distances
 # Custom libraries
 import wandb
 from networks.SimpleMLPs import MLP
-from dataloader_pickles import DataloaderTrainV4
+from dataloader_pickles import DataloaderTrainV4, DataloaderTrainV5
 import utils
 
 NUM_WORKERS = 0
@@ -34,31 +33,32 @@ device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("
 # %% Set hyperparameters
 hyperparameter_defaults = dict(
     lr=1e-3,  # learning rate
-    epochs=30,  # maximum number of epochs
-    BS=64,  # batch size
+    epochs=20,  # maximum number of epochs
+    BS=16,  # batch size
     nr_cells=400,  # nr of cells sampled from each well (no more than 1200 found in compound plates)
     kFilters=1,  # times DIVISION of filters in model
     latent_dim=256,
     output_dim=128,
+    nr_sets=4
 )
 wandb.init(project="FeatureAggregation", tags=['Sweep'], config=hyperparameter_defaults)  # 'dryrun'
 config = wandb.config
 
 # %% Load all data
-rootDir = r'/Users/rdijk/PycharmProjects/featureAggregation/datasets/unfiltered'
+rootDir = r'/Users/rdijk/PycharmProjects/featureAggregation/datasets/CPJUMP1'
 
 # Set paths for all training/validation files
-plateDirTrain1 = 'DataLoader_Plate00117010_unfiltered'
+plateDirTrain1 = 'DataLoader_BR00117010_unfiltered'
 tdir1 = os.path.join(rootDir, plateDirTrain1)
-plateDirTrain2 = 'DataLoader_Plate00117011_unfiltered'
+plateDirTrain2 = 'DataLoader_BR00117011_unfiltered'
 tdir2 = os.path.join(rootDir, plateDirTrain2)
-plateDirVal1 = 'DataLoader_Plate00117012_unfiltered'
+plateDirVal1 = 'DataLoader_BR00117012_unfiltered'
 vdir1 = os.path.join(rootDir, plateDirVal1)
-plateDirVal2 = 'DataLoader_Plate00117013_unfiltered'
+plateDirVal2 = 'DataLoader_BR00117013_unfiltered'
 vdir2 = os.path.join(rootDir, plateDirVal2)
 
 # Load csv for pair formation
-metadata = pd.read_csv('/Users/rdijk/Documents/Data/RawData/JUMP_target_compound_metadata_wells.csv', index_col=False)
+metadata = pd.read_csv('/Users/rdijk/Documents/Data/RawData/CPJUMP1_compounds/JUMP_target_compound_metadata_wells.csv', index_col=False)
 
 # Load all absolute paths to the pickle files for training
 filenamesTrain1 = [os.path.join(tdir1, file) for file in os.listdir(tdir1)]
@@ -82,8 +82,8 @@ df = utils.filterData(metadata, 'negcon', encode='pert_iname')
 # Split the data into training and validation set
 TrainTotal, ValTotal = utils.train_val_split(df, 0.8)
 
-trainset = DataloaderTrainV4(TrainTotal, nr_cells=config['nr_cells'])
-valset = DataloaderTrainV4(ValTotal, nr_cells=config['nr_cells'])
+trainset = DataloaderTrainV5(TrainTotal, nr_cells=config['nr_cells'], nr_sets=config['nr_sets'])
+valset = DataloaderTrainV5(ValTotal, nr_cells=config['nr_cells'], nr_sets=config['nr_sets'])
 
 train_loader = data.DataLoader(trainset, batch_size=config['BS'], shuffle=True, collate_fn=utils.my_collate,
                                drop_last=False, pin_memory=False, num_workers=NUM_WORKERS)

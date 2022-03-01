@@ -348,3 +348,4 @@ def distribution_plot(df, output_file, metric):
         sns.despine()
     plt.tight_layout()
     plt.savefig(f'figures/{output_file}')
+    plt.show()
