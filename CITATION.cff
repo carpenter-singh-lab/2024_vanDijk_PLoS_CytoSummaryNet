@@ -4,6 +4,7 @@ authors:
   - family-names: van Dijk
     given-names: Robert
     orcid: https://orcid.org/0000-0003-4982-9648
-title: "Contrastive learning based point set aggregation for image-based cell profiling"
+title: Contrastive learning based point set aggregation for image-based cell profiling
 version: 2.0.4
 date-released: 2022-06-24
+publisher: GitHub
