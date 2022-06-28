@@ -1,27 +1,39 @@
-program: main4_sweep.py
+program: main11_sweep.py
 method: bayes
 metric:
-  goal: minimize
-  name: Val loss
+  goal: maximize
+  name: best_val_mAP
 parameters:
   lr:
-    value: 0.001
+    values: [0.01, 0.001, 0.0005]
   epochs:
-    value: 20  # maximum number of epochs
-  BS:
-    value: 16  # batch size
+    value: 40
   nr_sets:
-    value: 4
-  nr_cells:
-      values: [200, 400, 600, 800, 1000]
-  latent_dim:
-    values: [128, 256, 512, 1028]
-  output_dim:
-    values: [128, 256, 512, 1028]
+    values: [4,5,6]
+  BS:
+    values: [18, 27, 54]
+  initial_cells:
+    value: 2000
+  cell_variance:
+    value: 900
   kFilters:
-    values: [0.5, 1, 2, 4]  # times multiplication of filters in model
+    values: [0.0625, 0.125 , 0.25, 0.5]
+  input_dim:
+    value: 1324
+  latent_dim:
+    values: [2048, 4096]
+  output_dim:
+    values: [1024, 2048]
+  cell_layers:
+    value: 1
+  proj_layers:
+    value: 2
+  reduction:
+    value: 'sum'
+
 early_terminate:
   type: hyperband
-  s: 2
-  eta: 3
-  max_iter: 20
+  s: 3
+  eta: 1
+  min_iter: 10
+  max_iter: 25

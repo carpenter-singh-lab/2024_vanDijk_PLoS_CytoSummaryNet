@@ -2,54 +2,91 @@
 Import large .csv file(s) (>20 GB) and preprocess them so that they can be used during training/validation/testing
 """
 
-import numpy as np
 import pandas as pd
 import os
 import pickle
+from sklearn.preprocessing import StandardScaler
+import dask.dataframe as dd
+import glob
+import gc
+import numpy as np
 
-plate = 'BR00113818_FS'
+dataset = 'Stain4'
+rootDir = fr'/Users/rdijk/Documents/Data/ProcessedData/{dataset}'
+plateDirs = glob.glob(f'{rootDir}/*.parquet')
 
-dirpath = r'/Users/rdijk/Documents/Data/ProcessedData/Stain2'
-file = f'{plate}.parquet'
-filename = os.path.join(dirpath, file)
+for filename in plateDirs:
+    plate = filename.split('/')[-1].split('.')[0]
+    print(f'Processing {plate}...')
+    df = dd.read_parquet(filename, engine='pyarrow')
 
-df = pd.read_parquet(filename, engine='pyarrow')  # Specify offending columns' data type
+    features = df.iloc[:, 6:]
+    feature_column_names = features.columns
 
-# Some row of wells to iterate over
-filename2 = '/Users/rdijk/Documents/Data/RawData/Stain2/JUMP-MOA_compound_platemap_with_metadata.csv'
-wells = pd.read_csv(filename2, usecols=['well_position'])
+    # Load into pandas dataframe
+    metadata = df.iloc[:, :6]
+    del df
 
-output_dirName = f'datasets/Stain2/DataLoader_{plate}'
+    # Filter out NaNs
+    features = features.dropna().compute().to_numpy(dtype='float32')
+    #%% Normalize per plate
+    print('Normalizing plate...')
+    gc.collect()
 
-try:
-    os.mkdir(output_dirName)
-except:
-    pass
+    import matplotlib.pyplot as plt
+    plt.scatter(list(range(1324)), features.mean(0), c='red')
+    plt.show()
 
-for index, row in wells.iterrows():
-    print(f"Index: {index}, Value: {row[0]}")
-    result = df[df.well_position == row[0]]
-    cell_features = result[[c for c in result.columns if c.startswith('Cells') or c.startswith('Nuclei') or c.startswith('Cytoplasm') ]]  # [c for c in result.columns if c.startswith("Cells")]
-    well = pd.unique(result.loc[:, 'well_position'])
-    pert_iname = pd.unique(result.loc[:, 'pert_iname'])
-    pert_type = pd.unique(result.loc[:, 'pert_type'])
-    moa = pd.unique(result.loc[:, 'moa'])
+    scaler = StandardScaler(copy=False).fit(features)
+    features = scaler.transform(features)
 
-    assert well == row[0]
-    assert len(pert_iname) == 1
-    assert len(pert_type) == 1
-    assert len(moa) == 1
+    # Some row of wells to iterate over
+    filename2 = '/Users/rdijk/Documents/Data/RawData/Stain2/JUMP-MOA_compound_platemap_with_metadata.csv'
+    wells = pd.read_csv(filename2, usecols=['well_position'])
 
-    print('Cell features array size: ', np.shape(cell_features))
+    output_dirName = f'datasets/{dataset}/DataLoader_{plate}'
 
-    dict = {
-        'well_position': well[0],
-        'pert_iname': pert_iname[0],
-        'pert_type': pert_type[0],
-        'moa': moa[0],
-        'cell_features': cell_features
-    }
 
-    with open(os.path.join(output_dirName, f'{well[0]}.pkl'), 'wb') as f:
-        pickle.dump(dict, f)
+    # return to pandas DF for speed
+    print('Concatenating...')
+    df = pd.concat([metadata.compute(), pd.DataFrame(features, columns=feature_column_names)], axis=1)
 
+    del features, metadata
+
+    try:
+        os.mkdir(output_dirName)
+    except:
+        pass
+
+
+    for index, row in wells.iterrows():
+        print(f"Index: {index}, Value: {row[0]}")
+        result = df[df.well_position == row[0]].copy()
+        cell_features = result[[c for c in result.columns if c.startswith('Cells') or c.startswith('Nuclei') or c.startswith('Cytoplasm') ]]  # [c for c in result.columns if c.startswith("Cells")]
+        well = pd.unique(result.loc[:, 'well_position'])
+        pert_iname = pd.unique(result.loc[:, 'pert_iname'])
+        pert_type = pd.unique(result.loc[:, 'pert_type'])
+        moa = pd.unique(result.loc[:, 'moa'])
+
+        try:
+            assert well == row[0]
+            assert len(pert_iname) == 1
+            assert len(pert_type) == 1
+            assert len(moa) == 1
+        except:
+            print(f'skipping well {well}')
+            continue
+        print('Cell features array size: ', np.shape(cell_features))
+
+        dict = {
+            'well_position': well[0],
+            'pert_iname': pert_iname[0],
+            'pert_type': pert_type[0],
+            'moa': moa[0],
+            'cell_features': cell_features
+        }
+
+        with open(os.path.join(output_dirName, f'{well[0]}.pkl'), 'wb') as f:
+            pickle.dump(dict, f)
+
+print('Donezo')

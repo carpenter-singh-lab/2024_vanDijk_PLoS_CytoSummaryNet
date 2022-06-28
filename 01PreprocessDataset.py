@@ -1,21 +1,31 @@
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
+import numpy as np
 
-plate = 'BR00113818_FS'
+plate = 'BR00115134multiplane_FS'
 
-csv_file = f'/Users/rdijk/Documents/Data/ProcessedData/Stain2/{plate}.csv'
-parquet_file = csv_file[:-3]+'parquet'
+csv_file = f'/Users/rdijk/Documents/Data/ProcessedData/Stain3/{plate}.csv'
+parquet_file = csv_file[:-3] + 'parquet'
 chunksize = 150_000
 
+columns = pd.read_csv(csv_file, nrows=1).columns.tolist()
+columns_dict = {sub: np.float32 for sub in columns}
+columns_dict.update({'well_position': str,
+                     'broad_sample': str,
+                     'pert_iname': str,
+                     'pert_type': str,
+                     'control_type': str,
+                     'moa': str
+                     })
+
 csv_stream = pd.read_csv(csv_file,
-                         dtype={'broad_sample': str,
-                         'pert_iname': str,
-                         'moa': str,
-                         #'gene': str,
-                         'control_type': str},
+                         dtype=columns_dict,
                          chunksize=chunksize,
-                         low_memory=False
+                         low_memory=False,
+                         on_bad_lines='skip',
+                         na_values=['0.0077482126.0', '104.230.06618817979624629', '0.0422404840.9948853419886684',
+                                    '0.2126100.0', '0..03280088609347405']
                          )
 
 for i, chunk in enumerate(csv_stream):
@@ -33,14 +43,13 @@ parquet_writer.close()
 
 print('Donezo')
 
-
 # param = 'Nuclei'
 # FeatureNames = pd.read_csv('/Users/rdijk/Documents/Data/RawData/Stain2/Stain2FeatureNames.csv')
 # a = [c for c in FeatureNames.iloc[:,0] if c.startswith(param)]
 # [print(f'{param}.'+x+',') for x in a]
 
 
-#%%
+# %%
 
 # Convert csv files to parquet efficiently
 

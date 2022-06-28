@@ -10,12 +10,23 @@ import matplotlib.pyplot as plt
 import random
 import numpy as np
 import utils_benchmark
+from pycytominer.operations.transform import RobustMAD
+from pycytominer import feature_select
 
 # heatmapCorrelation
 import seaborn as sns
 # Umap
 import umap
 import umap.plot
+
+# MAP
+from sklearn.metrics.pairwise import cosine_similarity, euclidean_distances
+from sklearn.metrics import average_precision_score
+import copy
+
+# filter noisy data
+from dataloader_pickles import DataloaderEvalV5, DataloaderTrainV6
+import torch.utils.data as data
 
 import os
 
@@ -71,7 +82,7 @@ def train_val_split(metadata_df, Tsplit=0.8, sort=True):
 
     return [df.iloc[:split, :].reset_index(drop=True), df.iloc[split:, :].reset_index(drop=True)]
 
-def filterData(df, filter, encode=None, sort=True, mode='default'):
+def filterData(df, filter, encode=None, mode='default'):
     if 'negcon' in filter: # drop all negcon wells
         if mode == 'default':
             df = df[df.control_type != 'negcon']
@@ -82,8 +93,7 @@ def filterData(df, filter, encode=None, sort=True, mode='default'):
         pd.options.mode.chained_assignment = None  # default='warn'
         obj_df = df[encode].astype('category')
         df['Metadata_labels'] = obj_df.cat.codes
-        if sort:
-            df = df.sort_values(by='Metadata_labels')
+
         df = df.reset_index(drop=True)
 
     return df
@@ -96,6 +106,46 @@ def featureSelection(features, bestk = 800):
     sort_index = np.argsort(abs(avcorr))
     bestindices = sort_index[:bestk]
     return features[:, bestindices]
+
+
+def filter_noisy_data(plateDirs, rootDir, model, config):
+    model.eval()
+    TrainLoaders = []
+    for plate in plateDirs:
+        metadata = pd.read_csv(
+            '/Users/rdijk/Documents/Data/RawData/Stain2/JUMP-MOA_compound_platemap_with_metadata.csv', index_col=False)
+
+        platestring = plate.split('_')[-2]
+        metadata = addDataPathsToMetadata(rootDir, metadata, plate)
+
+        # Filter the data and create numerical labels
+        df_prep = filterData(metadata, 'negcon', encode='pert_iname')
+        # Add all data to one DF
+        Total, _ = train_val_split(df_prep, 0.8, sort=True)
+        valset = DataloaderEvalV5(Total)
+        loader = data.DataLoader(valset, batch_size=1, shuffle=False,
+                                 drop_last=False, pin_memory=False, num_workers=0)
+        MLP_profiles = pd.DataFrame()
+        with torch.no_grad():
+            for idx, (points, labels) in enumerate(loader):
+                feats, _ = model(points)
+                c1 = pd.concat([pd.DataFrame(feats), pd.Series(labels)], axis=1)
+                MLP_profiles = pd.concat([MLP_profiles, c1])
+        MLP_profiles.columns = [f"f{x}" for x in range(MLP_profiles.shape[1] - 1)] + ['Metadata_labels']
+        #MLP_profiles['Metadata_pert_iname'] = list(metadata[metadata['control_type'] != 'negcon']['pert_iname'])
+        AP = CalculateMAP(MLP_profiles, 'cosine_similarity', groupby='Metadata_labels')
+
+        # GENERATE NEW TRAINLOADERS
+        indices = AP[AP.AP < 0.1].index
+        print(f'Removing {len(indices)} noisy labels from {plate.split("//")[-1].split("_")[1]}.')
+        newTrainTotal = Total.drop(index=indices).reset_index(drop=True)
+        gTDF = newTrainTotal.groupby('Metadata_labels')
+        trainset = DataloaderTrainV6(newTrainTotal, nr_cells=config['nr_cells'][0], nr_sets=config['nr_sets'], groupDF=gTDF)
+        TrainLoaders.append(data.DataLoader(trainset, batch_size=config['batch_size'], shuffle=True, collate_fn=my_collate,
+                                            drop_last=False, pin_memory=False, num_workers=0))
+
+    return TrainLoaders
+
 
 
 #######################
@@ -139,7 +189,8 @@ def featureCorrelation(df, Nfeatures=20):
     plt.show()
     return
 
-def CalculatePercentReplicating(dfs, group_by_feature, n_replicates, n_samples=10000, description='Unknown'):
+def CalculatePercentReplicating(dfs, group_by_feature, n_replicates, n_samples=10000,
+                                description='Unknown', percent_matching=False):
     """
 
     :param dfs: list of plate dataframes that are analysed together.
@@ -164,9 +215,10 @@ def CalculatePercentReplicating(dfs, group_by_feature, n_replicates, n_samples=1
     print('Created df of size: ', data_df.shape)
     metadata_df = utils_benchmark.get_metadata(data_df)
     features_df = utils_benchmark.get_featuredata(data_df).replace(np.inf, np.nan).dropna(axis=1, how="any")
+
     data_df = pd.concat([metadata_df, features_df], axis=1)
 
-    replicating_corr = list(utils_benchmark.corr_between_replicates(data_df, group_by_feature))  # signal distribution
+    replicating_corr = list(utils_benchmark.corr_between_replicates(data_df, group_by_feature, percent_matching))  # signal distribution
     null_replicating = list(utils_benchmark.corr_between_non_replicates(data_df, n_samples=n_samples, n_replicates=n_replicates,
                                                               metadata_compound_name=group_by_feature))  # null distribution
 
@@ -183,3 +235,205 @@ def CalculatePercentReplicating(dfs, group_by_feature, n_replicates, n_samples=1
 
     return corr_replicating_df
 
+
+
+def CalculateMAP(df, distance='euclidean', groupby='Metadata_labels', percent_matching=False):
+    df = df.sort_values(by=groupby)
+    features = utils_benchmark.get_featuredata(df)
+
+    if distance == 'cosine_similarity':
+        dist = pd.DataFrame(cosine_similarity(features))
+    elif distance == 'euclidean':
+        dist = pd.DataFrame(euclidean_distances(features))
+
+    compound_names = list(df[groupby])
+    dist.set_axis(compound_names, axis=1, inplace=True)
+    dist.set_axis(compound_names, axis=0, inplace=True)
+
+    np.fill_diagonal(dist.values, -1)
+    well_APs = []
+    PatKs = []
+
+    if percent_matching:
+        df.reset_index(drop=True, inplace=True)
+
+    iterator = dist.iterrows()
+    for index, row in iterator:
+        if percent_matching:
+            row.reset_index(drop=True, inplace=True)
+            current_compound = df['Metadata_pert_iname'][row == -1].values[0]
+            indices1 = set(df['Metadata_pert_iname'][df['Metadata_pert_iname']==current_compound].index)
+            indices2 = set(df['Metadata_pert_iname'][df[groupby] == index].index)
+            sister_indices = indices2 - indices1
+            if len(sister_indices) == 0:
+                del compound_names[list(indices1)[0]:list(indices1)[-1] + 1]
+                next(iterator)
+                next(iterator)
+                next(iterator)
+                continue
+            row.drop(list(indices1), inplace=True)
+            labels = copy.deepcopy(row)
+            labels.values[:] = 0
+            labels.loc[list(sister_indices)] = 1  # set other compound but with same index to 1 only
+
+            row.reset_index(drop=True, inplace=True)
+            labels.reset_index(drop=True, inplace=True)
+        else:
+            row = row[row != -1]
+            labels = copy.deepcopy(row)
+            labels.values[:] = 0
+            labels[index] = 1
+        AP = average_precision_score(labels, row)
+        well_APs.append(AP)
+
+        if percent_matching:
+            PatK = precision_at_k(labels, row, k=4)  # 4 because all sister compounds
+        else:
+            PatK = precision_at_k(labels, row, k=3)  # 3 because one is masked
+        PatKs.append(PatK)
+
+    scores = pd.DataFrame(zip(compound_names, well_APs, PatKs), columns=['compound', 'AP', 'precision at R'])
+
+    # plt.figure(figsize=(14, 10), dpi=300)
+    # # plot the heatmap
+    # sns.heatmap(dist, xticklabels=compound_names, yticklabels=compound_names, annot=True)
+    # plt.title('Cosine Similarity compounds')
+    # plt.show()
+    return scores
+
+
+def precision_at_k(y_true, y_score, k, pos_label=1):
+    from sklearn.utils import column_or_1d
+    from sklearn.utils.multiclass import type_of_target
+
+    y_true_type = type_of_target(y_true)
+    if not (y_true_type == "binary"):
+        raise ValueError("y_true must be a binary column.")
+
+    # Makes this compatible with various array types
+    y_true_arr = column_or_1d(y_true)
+    y_score_arr = column_or_1d(y_score)
+
+    y_true_arr = y_true_arr == pos_label
+
+    desc_sort_order = np.argsort(y_score_arr)[::-1]
+    y_true_sorted = y_true_arr[desc_sort_order]
+    y_score_sorted = y_score_arr[desc_sort_order]
+
+    true_positives = y_true_sorted[:k].sum()
+
+    return true_positives / k
+
+"""
+# From https://github.com/ltrottier/ZCA-Whitening-Python/blob/master/zca.py
+MIT License
+Copyright (c) 2018 Ludovic Trottier
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+"""
+import kneed
+import scipy
+import numpy as np
+import pandas as pd
+from sklearn.base import TransformerMixin, BaseEstimator
+from sklearn.utils.validation import check_is_fitted
+from sklearn.utils import check_array, as_float_array
+
+
+class ZCA(BaseEstimator, TransformerMixin):
+
+    def __init__(self, copy=False, regularization=None, retain_variance=0.99):
+        self.regularization = regularization
+        self.eigenvals = None
+        self.retain_variance = retain_variance
+        self.copy = copy
+
+    def fit(self, X, y=None):
+        X = as_float_array(X, copy=self.copy)
+        self.mean_ = np.mean(X, axis=0)
+        X = X - self.mean_
+        sigma = np.dot(X.T, X) / (X.shape[0] - 1)
+        U, S, V = np.linalg.svd(sigma)
+        self.eigenvals = S
+        if not self.regularization:
+            csum = S / S.sum()
+            csum = np.cumsum(csum)
+            threshold_loc = (csum < self.retain_variance).sum()
+            self.regularization = S[threshold_loc]
+        tmp = np.dot(U, np.diag(1 / np.sqrt(S + self.regularization)))
+        self.components_ = np.dot(tmp, U.T)
+        return self
+
+    def transform(self, X):
+        X_transformed = X - self.mean_
+        X_transformed = np.dot(X_transformed, self.components_.T)
+        return X_transformed
+
+
+class ZCA_corr(BaseEstimator, TransformerMixin):
+    def __init__(self, copy=False, regularization=None):
+        self.copy = copy
+        self.eigenvals = []
+        self.regularization = regularization
+
+    def estimate_regularization(self, eigenvalue):
+        x = [_ for _ in range(len(eigenvalue))]
+        kneedle = kneed.KneeLocator(
+            x, eigenvalue, S=1.0, curve='convex', direction='decreasing')
+        reg = eigenvalue[kneedle.elbow]/10.0
+        return reg  # The complex part of the eigenvalue is ignored
+
+    def fit(self, X, y=None):
+        """
+        Compute the mean, sphering and desphering matrices.
+        Parameters
+        ----------
+        X : array-like with shape [n_samples, n_features]
+            The data used to compute the mean, sphering and desphering
+            matrices.
+        """
+        X = check_array(X, accept_sparse=False, copy=self.copy, ensure_2d=True)
+        X = as_float_array(X, copy=self.copy)
+        self.mean_ = X.mean(axis=0)
+        X_ = X - self.mean_
+        cov = np.dot(X_.T, X_) / (X_.shape[0] - 1)
+        V = np.diag(cov)
+        df = pd.DataFrame(X_)
+        # replacing nan with 0 and inf with large values
+        corr = np.nan_to_num(df.corr())
+        G, T, _ = scipy.linalg.svd(corr)
+        self.eigenvals = T
+        if not self.regularization:
+            regularization = self.estimate_regularization(T.real)
+            self.regularization = regularization
+        else:
+            regularization = self.regularization
+        t = np.sqrt(T.clip(regularization))
+        t_inv = np.diag(1.0 / t)
+        v_inv = np.diag(1.0/np.sqrt(V.clip(1e-3)))
+        self.sphere_ = np.dot(np.dot(np.dot(G, t_inv), G.T), v_inv)
+        return self
+
+    def transform(self, X, y=None, copy=None):
+        """
+        Parameters
+        ----------
+        X : array-like with shape [n_samples, n_features]
+            The data to sphere along the features axis.
+        """
+        check_is_fitted(self, "mean_")
+        X = as_float_array(X, copy=self.copy)
+        return np.dot(X - self.mean_, self.sphere_.T)

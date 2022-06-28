@@ -100,7 +100,7 @@ def percent_score(null_dist, corr_dist, how):
         return (np.mean(above_threshold.astype(float)) + np.mean(below_threshold.astype(float)))*100, perc_95, perc_5
 
 
-def corr_between_replicates(df, group_by_feature):
+def corr_between_replicates(df, group_by_feature, percent_matching=False):
     """
         Correlation between replicates
         Parameters:
@@ -119,7 +119,15 @@ def corr_between_replicates(df, group_by_feature):
         if len(group_features) == 1:  # If there is only one replicate on a plate
             replicate_corr.append(np.nan)
         else:
-            np.fill_diagonal(corr, np.nan)
+            if percent_matching:
+                corr_df = pd.DataFrame(corr)
+                corr_df.set_axis(list(group['Metadata_pert_iname']), axis=0, inplace=True)
+                corr_df.set_axis(list(group['Metadata_pert_iname']), axis=1, inplace=True)
+                for i in range(len(group.Metadata_pert_iname.unique())):
+                    corr_df.loc[group.Metadata_pert_iname.unique()[i], group.Metadata_pert_iname.unique()[i]] = np.nan
+                corr = np.array(corr_df)
+            else:
+                np.fill_diagonal(corr, np.nan)
             replicate_corr.append(np.nanmedian(corr))  # median replicate correlation
     return replicate_corr
 
