@@ -4,3 +4,5 @@ We propose a Deep Sets based method that learns the best way of aggregating sing
 
 
 All of the scripts that were used to develop, train, and evaluate the model are shown here. The scripts for computing the figures can be found in the jupyter notebooks folder.
+
+You can find more details in the FeatureAggregationManuscriptV1.pdf
