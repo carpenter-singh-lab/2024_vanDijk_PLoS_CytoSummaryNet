@@ -23,10 +23,7 @@ import umap.plot
 from sklearn.metrics.pairwise import cosine_similarity, euclidean_distances
 from sklearn.metrics import average_precision_score
 import copy
-<<<<<<< HEAD
-=======
 from itertools import islice
->>>>>>> fac3077 (Updated scripts for preprocessing, training, and evaluating of LINCS data.)
 
 # filter noisy data
 from dataloader_pickles import DataloaderEvalV5, DataloaderTrainV6
@@ -70,11 +67,8 @@ def my_collate(batch):
 
 def train_val_split(metadata_df, Tsplit=0.8, sort=True):
     df = pd.DataFrame()
-<<<<<<< HEAD
     plate_columns = [c for c in metadata_df.columns if c.startswith("plate")]
-=======
     plate_columns = [c for c in metadata_df.columns if c.startswith("plate1")]
->>>>>>> fac3077 (Updated scripts for preprocessing, training, and evaluating of LINCS data.)
     if len(plate_columns) < 1:
         raise Warning("Could not find any plate columns in metadata_df.")
     for i, plate in enumerate(plate_columns):
@@ -96,11 +90,8 @@ def filterData(df, filter, encode=None, mode='default'):
             df = df[df.control_type != 'negcon']
         elif mode == 'eval':
             df = df[df.Metadata_control_type != 'negcon']
-<<<<<<< HEAD
-=======
         elif mode == 'LINCS':
             df = df.dropna(subset=['broad_sample'])
->>>>>>> fac3077 (Updated scripts for preprocessing, training, and evaluating of LINCS data.)
         df = df.reset_index(drop=True)
     if encode!=None:
         pd.options.mode.chained_assignment = None  # default='warn'
@@ -159,8 +150,6 @@ def filter_noisy_data(plateDirs, rootDir, model, config):
 
     return TrainLoaders
 
-<<<<<<< HEAD
-=======
 # From https://github.com/cytomining/pycytominer/pull/228/commits/41a971ec52fe09625e6de8d2fa4e4f3fbeddf620
 import os
 from pycytominer.cyto_utils.cells import SingleCells
@@ -225,7 +214,6 @@ def sqlite_to_df(
         )
 
     return df_merged_sc
->>>>>>> fac3077 (Updated scripts for preprocessing, training, and evaluating of LINCS data.)
 
 
 #######################
@@ -319,14 +307,11 @@ def CalculatePercentReplicating(dfs, group_by_feature, n_replicates, n_samples=1
 
 def CalculateMAP(df, distance='euclidean', groupby='Metadata_labels', percent_matching=False):
     df = df.sort_values(by=groupby)
-<<<<<<< HEAD
-=======
 
     if percent_matching:
         df.dropna(subset=[groupby], inplace=True)
         df.reset_index(drop=True, inplace=True)
 
->>>>>>> fac3077 (Updated scripts for preprocessing, training, and evaluating of LINCS data.)
     features = utils_benchmark.get_featuredata(df)
 
     if distance == 'cosine_similarity':
@@ -334,11 +319,8 @@ def CalculateMAP(df, distance='euclidean', groupby='Metadata_labels', percent_ma
     elif distance == 'euclidean':
         dist = pd.DataFrame(euclidean_distances(features))
 
-<<<<<<< HEAD
     compound_names = list(df[groupby])
-=======
     compound_names = pd.Series(list(df[groupby]))
->>>>>>> fac3077 (Updated scripts for preprocessing, training, and evaluating of LINCS data.)
     dist.set_axis(compound_names, axis=1, inplace=True)
     dist.set_axis(compound_names, axis=0, inplace=True)
 
@@ -346,12 +328,9 @@ def CalculateMAP(df, distance='euclidean', groupby='Metadata_labels', percent_ma
     well_APs = []
     PatKs = []
 
-<<<<<<< HEAD
     if percent_matching:
         df.reset_index(drop=True, inplace=True)
 
-=======
->>>>>>> fac3077 (Updated scripts for preprocessing, training, and evaluating of LINCS data.)
     iterator = dist.iterrows()
     for index, row in iterator:
         if percent_matching:
@@ -361,15 +340,12 @@ def CalculateMAP(df, distance='euclidean', groupby='Metadata_labels', percent_ma
             indices2 = set(df['Metadata_pert_iname'][df[groupby] == index].index)
             sister_indices = indices2 - indices1
             if len(sister_indices) == 0:
-<<<<<<< HEAD
                 del compound_names[list(indices1)[0]:list(indices1)[-1] + 1]
                 next(iterator)
                 next(iterator)
                 next(iterator)
-=======
                 compound_names.drop(list(indices1), axis=0, inplace=True)
                 next(islice(iterator, len(indices1)-2, None), '')
->>>>>>> fac3077 (Updated scripts for preprocessing, training, and evaluating of LINCS data.)
                 continue
             row.drop(list(indices1), inplace=True)
             labels = copy.deepcopy(row)
