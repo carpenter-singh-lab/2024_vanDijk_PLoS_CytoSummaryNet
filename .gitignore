@@ -1,16 +1,23 @@
 # My files
 __pycache__/
 wandb/
+wandb_backup/
 InspirationScripts/
 datasets/
 dask-worker-space/
-old_networks/
+figures/
+outputs/
+Jupyter_scripts/Saliencies/
+
 
 # History files
 .Rhistory
 .Rapp.history
 
 # Session Data files
+.DS_Store
+.AppleDouble
+.LSOverride
 .RData
 
 # Example code in package build process
