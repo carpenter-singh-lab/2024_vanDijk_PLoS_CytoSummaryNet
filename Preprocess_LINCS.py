@@ -114,7 +114,7 @@ if __name__=='__main__':
     # Required positional argument
     parser.add_argument('metadata_filename', type=str,
                         help='Specify the barcode platemap filename.')
-    # Required positional argument
+    # Optional positional argument
     parser.add_argument('subsample', nargs='?', const=False,
                         help='Compute a subsample of the first 1000 cells in the sqlite file. Usefull for debugging.')
 

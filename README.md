@@ -11,31 +11,35 @@ You can find more details in the FeatureAggregationManuscriptV1.pdf
 
 # Applying this method for your own dataset on AWS EBS
 ### First install required packages:
-`sudo su`
-`mkdir ~/ebs_tmp/`
-`cd ~/ebs_tmp`
-`sudo yum install git -y`
-`sudo amazon-linux-extras install epel`
-`sudo yum install nload sysstat parallel -y`
+    sudo su
+	mkdir ~/ebs_tmp/
+	cd ~/ebs_tmp
+	sudo yum install git -y
+	sudo amazon-linux-extras install epel
+	sudo yum install nload sysstat parallel -y
 
 ### Then clone this GitHub repo:
-`git clone https://github.com/broadinstitute/FeatureAggregation_single_cell.git`
+	git clone https://github.com/broadinstitute/FeatureAggregation_single_cell.git
 
 ### Configure AWS credentials
-`aws configure`
+	aws configure
 _enter credentials_
 
 ### Download all plates (in this example LINCS will be used)
-`cd /aws_scripts`
-`chmod +x get_data_LINCS.sh`
-`./ get_data_LINCS.sh`
+	cd /aws_scripts
+	chmod +x get_data_LINCS.sh
+	./ get_data_LINCS.sh
 
 ### Setup conda environment
-cd `..`
-conda env create -f environment.yml
+	cd ..
+	conda env create -f environment.yml
 
 
 ### Preprocess all plates
-python 
+	python Preprocess_LINCS.py @script_input_files/lincs_preprocessing_input.txt
 
+### Train the moddel
+	python main_LINCS.py @script_input_files/main_LINCS_input.txt
+
+### Evaluate the trained model 
 
