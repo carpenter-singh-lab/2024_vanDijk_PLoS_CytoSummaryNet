@@ -36,6 +36,7 @@ random.seed(manualSeed)
 torch.manual_seed(manualSeed)
 np.random.seed(manualSeed)
 
+<<<<<<< HEAD
 from sklearn.decomposition import PCA
 import seaborn as sns
 from scipy.spatial import distance
@@ -50,6 +51,15 @@ print('Loading:', model_name)
 
 input_dim = 1324  # 1938 // 838 // 800
 kFilters = 1/2  # times DIVISION of filters in model
+=======
+## %% Load model
+save_name_extension = 'model_bestval_simpleMLP_V1'  # extension of the saved model
+model_name = save_name_extension
+print('Loading:', model_name)
+
+input_dim = 1324  # 1324
+kFilters = 1/2
+>>>>>>> fac3077 (Updated scripts for preprocessing, training, and evaluating of LINCS data.)
 latent_dim = 2048
 output_dim = 2048
 model = MLPsumV2(input_dim=input_dim, latent_dim=latent_dim, output_dim=output_dim,
@@ -74,13 +84,21 @@ else:
     mAP_label = 'Metadata_pert_iname'
 
 dataset_name = 'Stain4'
+<<<<<<< HEAD
 MAPfilename = f'MAP_Stain234_15_FINAL_{dataset_name}'
 
 path = r'wandb/latest-run/files'
+=======
+MAPfilename = f'mAP_{dataset_name}_test_1'
+
+path = r'wandb/latest-run/files'
+
+>>>>>>> fac3077 (Updated scripts for preprocessing, training, and evaluating of LINCS data.)
 #path = r'wandb/run-20220517_164505-2q0md5h8/files'  # Stain234 15 plates
 #path = r'wandb/run-20220503_161251-29xy65t4/files' # Stain234 12 plates
 #path = r'wandb/run-20220505_221947-1m1zas58/files' # Stain234 12 plates outliers
 
+<<<<<<< HEAD
 #path = r'wandb/run-20220427_191823-och8e6jv/files'  # Stain34 6 plates
 
 
@@ -91,6 +109,11 @@ fullpath = os.path.join(path, model_name)
 # fullpath = os.path.join('/Users/rdijk/Documents/ProjectFA/InterpretabilityAnalysis/LearningCovarianceMatrices/models',
 #                      'general_ckpt_simpleMLP_V1_sphered')
 #%% TODO TODO remove this stuff on top
+=======
+models = os.listdir(path)
+fullpath = os.path.join(path, model_name)
+
+>>>>>>> fac3077 (Updated scripts for preprocessing, training, and evaluating of LINCS data.)
 if 'ckpt' in model_name:
     model.load_state_dict(torch.load(fullpath)['model_state_dict'])
 else:
@@ -104,7 +127,10 @@ AllResultsDF = pd.DataFrame()
 ALLCELLS = []
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> fac3077 (Updated scripts for preprocessing, training, and evaluating of LINCS data.)
 average_perturbation_map = {}
 plate_loadings = pd.DataFrame()
 for plate in PLATES:

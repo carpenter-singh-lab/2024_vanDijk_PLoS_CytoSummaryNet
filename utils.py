@@ -23,6 +23,10 @@ import umap.plot
 from sklearn.metrics.pairwise import cosine_similarity, euclidean_distances
 from sklearn.metrics import average_precision_score
 import copy
+<<<<<<< HEAD
+=======
+from itertools import islice
+>>>>>>> fac3077 (Updated scripts for preprocessing, training, and evaluating of LINCS data.)
 
 # filter noisy data
 from dataloader_pickles import DataloaderEvalV5, DataloaderTrainV6
@@ -66,7 +70,11 @@ def my_collate(batch):
 
 def train_val_split(metadata_df, Tsplit=0.8, sort=True):
     df = pd.DataFrame()
+<<<<<<< HEAD
     plate_columns = [c for c in metadata_df.columns if c.startswith("plate")]
+=======
+    plate_columns = [c for c in metadata_df.columns if c.startswith("plate1")]
+>>>>>>> fac3077 (Updated scripts for preprocessing, training, and evaluating of LINCS data.)
     if len(plate_columns) < 1:
         raise Warning("Could not find any plate columns in metadata_df.")
     for i, plate in enumerate(plate_columns):
@@ -88,6 +96,11 @@ def filterData(df, filter, encode=None, mode='default'):
             df = df[df.control_type != 'negcon']
         elif mode == 'eval':
             df = df[df.Metadata_control_type != 'negcon']
+<<<<<<< HEAD
+=======
+        elif mode == 'LINCS':
+            df = df.dropna(subset=['broad_sample'])
+>>>>>>> fac3077 (Updated scripts for preprocessing, training, and evaluating of LINCS data.)
         df = df.reset_index(drop=True)
     if encode!=None:
         pd.options.mode.chained_assignment = None  # default='warn'
@@ -146,6 +159,73 @@ def filter_noisy_data(plateDirs, rootDir, model, config):
 
     return TrainLoaders
 
+<<<<<<< HEAD
+=======
+# From https://github.com/cytomining/pycytominer/pull/228/commits/41a971ec52fe09625e6de8d2fa4e4f3fbeddf620
+import os
+from pycytominer.cyto_utils.cells import SingleCells
+from typing import Any, Sequence
+
+def sqlite_to_df(
+    data_path: str,
+    metadata_path: str = None,
+    image_cols: Sequence = ["TableNumber", "ImageNumber", "Image_Metadata_Site", "Image_FileName_CellOutlines"],
+    strata: Sequence = ["Image_Metadata_Plate", "Image_Metadata_Well"],
+    compute_subsample: bool = False,
+    compression_options: Any = None,
+    float_format: Any = None,
+    single_cell_normalize: bool = False,
+    normalize_args: Any = None,
+    metadata_identifier: str = "Metadata_",
+    metadata_merge_on: Sequence = ["Metadata_Well"],
+):
+    """Function to convert SQLite file to Pandas DataFrame."""
+
+    # Define test SQL file
+    sql_file = os.path.abspath(data_path) #"sqlite:////" +
+
+    if compute_subsample:
+        subsample_n = 1000
+    else:
+        subsample_n = 'all'
+    # define dataframe
+    ap = SingleCells(
+        file_or_conn=sql_file,
+        image_cols=image_cols,
+        subsample_n=subsample_n,
+        strata=strata,
+    )
+
+    # Merge compartments and meta information into one dataframe
+    df_merged_sc = ap.merge_single_cells(
+        sc_output_file="none",
+        compute_subsample=False,
+        compression_options=compression_options,
+        float_format=float_format,
+        single_cell_normalize=single_cell_normalize,
+        normalize_args=normalize_args,
+    )
+
+    # In case metadata is provided, merge into existing dataframe
+    if metadata_path:
+        # Load additional information of file
+        df_info = pd.read_csv(metadata_path, sep='\t')
+        df_info = df_info.rename(columns={"well_position": "Metadata_Well",
+                                          "plate_map_name": "Metadata_plate_map_name",
+                                          "broad_sample": "Metadata_broad_sample",
+                                          "mmoles_per_liter": "Metadata_mmoles_per_liter"})
+
+        # Select only metadata
+        _info_meta = [m for m in df_info.columns if m.startswith(
+            metadata_identifier)]
+
+        # Merge single cell dataframe with additional information
+        df_merged_sc = df_merged_sc.merge(
+            right=df_info[_info_meta], how="left", on=metadata_merge_on
+        )
+
+    return df_merged_sc
+>>>>>>> fac3077 (Updated scripts for preprocessing, training, and evaluating of LINCS data.)
 
 
 #######################
@@ -239,6 +319,14 @@ def CalculatePercentReplicating(dfs, group_by_feature, n_replicates, n_samples=1
 
 def CalculateMAP(df, distance='euclidean', groupby='Metadata_labels', percent_matching=False):
     df = df.sort_values(by=groupby)
+<<<<<<< HEAD
+=======
+
+    if percent_matching:
+        df.dropna(subset=[groupby], inplace=True)
+        df.reset_index(drop=True, inplace=True)
+
+>>>>>>> fac3077 (Updated scripts for preprocessing, training, and evaluating of LINCS data.)
     features = utils_benchmark.get_featuredata(df)
 
     if distance == 'cosine_similarity':
@@ -246,7 +334,11 @@ def CalculateMAP(df, distance='euclidean', groupby='Metadata_labels', percent_ma
     elif distance == 'euclidean':
         dist = pd.DataFrame(euclidean_distances(features))
 
+<<<<<<< HEAD
     compound_names = list(df[groupby])
+=======
+    compound_names = pd.Series(list(df[groupby]))
+>>>>>>> fac3077 (Updated scripts for preprocessing, training, and evaluating of LINCS data.)
     dist.set_axis(compound_names, axis=1, inplace=True)
     dist.set_axis(compound_names, axis=0, inplace=True)
 
@@ -254,9 +346,12 @@ def CalculateMAP(df, distance='euclidean', groupby='Metadata_labels', percent_ma
     well_APs = []
     PatKs = []
 
+<<<<<<< HEAD
     if percent_matching:
         df.reset_index(drop=True, inplace=True)
 
+=======
+>>>>>>> fac3077 (Updated scripts for preprocessing, training, and evaluating of LINCS data.)
     iterator = dist.iterrows()
     for index, row in iterator:
         if percent_matching:
@@ -266,10 +361,15 @@ def CalculateMAP(df, distance='euclidean', groupby='Metadata_labels', percent_ma
             indices2 = set(df['Metadata_pert_iname'][df[groupby] == index].index)
             sister_indices = indices2 - indices1
             if len(sister_indices) == 0:
+<<<<<<< HEAD
                 del compound_names[list(indices1)[0]:list(indices1)[-1] + 1]
                 next(iterator)
                 next(iterator)
                 next(iterator)
+=======
+                compound_names.drop(list(indices1), axis=0, inplace=True)
+                next(islice(iterator, len(indices1)-2, None), '')
+>>>>>>> fac3077 (Updated scripts for preprocessing, training, and evaluating of LINCS data.)
                 continue
             row.drop(list(indices1), inplace=True)
             labels = copy.deepcopy(row)

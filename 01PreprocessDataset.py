@@ -3,9 +3,11 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 import numpy as np
 
-plate = 'BR00115134multiplane_FS'
+plate = 'SQ00015223'
 
-csv_file = f'/Users/rdijk/Documents/Data/ProcessedData/Stain3/{plate}.csv'
+#csv_file = f'/Users/rdijk/Documents/Data/ProcessedData/Stain3/{plate}.csv'
+csv_file = fr'/Users/rdijk/Documents/ProjectFA/Phase2/Data/ProcessedData/{plate}.csv'
+
 parquet_file = csv_file[:-3] + 'parquet'
 chunksize = 150_000
 
@@ -16,9 +18,9 @@ columns_dict.update({'well_position': str,
                      'pert_iname': str,
                      'pert_type': str,
                      'control_type': str,
-                     'moa': str
+                     'moa': str,
+                     'plate_map_name': str
                      })
-
 csv_stream = pd.read_csv(csv_file,
                          dtype=columns_dict,
                          chunksize=chunksize,
@@ -27,7 +29,6 @@ csv_stream = pd.read_csv(csv_file,
                          na_values=['0.0077482126.0', '104.230.06618817979624629', '0.0422404840.9948853419886684',
                                     '0.2126100.0', '0..03280088609347405']
                          )
-
 for i, chunk in enumerate(csv_stream):
     print("Chunk", i)
     if i == 0:
@@ -42,59 +43,3 @@ for i, chunk in enumerate(csv_stream):
 parquet_writer.close()
 
 print('Donezo')
-
-# param = 'Nuclei'
-# FeatureNames = pd.read_csv('/Users/rdijk/Documents/Data/RawData/Stain2/Stain2FeatureNames.csv')
-# a = [c for c in FeatureNames.iloc[:,0] if c.startswith(param)]
-# [print(f'{param}.'+x+',') for x in a]
-
-
-# %%
-
-# Convert csv files to parquet efficiently
-
-import pandas as pd
-import sqlite3
-import os
-
-# Metadata information
-# metadata_path = '/Users/rdijk/Documents/Data/RawData/Stain2/JUMP-MOA_compound_platemap_with_metadata.csv'
-# tablename = 'JUMP_MOA_compound_platemap_with_metadata_csv'
-
-# Batch information
-# path = r'/Users/rdijk/Documents/Data/RawData/Stain2/sqlite'
-# batch = 'BR00112197binned.sqlite'
-
-# Output file name
-# parquet_file = os.path.join('/Users/rdijk/Documents/Data/ProcessedData/Stain2', batch[:-6]+'parquet')
-
-# Sqlite files to be executed
-# sqlfile1 = '/Users/rdijk/Library/DBeaverData/workspace6/Feature Aggregation/Scripts/Pipeline/01_CreateWellColumnImage.sql'
-# sqlfile2 = '/Users/rdijk/Library/DBeaverData/workspace6/Feature Aggregation/Scripts/Scripts/PythonSql/PythonSql1.sql'
-# sqlfile2 = '/Users/rdijk/Library/DBeaverData/workspace6/Feature Aggregation/Scripts/Pipeline/02_Stain2_FS_Agg.sql'
-# sqlfile3 = '/Users/rdijk/Library/DBeaverData/workspace6/Feature Aggregation/Scripts/Scripts/PythonSql/PythonSql2.sql'
-# sqlfile4 = '/Users/rdijk/Library/DBeaverData/workspace6/Feature Aggregation/Scripts/Scripts/PythonSql/PythonSql3.sql'
-
-# Establish connection
-# connection = sqlite3.connect(os.path.join(path, batch))
-# cursor = connection.cursor()
-
-# Import metadata table for joining of tables
-# metadata_df = pd.read_csv(metadata_path)
-# metadata_df.to_sql(tablename, connection, if_exists='append', index=False)
-
-# Check if correctly imported
-# cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-# print(cursor.fetchall())
-
-# print('Creating well column...')
-# sql_file = open(sqlfile1)
-# sql_as_string = sql_file.read()
-# cursor.executescript(sql_as_string)
-
-# print('Joining tables and reading as pandas DF...')
-# sql_file = open(sqlfile2)
-# sql_as_string = sql_file.read()
-# pandasDF = pd.read_sql_query(sql_as_string, connection)
-# print('Writing DF as parquet file')
-# pandasDF.to_parquet(parquet_file)
