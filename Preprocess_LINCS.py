@@ -23,7 +23,7 @@ def preprocessLINCS(args):
 
         df = sqlite_to_df(path, metadata_path=os.path.join(args.metadatadir, 'platemap', plate_map_name + '.txt'),
                           compute_subsample=args.subsample)  # Compute_subsample==True will return a chunk of 1000 cells
-
+        print('Successfully retrieved dataframe')
         feature_column_names = df.columns[~df.columns.str.contains("Metadata")].tolist()
         metadata_column_names = df.columns[df.columns.str.contains("Metadata")].tolist()
 

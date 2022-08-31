@@ -574,7 +574,7 @@ class SingleCells(object):
                         right_on=self.merge_cols + [right_link_col],
                         suffixes=merge_suffix,
                     )
-
+                print('Current df size:', sc_df.shape)
                 linking_check_cols.append(linking_check)
 
         # Add metadata prefix to merged suffixes

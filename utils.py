@@ -197,6 +197,7 @@ def sqlite_to_df(
 
     # In case metadata is provided, merge into existing dataframe
     if metadata_path:
+        print('Adding metadata to data')
         # Load additional information of file
         df_info = pd.read_csv(metadata_path, sep='\t')
         df_info = df_info.rename(columns={"well_position": "Metadata_Well",
