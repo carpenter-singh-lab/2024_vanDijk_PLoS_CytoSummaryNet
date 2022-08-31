@@ -402,7 +402,7 @@ class SingleCells(object):
         else:
             df = next(pd.read_sql(sql=compartment_query, con=self.conn, chunksize=1000))
         # End edited code
-        return df
+        return df.astype(np.float32)
 
     def aggregate_compartment(
         self,
