@@ -11,12 +11,13 @@ You can find more details in the FeatureAggregationManuscriptV1.pdf
 
 # Applying this method for your own dataset on AWS EBS
 ### First install required packages:
+	# If starting on an empty AWS EBS volume, otherwise ...
     sudo su
 	mkdir ~/ebs_tmp/
 	cd ~/ebs_tmp
+	# ... start here 
 	sudo yum install git -y
 	sudo amazon-linux-extras install epel
-	sudo yum install nload sysstat parallel -y
 
 ### Then clone this GitHub repo:
 	git clone https://github.com/broadinstitute/FeatureAggregation_single_cell.git
