@@ -56,7 +56,13 @@ def preprocessLINCS(args):
 
         try:
             os.mkdir('datasets')
+        except:
+            pass
+        try:
             os.mkdir(f'datasets/{args.dataset}')
+        except:
+            pass
+        try:
             os.mkdir(output_dirName)
         except:
             pass
