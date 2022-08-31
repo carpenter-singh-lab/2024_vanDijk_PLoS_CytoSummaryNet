@@ -33,12 +33,27 @@ _enter credentials_
 	chmod +x get_data_LINCS.sh
 	./get_data_LINCS.sh
 
+### Download the metadata
+	cd aws_scripts
+	git init
+	git remote add -f origin https://github.com/broadinstitute/lincs-cell-painting.git
+	git config core.sparseCheckout true
+	echo "metadata/platemaps/2016_04_01_a549_48hr_batch1/" >> .git/info/sparse-checkout
+	git pull origin master
+
+
 ### Setup conda environment
 	cd ..
+	conda update --all
+	conda create -n FAenv python=3.9 scipy=1.8 pytorch umap-learn pandas matplotlib seaborn pycytominer
+	conda activate FAenv
+	conda install datashader bokeh holoviews scikit-image colorcet 
+	pip install kneed sklearn
+
 	conda env create -f environment.yml
 
-
 ### Preprocess all plates
+	# Edit the lincs_preprocessing_input.txt file; p1: dataset name, p2: sqlite path, p3: metadata path, p4: barcode platemap filename
 	python Preprocess_LINCS.py @script_input_files/lincs_preprocessing_input.txt
 
 ### Train the moddel

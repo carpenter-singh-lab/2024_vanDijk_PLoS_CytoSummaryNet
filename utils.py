@@ -152,7 +152,7 @@ def filter_noisy_data(plateDirs, rootDir, model, config):
 
 # From https://github.com/cytomining/pycytominer/pull/228/commits/41a971ec52fe09625e6de8d2fa4e4f3fbeddf620
 import os
-from pycytominer.cyto_utils.cells import SingleCells
+from cells import SingleCells
 from typing import Any, Sequence
 
 def sqlite_to_df(
