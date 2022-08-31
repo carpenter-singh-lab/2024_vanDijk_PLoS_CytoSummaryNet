@@ -27,8 +27,10 @@ _enter credentials_
 
 ### Download all plates (in this example LINCS will be used)
 	cd /aws_scripts
+	cp get_data_LINCS.txt get_data_LINCS.sh 
+	# possibly edit the .sh copy to download a subset of the data with "nano get_data_LINCS.sh" or similar
 	chmod +x get_data_LINCS.sh
-	./ get_data_LINCS.sh
+	./get_data_LINCS.sh
 
 ### Setup conda environment
 	cd ..
