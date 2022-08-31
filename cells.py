@@ -402,7 +402,15 @@ class SingleCells(object):
         else:
             df = next(pd.read_sql(sql=compartment_query, con=self.conn, chunksize=1000))
         # End edited code
-        return df.astype(np.float32)
+        feature_column_names = df.columns[~df.columns.str.contains("Metadata")].tolist()
+        metadata_column_names = df.columns[df.columns.str.contains("Metadata")].tolist()
+
+        # Load into pandas dataframe
+        features = df[feature_column_names].astype(np.float32)
+        metadata = df[metadata_column_names]
+
+        df = pd.concat([metadata, features], axis=1)
+        return df
 
     def aggregate_compartment(
         self,
