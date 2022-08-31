@@ -34,7 +34,7 @@ def preprocessLINCS(args):
         del df
 
         # Filter out NaNs
-        features = features.dropna().to_numpy()
+        features = features.dropna().to_numpy(np.float32)
         # %% Normalize per plate
         print('Normalizing plate...')
         gc.collect()
