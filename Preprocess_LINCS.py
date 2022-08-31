@@ -55,6 +55,8 @@ def preprocessLINCS(args):
         del features, metadata
 
         try:
+            os.mkdir('datasets')
+            os.mkdir(f'datasets/{args.dataset}')
             os.mkdir(output_dirName)
         except:
             pass
