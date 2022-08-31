@@ -7,6 +7,7 @@ from sklearn.preprocessing import StandardScaler
 import pickle
 import gc
 import argparse
+import string
 
 def preprocessLINCS(args):
     # Intialize paths
@@ -42,9 +43,8 @@ def preprocessLINCS(args):
         scaler = StandardScaler(copy=False).fit(features)
         features = scaler.transform(features)
 
-        # Some row of wells to iterate over
-        filename2 = '/Users/rdijk/Documents/Data/RawData/Stain2/JUMP-MOA_compound_platemap_with_metadata.csv'
-        wells = pd.read_csv(filename2, usecols=['well_position'])
+        # Generate row of wells to iterate over
+        wells = pd.DataFrame({"well_position": [a + y for a in list(string.ascii_uppercase)[:16] for y in list(map(lambda x: "{:0=2d}".format(x), list(range(1, 25, 1))))]})
 
         output_dirName = f'datasets/{args.dataset}/DataLoader_{platebarcode}'
 
