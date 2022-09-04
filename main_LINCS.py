@@ -262,7 +262,8 @@ if __name__=='__main__':
                                      fromfile_prefix_chars='@')
 
     # Optional positional argument
-    parser.add_argument('metadata_path', const='aws_scripts/metadata/platemaps/2016_04_01_a549_48hr_batch1', type=str,
+    parser.add_argument('metadata_path', nargs='?', const='aws_scripts/metadata/platemaps/2016_04_01_a549_48hr_batch1',
+                        type=str,
                         help='Specify the path where the barcode_platemap and platemaps directory are located.')
     parser.add_argument('wandb_mode', nargs='?', const='online', type=str,
                         help='Sync the data with the wandb server with "online" or run offline with "dryrun".')
