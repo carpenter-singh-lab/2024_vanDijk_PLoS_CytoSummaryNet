@@ -57,7 +57,8 @@ _enter credentials_
 	python Preprocess_LINCS.py @script_input_files/lincs_preprocessing_input.txt
 
 ### Train the moddel
-	python main_LINCS.py @script_input_files/main_LINCS_input.txt
+_modify the "script_input_files/main_LINCS_input.txt" file to fit the hyperparameters you are using._
 
+	python main_LINCS.py @script_input_files/main_LINCS_input.txt
 ### Evaluate the trained model 
 

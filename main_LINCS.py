@@ -77,18 +77,18 @@ def train_model_LINCS(args):
     weight_decay = 'AdamW default'
 
     #%% Load all data
-    rootDir = r'/Users/rdijk/PycharmProjects/featureAggregation/datasets/LINCS'
+    rootDir = r'datasets/LINCS'  # path to datasets
     plateDirs = [x[0] for x in os.walk(rootDir)][1:]
     platenames = [x.split('_')[-1] for x in plateDirs]
 
-    metadata_dir = '/Users/rdijk/Documents/ProjectFA/Phase2/Data/metadata'
+    metadata_dir = args.metadata_path  # path to metadata
     barcode_platemap = pd.read_csv(os.path.join(metadata_dir, 'barcode_platemap.csv'), index_col=False)
     barcode_platemap = barcode_platemap[barcode_platemap['Assay_Plate_Barcode'].isin(platenames)]
 
     platemaps = barcode_platemap['Plate_Map_Name'].tolist()
     platenames = barcode_platemap['Assay_Plate_Barcode'].tolist()
 
-    plateDirs = ['/Users/rdijk/PycharmProjects/featureAggregation/datasets/LINCS/DataLoader_'+x for x in platenames]
+    plateDirs = [rootDir+'/DataLoader_'+x for x in platenames]
 
     I = platemaps.index('C-7161-01-LM6-013')
     plateDirs.pop(I)
@@ -114,7 +114,7 @@ def train_model_LINCS(args):
     valloader = data.DataLoader(val_sets, batch_size=1, shuffle=False,
                                    drop_last=False, pin_memory=False, num_workers=NUM_WORKERS)
 
-    print(f'\nLoading {len(TrainLoaders)} plates. Do you want to proceed?')
+    print(f'\nLoading {len(TrainLoaders)} plates with {len(trainloader)} wells. Do you want to proceed?')
     if input('Continue? [y/n]') == 'y':
         pass
     else:
@@ -262,6 +262,8 @@ if __name__=='__main__':
                                      fromfile_prefix_chars='@')
 
     # Optional positional argument
+    parser.add_argument('metadata_path', const='aws_scripts/metadata/platemaps/2016_04_01_a549_48hr_batch1', type=str,
+                        help='Specify the path where the barcode_platemap and platemaps directory are located.')
     parser.add_argument('wandb_mode', nargs='?', const='online', type=str,
                         help='Sync the data with the wandb server with "online" or run offline with "dryrun".')
     # Optional positional argument
