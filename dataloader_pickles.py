@@ -214,7 +214,7 @@ class DataloaderTrainV7(Dataset):
         labels = torch.tensor([label]*self.nr_sets, dtype=torch.int16)
 
         if sampled_features.shape[1] == 1:
-            return
+            return [None, None]
         return [sampled_features, labels]
 
 
