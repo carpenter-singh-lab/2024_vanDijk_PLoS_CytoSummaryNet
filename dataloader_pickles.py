@@ -200,11 +200,11 @@ class DataloaderTrainV7(Dataset):
             for x in range(len(temp)):
                 F = temp[x]['cell_features']
                 if F.shape[0] < 10:
-                    F = pd.DataFrame(np.zeros((1, F.shape[1]))) # create empty dataframe
+                    continue
                 F.dropna(inplace=True)  # Remove possible NaNs
                 idxs = np.random.choice(F.shape[0], self.nr_cells//len(temp))
                 temp[x]['cell_features'] = F.iloc[idxs, :]
-            features_select = np.concatenate([x['cell_features'] for x in temp])
+            features_select = np.concatenate([z['cell_features'] for z in temp])
 
             # Append to list of sampled features
             sampled_features.append(features_select)
