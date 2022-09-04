@@ -209,6 +209,7 @@ class DataloaderTrainV7(Dataset):
             # Append to list of sampled features
             sampled_features.append(features_select)
 
+        sampled_features = np.array(sampled_features) # first convert to numpy array for speed
         sampled_features = torch.tensor(sampled_features, dtype=torch.float32)
         labels = torch.tensor([label]*self.nr_sets, dtype=torch.int16)
 

@@ -1,5 +1,6 @@
 aws_scripts/metadata/platemaps/2016_04_01_a549_48hr_batch1
 dryrun
+1783
 5e-4
 100
 4

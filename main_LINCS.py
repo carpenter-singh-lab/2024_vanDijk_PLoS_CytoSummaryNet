@@ -67,7 +67,7 @@ def train_model_LINCS(args):
     print(f'True batch size is {true_BS}')
     initial_cells = args.initial_cells
     nr_cells = (initial_cells, 800)  # INTEGER or TUPLE (median, std) for gaussian // (1100, 300)
-    input_dim = 1783  # 1324
+    input_dim = args.model_input_size  # 1324
     kFilters = args.kfilters  # times DIVISION of filters in model
     latent_dim = 2048
     output_dim = 2048
@@ -114,7 +114,7 @@ def train_model_LINCS(args):
     valloader = data.DataLoader(val_sets, batch_size=1, shuffle=False,
                                    drop_last=False, pin_memory=False, num_workers=NUM_WORKERS)
 
-    print(f'\nLoading {len(TrainLoaders)} plates with {len(trainloader)} wells. Do you want to proceed?')
+    print(f'\nLoading {len(TrainLoaders)} plates with {len(train_sets)} wells. Do you want to proceed?')
     if input('Continue? [y/n]') == 'y':
         pass
     else:
@@ -265,8 +265,12 @@ if __name__=='__main__':
     parser.add_argument('metadata_path', nargs='?', const='aws_scripts/metadata/platemaps/2016_04_01_a549_48hr_batch1',
                         type=str,
                         help='Specify the path where the barcode_platemap and platemaps directory are located.')
+    # Optional positional argument
     parser.add_argument('wandb_mode', nargs='?', const='online', type=str,
                         help='Sync the data with the wandb server with "online" or run offline with "dryrun".')
+    # Optional positional argument
+    parser.add_argument('model_input_size', nargs='?', const=1781, type=int,
+                        help='Number of single cell features.')
     # Optional positional argument
     parser.add_argument('lr', nargs='?', const=5e-4, type=float,
                         help='AdamW learning rate')
@@ -291,7 +295,9 @@ if __name__=='__main__':
     args = parser.parse_args()
 
     print("Argument values:")
+    print('metadata path:'. args.metadata_path)
     print('wandb mode:', args.wandb_mode)
+    print('model input size:', args.model_input_size)
     print('lr:', args.lr)
     print('epochs:', args.epochs)
     print('nr_sets:', args.nr_sets)
