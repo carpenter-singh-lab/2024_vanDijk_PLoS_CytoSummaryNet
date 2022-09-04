@@ -88,7 +88,7 @@ def train_model_LINCS(args):
     platemaps = barcode_platemap['Plate_Map_Name'].tolist()
     platenames = barcode_platemap['Assay_Plate_Barcode'].tolist()
 
-    plateDirs = ['/DataLoader_'+x for x in platenames]
+    plateDirs = ['DataLoader_'+x for x in platenames]
 
     I = platemaps.index('C-7161-01-LM6-013')
     plateDirs.pop(I)
