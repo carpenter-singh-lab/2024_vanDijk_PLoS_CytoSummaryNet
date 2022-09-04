@@ -295,7 +295,7 @@ if __name__=='__main__':
     args = parser.parse_args()
 
     print("Argument values:")
-    print('metadata path:'. args.metadata_path)
+    print('metadata path:', args.metadata_path)
     print('wandb mode:', args.wandb_mode)
     print('model input size:', args.model_input_size)
     print('lr:', args.lr)
