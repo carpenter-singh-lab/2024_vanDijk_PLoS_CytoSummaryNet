@@ -64,81 +64,9 @@ class DataloaderEvalV5(Dataset):
 
         label = torch.tensor(label, dtype=torch.int16)
 
+
         return [features, label]
 
-class DataloaderTrainV6(Dataset):
-    """ Groups two wells together at random and then samples from then (uneven distribution)
-    Dataloader used for loading pickle files on the fly from the laoder during the training.
-     Data augmentation is possible, not implemented yet. """
-
-    def __init__(self, df, nr_cells=400, nr_sets=3, groupDF=None, compensator=0):
-        """
-        Args:
-            df: dataframe of all metadata and paths to the pickle files per plate
-            nr_cells: number of cells that are sampled from the single-cell feature wells
-            nr_sets: number of cell features sets that are drawn from each well
-        """
-
-        self.df = df
-        self.nr_cells = nr_cells
-        self.groupDF = groupDF
-        self.compensator = compensator
-        self.nr_sets = nr_sets
-
-    def __len__(self):
-        if self.groupDF is not None:
-            return len(self.groupDF)
-        else:
-            return len(self.df)
-
-    def __getitem__(self, idx):
-        if torch.is_tensor(idx):
-            idx = idx.tolist()
-        idx = idx+self.compensator
-        # Load Sample
-        if self.groupDF is not None:
-            sample = []
-            try:
-                paths = self.df.iloc[:, 1][self.groupDF.groups[idx]]
-            except:
-                idx = random.choice(list(self.groupDF.groups.keys()))
-                paths = self.df.iloc[:, 1][self.groupDF.groups[idx]]
-            for P in paths:
-                with open(P, 'rb') as f:
-                    s1 = pickle.load(f)
-                    sample.append(s1)
-            # Extract numpy array
-            label = self.df['Metadata_labels'][self.groupDF.groups[idx]].iloc[0]
-
-        else:
-            raise Warning("No definition for groupDF==None")
-
-        sampled_features = []
-        for _ in range(self.nr_sets):
-            # Generate random number of wells to combine into one sample
-            nr_wells = np.random.randint(1, 3, 1) # either 1 or 2 wells combined
-            if nr_wells <= len(sample):
-                which_wells = np.random.choice(len(sample), nr_wells, replace=False) # sampling without replacement
-            else:
-                which_wells = [0]
-            temp = [sample[x] for x in which_wells]
-            features = np.concatenate([x['cell_features'] for x in temp])
-            features = features[~np.isnan(features).any(axis=1)]  # Remove possible NaNs
-            assert ~np.isnan(features).any()
-
-            if features.shape[0] < 10:
-                features = np.zeros((1, features.shape[1]))
-
-            # Sample self.nr_cells cells from the (combined) well
-            random_indices = np.random.choice(features.shape[0], self.nr_cells)
-            features_select = features[random_indices, :]
-            # Append to list of sampled features
-            sampled_features.append(features_select)
-
-        sampled_features = torch.tensor(sampled_features, dtype=torch.float32)
-        labels = torch.tensor([label]*self.nr_sets, dtype=torch.int16)
-
-        return [sampled_features, labels]
 
 
 class DataloaderTrainV7(Dataset):
@@ -307,6 +235,80 @@ class DataloaderTrainVX(Dataset):
 
 
 #%% TODO Deprecated
+
+class DataloaderTrainV6(Dataset):
+    """ Groups two wells together at random and then samples from then (uneven distribution)
+    Dataloader used for loading pickle files on the fly from the laoder during the training.
+     Data augmentation is possible, not implemented yet. """
+
+    def __init__(self, df, nr_cells=400, nr_sets=3, groupDF=None, compensator=0):
+        """
+        Args:
+            df: dataframe of all metadata and paths to the pickle files per plate
+            nr_cells: number of cells that are sampled from the single-cell feature wells
+            nr_sets: number of cell features sets that are drawn from each well
+        """
+
+        self.df = df
+        self.nr_cells = nr_cells
+        self.groupDF = groupDF
+        self.compensator = compensator
+        self.nr_sets = nr_sets
+
+    def __len__(self):
+        if self.groupDF is not None:
+            return len(self.groupDF)
+        else:
+            return len(self.df)
+
+    def __getitem__(self, idx):
+        if torch.is_tensor(idx):
+            idx = idx.tolist()
+        idx = idx+self.compensator
+        # Load Sample
+        if self.groupDF is not None:
+            sample = []
+            try:
+                paths = self.df.iloc[:, 1][self.groupDF.groups[idx]]
+            except:
+                idx = random.choice(list(self.groupDF.groups.keys()))
+                paths = self.df.iloc[:, 1][self.groupDF.groups[idx]]
+            for P in paths:
+                with open(P, 'rb') as f:
+                    s1 = pickle.load(f)
+                    sample.append(s1)
+            # Extract numpy array
+            label = self.df['Metadata_labels'][self.groupDF.groups[idx]].iloc[0]
+
+        else:
+            raise Warning("No definition for groupDF==None")
+
+        sampled_features = []
+        for _ in range(self.nr_sets):
+            # Generate random number of wells to combine into one sample
+            nr_wells = np.random.randint(1, 3, 1) # either 1 or 2 wells combined
+            if nr_wells <= len(sample):
+                which_wells = np.random.choice(len(sample), nr_wells, replace=False) # sampling without replacement
+            else:
+                which_wells = [0]
+            temp = [sample[x] for x in which_wells]
+            features = np.concatenate([x['cell_features'] for x in temp])
+            features = features[~np.isnan(features).any(axis=1)]  # Remove possible NaNs
+            assert ~np.isnan(features).any()
+
+            if features.shape[0] < 10:
+                features = np.zeros((1, features.shape[1]))
+
+            # Sample self.nr_cells cells from the (combined) well
+            random_indices = np.random.choice(features.shape[0], self.nr_cells)
+            features_select = features[random_indices, :]
+            # Append to list of sampled features
+            sampled_features.append(features_select)
+
+        sampled_features = torch.tensor(sampled_features, dtype=torch.float32)
+        labels = torch.tensor([label]*self.nr_sets, dtype=torch.int16)
+
+        return [sampled_features, labels]
 
 
 class DataloaderTrainV3(Dataset):

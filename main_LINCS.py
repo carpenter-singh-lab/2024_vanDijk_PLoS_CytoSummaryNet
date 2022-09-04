@@ -212,6 +212,8 @@ def train_model_LINCS(args):
             MLP_profiles = torch.tensor([], dtype=torch.float32)
             MLP_labels = torch.tensor([], dtype=torch.int16)
             for (points, labels) in tqdm(valloader):
+                if points.shape[1] == 1:
+                    continue
                 feats, _ = model(points)
                 # Append everything to dataframes
                 MLP_profiles = torch.cat([MLP_profiles, feats])
