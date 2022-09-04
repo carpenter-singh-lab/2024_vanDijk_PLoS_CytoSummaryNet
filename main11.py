@@ -23,11 +23,8 @@ from dataloader_pickles import DataloaderTrainV7, DataloaderEvalV5
 import utils
 
 ##%%
-<<<<<<< HEAD
 run = wandb.init(project="FeatureAggregation", mode='online', tags=['Generalized Models', 'Stain2', 'Stain3', 'Stain4'])  # 'dryrun'
-=======
 run = wandb.init(project="FeatureAggregation", mode='online', tags=['LINCS'])  # 'dryrun'
->>>>>>> fac3077 (Updated scripts for preprocessing, training, and evaluating of LINCS data.)
 wandb.define_metric("Val loss", summary="min")
 wandb.define_metric("Val mAP", summary="max")
 #%%
