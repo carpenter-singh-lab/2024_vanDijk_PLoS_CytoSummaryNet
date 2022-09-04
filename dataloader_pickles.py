@@ -200,7 +200,7 @@ class DataloaderTrainV7(Dataset):
             for x in range(len(temp)):
                 F = temp[x]['cell_features']
                 if F.shape[0] < 10:
-                    F = pd.DataFrame(np.zeros((1, F.shape[1])))
+                    F = pd.DataFrame(np.zeros((1, F.shape[1]))) # create empty dataframe
                 F.dropna(inplace=True)  # Remove possible NaNs
                 idxs = np.random.choice(F.shape[0], self.nr_cells//len(temp))
                 temp[x]['cell_features'] = F.iloc[idxs, :]
