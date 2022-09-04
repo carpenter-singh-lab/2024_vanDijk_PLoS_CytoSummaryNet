@@ -199,9 +199,9 @@ class DataloaderTrainV7(Dataset):
             temp = [sample[x] for x in which_wells]
             for x in range(len(temp)):
                 F = temp[x]['cell_features']
-                F.dropna(inplace=True) # Remove possible NaNs
                 if F.shape[0] < 10:
                     F = pd.DataFrame(np.zeros((1, F.shape[1])))
+                F.dropna(inplace=True)  # Remove possible NaNs
                 idxs = np.random.choice(F.shape[0], self.nr_cells//len(temp))
                 temp[x]['cell_features'] = F.iloc[idxs, :]
             features_select = np.concatenate([x['cell_features'] for x in temp])

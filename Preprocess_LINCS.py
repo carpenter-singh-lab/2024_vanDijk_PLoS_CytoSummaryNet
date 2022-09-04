@@ -85,7 +85,7 @@ def preprocessLINCS(args):
                 print(f'data not available, saving empty well {well}')
                 dict = {
                     'well_position': row[0],
-                    'cell_features': np.zeros((1, 1))
+                    'cell_features': pd.DataFrame(np.zeros((1, 1781)))
                 }
                 with open(os.path.join(output_dirName, f'{row[0]}.pkl'), 'wb') as f:
                     pickle.dump(dict, f)
