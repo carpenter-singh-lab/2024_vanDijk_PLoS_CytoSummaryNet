@@ -59,9 +59,9 @@ def my_collate_eval(batch):
     return [data, target, aggregated_data, agg_target]
 
 def my_collate(batch):
-    data = [item[0] for item in batch if item != None]
+    data = [item[0] for item in batch if item[0] != None]
     data = torch.cat(data, dim=0)
-    target = [item[1] for item in batch if item!= None]
+    target = [item[1] for item in batch if item[0] != None]
     target = torch.cat(target, dim=0)
     return [data, target]
 
