@@ -43,7 +43,7 @@ _enter credentials_
 
 	# Download the repurposing info table to access perturbation names and MoA's (repurposing_info_long.tsv)
 	cd metadata/platemaps/2016_04_01_a549_48hr_batch1
-	curl -o repurposing_info_long.tsv https://raw.githubusercontent.com/broadinstitute/lincs-cell-painting/master/metadata/moa/repurposing_info_external_moa_map_resolved.tsv
+	curl -o repurposing_info_long.tsv https://raw.githubusercontent.com/broadinstitute/lincs-cell-painting/master/metadata/moa/repurposing_info_long.tsv
 
 
 
@@ -67,3 +67,6 @@ _modify the "script_input_files/main_LINCS_input.txt" file to fit the hyperparam
 	python main_LINCS.py @script_input_files/main_LINCS_input.txt
 ### Evaluate the trained model 
 
+
+
+git show origin/master:main_LINCS.py > main_LINCS.py

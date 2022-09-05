@@ -208,8 +208,7 @@ def train_model_LINCS(args):
                 CELLS = int(np.random.normal(nr_cells[0], nr_cells[1], 1))
                 while CELLS < 100 or CELLS % 2 != 0:
                     CELLS = int(np.random.normal(nr_cells[0], nr_cells[1], 1))
-                for z in range(len(trainloader.dataset.datasets)):
-                    trainloader.dataset.datasets[z].nr_cells = CELLS
+                trainloader.dataset.nr_cells = CELLS
 
         tr_loss /= (idx+1)
         wandb.log({"Train Loss": tr_loss}, step=e)  # send data to wandb.ai
