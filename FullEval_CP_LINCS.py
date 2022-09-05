@@ -175,9 +175,20 @@ def fulleval(args):
     average_profiles = pd.concat([features, average_profiles.iloc[:, -1]], axis=1)
 
     ## Save all the dataframes to .csv files!
+    try:
+        os.mkdir(args.output_path)
+    except:
+        pass
+
+    try:
+        os.mkdir(f'{args.output_path}/{dataset_name}_profiles')
+    except:
+        pass
+
+
     if save_features_to_csv:
-        MLP_profiles.to_csv(f'outputs/{dataset_name}/MLP_profiles_{args.dose_point}_.csv', index=False)
-        average_profiles.to_csv(f'outputs/{dataset_name}/average_profiles_{args.dose_point}_.csv', index=False)
+        MLP_profiles.to_csv(f'{args.output_path}/{dataset_name}_profiles/MLP_profiles_{args.dose_point}_.csv', index=False)
+        average_profiles.to_csv(f'{args.output_path}/{dataset_name}_profiles/average_profiles_{args.dose_point}_.csv', index=False)
     split = int(MLP_profiles.shape[0] * train_val_split)
 
     MLP_profiles['Metadata_pert_iname'] = list(bigdf['pert_iname'])
@@ -204,6 +215,7 @@ def fulleval(args):
         os.mkdir(f'{args.output_path}/mAPs')
     except:
         pass
+
     f = open(f'{args.output_path}/mAPs/{MAPfilename}.txt', 'a')
     f.write('\n')
     f.write('\n')
@@ -248,11 +260,6 @@ def fulleval(args):
     PLATES = [x.split('_')[-1] for x in plateDirs]
     PLATES.sort()
     allresultsdf['plate'] = '_'.join(PLATES)
-
-    try:
-        os.mkdir(args.output_path)
-    except:
-        pass
 
     allresultsdf = allresultsdf.set_index('plate')
     print(allresultsdf.round(2).to_markdown())

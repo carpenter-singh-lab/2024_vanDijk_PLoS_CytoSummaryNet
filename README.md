@@ -66,6 +66,9 @@ _modify the "script_input_files/main_LINCS_input.txt" file to fit the hyperparam
 
 	python main_LINCS.py @script_input_files/main_LINCS_input.txt
 ### Evaluate the trained model 
+_modify the "script_input_files/fulleval_input.txt" file to the type of evaluation you want to do and on which dataset._
+
+	python FullEval_CP_LINCS.py @script_input_files/fulleval_input.txt
 
 
 
