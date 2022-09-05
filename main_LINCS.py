@@ -4,6 +4,7 @@ import random
 import numpy as np
 import time
 import pandas as pd
+pd.set_option('display.max_columns', 10)
 
 ## tqdm for loading bars
 from tqdm import tqdm
@@ -85,6 +86,11 @@ def train_model_LINCS(args):
     barcode_platemap = pd.read_csv(os.path.join(metadata_dir, 'barcode_platemap.csv'), index_col=False)
     barcode_platemap = barcode_platemap[barcode_platemap['Assay_Plate_Barcode'].isin(platenames)]
 
+    repurposing_info = pd.read_csv(os.path.join(metadata_dir, 'repurposing_info_long.tsv'), index_col=False,
+                                   low_memory=False, sep='\t', usecols=["broad_id", "pert_iname", "moa"])
+    repurposing_info = repurposing_info.rename(columns={"broad_id": "broad_sample"})
+    repurposing_info = repurposing_info.drop_duplicates()
+
     platemaps = barcode_platemap['Plate_Map_Name'].tolist()
     platenames = barcode_platemap['Assay_Plate_Barcode'].tolist()
 
@@ -95,26 +101,33 @@ def train_model_LINCS(args):
     platemaps.pop(I)
     platenames.pop(I)
 
-    TrainLoaders = []
-    ValLoaders = []
+    bigdf = []
     for i, pDir in enumerate(plateDirs):
         C_plate_map = pd.read_csv(os.path.join(metadata_dir, 'platemap', platemaps[i]+'.txt'), sep='\t')
         C_metadata = utils.addDataPathsToMetadata(rootDir, C_plate_map, pDir)
-        df = utils.filterData(C_metadata, 'negcon', encode='broad_sample', mode='LINCS')
-        df = df[np.logical_and(df['mmoles_per_liter'] > 9, df['mmoles_per_liter'] < 11)]
-        Total, _ = utils.train_val_split(df, 1.0, sort=True)
-        gTDF = Total.groupby('Metadata_labels')
-        TrainLoaders.append(DataloaderTrainV7(Total, nr_cells=initial_cells, nr_sets=nr_sets, groupDF=gTDF))
-        ValLoaders.append(DataloaderEvalV5(Total))
+        df = C_metadata[np.logical_and(C_metadata['mmoles_per_liter'] > 9, C_metadata['mmoles_per_liter'] < 11)]
+        bigdf.append(df)
+    bigdf = pd.merge(pd.concat(bigdf), repurposing_info, on='broad_sample', how='left')
+    bigdf = utils.filterData(bigdf, 'negcon', encode='pert_iname', mode='LINCS')
+    shape1 = bigdf.shape[0]
+    bigdf.dropna(inplace=True)  # drop all compounds without annotations for pert_iname (and moa)
+    shape2 = bigdf.shape[0]
+    print("Removed", shape1-shape2, "wells due to missing annotation of pert_iname and moa.")
+    bigdf = bigdf[bigdf.Metadata_labels.duplicated(keep=False)]
+    shape3 = bigdf.shape[0]
+    print("Removed", shape2-shape3, "unique compound wells.")
+    print('Using', shape3, "wells")
+    Total, _ = utils.train_val_split(bigdf, 1.0, sort=True)
+    gTDF = Total.groupby('Metadata_labels')
+    TrainDataset = DataloaderTrainV7(Total, nr_cells=initial_cells, nr_sets=nr_sets, groupDF=gTDF)
+    ValDataset = DataloaderEvalV5(Total)
 
-    train_sets = torch.utils.data.ConcatDataset(TrainLoaders)
-    trainloader = data.DataLoader(train_sets, batch_size=BS, shuffle=True, collate_fn=utils.my_collate,
+    trainloader = data.DataLoader(TrainDataset, batch_size=BS, shuffle=True, collate_fn=utils.my_collate,
                                         drop_last=False, pin_memory=False, num_workers=NUM_WORKERS)
-    val_sets = torch.utils.data.ConcatDataset(ValLoaders)
-    valloader = data.DataLoader(val_sets, batch_size=1, shuffle=False,
+    valloader = data.DataLoader(ValDataset, batch_size=1, shuffle=False,
                                    drop_last=False, pin_memory=False, num_workers=NUM_WORKERS)
 
-    print(f'\nLoading {len(TrainLoaders)} plates with {len(train_sets)} wells. Do you want to proceed?')
+    print(f'\nLoading {len(plateDirs)} plates with {len(TrainDataset)} unique compounds. Do you want to proceed?')
     if input('Continue? [y/n]') == 'y':
         pass
     else:

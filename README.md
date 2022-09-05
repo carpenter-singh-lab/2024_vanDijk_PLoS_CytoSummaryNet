@@ -41,6 +41,11 @@ _enter credentials_
 	echo "metadata/platemaps/2016_04_01_a549_48hr_batch1/" >> .git/info/sparse-checkout
 	git pull origin master
 
+	# Download the repurposing info table to access perturbation names and MoA's (repurposing_info_long.tsv)
+	cd metadata/platemaps/2016_04_01_a549_48hr_batch1
+	curl -o repurposing_info_long.tsv https://raw.githubusercontent.com/broadinstitute/lincs-cell-painting/master/metadata/moa/repurposing_info_external_moa_map_resolved.tsv
+
+
 
 ### Setup conda environment
 	cd ..
@@ -48,7 +53,7 @@ _enter credentials_
 	conda create -n FAenv python=3.9 scipy=1.8 pytorch umap-learn pandas matplotlib seaborn pycytominer
 	conda activate FAenv
 	conda install datashader bokeh holoviews scikit-image colorcet 
-	pip install kneed sklearn
+	pip install kneed sklearn pytorch-metric-learning wandb
 
 	conda env create -f environment.yml
 
