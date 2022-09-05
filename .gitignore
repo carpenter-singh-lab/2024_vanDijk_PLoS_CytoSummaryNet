@@ -8,6 +8,7 @@ dask-worker-space/
 figures/
 outputs/
 Jupyter_scripts/Saliencies/
+results/
 
 
 # History files

@@ -1,0 +1,9 @@
+1783
+0.5 
+False 
+False 
+LINCS 
+wandb/latest-run 
+/Users/rdijk/Documents/ProjectFA/Phase2/Data/metadata
+10
+results

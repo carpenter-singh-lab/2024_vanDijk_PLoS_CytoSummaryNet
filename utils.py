@@ -320,7 +320,6 @@ def CalculateMAP(df, distance='euclidean', groupby='Metadata_labels', percent_ma
     elif distance == 'euclidean':
         dist = pd.DataFrame(euclidean_distances(features))
 
-    compound_names = list(df[groupby])
     compound_names = pd.Series(list(df[groupby]))
     dist.set_axis(compound_names, axis=1, inplace=True)
     dist.set_axis(compound_names, axis=0, inplace=True)
@@ -341,11 +340,7 @@ def CalculateMAP(df, distance='euclidean', groupby='Metadata_labels', percent_ma
             indices2 = set(df['Metadata_pert_iname'][df[groupby] == index].index)
             sister_indices = indices2 - indices1
             if len(sister_indices) == 0:
-                del compound_names[list(indices1)[0]:list(indices1)[-1] + 1]
-                next(iterator)
-                next(iterator)
-                next(iterator)
-                compound_names.drop(list(indices1), axis=0, inplace=True)
+                compound_names = compound_names.drop(list(indices1))
                 next(islice(iterator, len(indices1)-2, None), '')
                 continue
             row.drop(list(indices1), inplace=True)
