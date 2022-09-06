@@ -84,27 +84,28 @@ def fulleval(args):
     plateDirs = [x[0] for x in os.walk(rootDir)][1:]
     platenames = [x.split('_')[-1] for x in plateDirs]
 
-    metadata_dir = args.metadata_path
+    metadata_dir = args.metadata_path  # path to metadata
     barcode_platemap = pd.read_csv(os.path.join(metadata_dir, 'barcode_platemap.csv'), index_col=False)
     barcode_platemap = barcode_platemap[barcode_platemap['Assay_Plate_Barcode'].isin(platenames)]
-
-    platemaps = barcode_platemap['Plate_Map_Name'].tolist()
-    platenames = barcode_platemap['Assay_Plate_Barcode'].tolist()
-
-    plateDirs = [f'DataLoader_'+x for x in platenames]
-
-    I = platemaps.index('C-7161-01-LM6-013')
-    plateDirs.pop(I)
-    platemaps.pop(I)
-    platenames.pop(I)
 
     repurposing_info = pd.read_csv(os.path.join(metadata_dir, 'repurposing_info_long.tsv'), index_col=False,
                                    low_memory=False, sep='\t', usecols=["broad_id", "pert_iname", "moa"])
     repurposing_info = repurposing_info.rename(columns={"broad_id": "broad_sample"})
     repurposing_info = repurposing_info.drop_duplicates()
 
+    platemaps = barcode_platemap['Plate_Map_Name'].tolist()
+    platenames = barcode_platemap['Assay_Plate_Barcode'].tolist()
+
+    plateDirs = ['DataLoader_'+x for x in platenames]
+
+    I = platemaps.index('C-7161-01-LM6-013')
+    plateDirs.pop(I)
+    platemaps.pop(I)
+    platenames.pop(I)
+
     # Initialize variables
     average_perturbation_map = {}
+
     bigdf = []
     for i, pDir in enumerate(plateDirs):
         platestring = pDir.split('_')[-1]
@@ -143,8 +144,8 @@ def fulleval(args):
     with torch.no_grad():
         for idx, (points, labels) in enumerate(tqdm(loader)):
             if points.shape[1] == 1:
-                print('Warning: encountered empty well - replcaing with all zeros feature vector.')
-                points = torch.zeros(1, 1, args.model_input_size)
+                continue
+                #points = torch.zeros(1, 1, args.model_input_size)
 
             feats, _ = model(points)
             # Append everything to dataframes
@@ -169,9 +170,9 @@ def fulleval(args):
     fitted_scaler = scaler.fit(average_profiles.iloc[:, :-1])
     features = fitted_scaler.transform(average_profiles.iloc[:, :-1])
     features = feature_select(average_profiles.iloc[:, :-1], operation=["variance_threshold",
-                                                                                             "correlation_threshold",
-                                                                                             "drop_na_columns",
-                                                                                             "blocklist"])
+                                                                         "correlation_threshold",
+                                                                         "drop_na_columns",
+                                                                         "blocklist"])
     average_profiles = pd.concat([features, average_profiles.iloc[:, -1]], axis=1)
 
     ## Save all the dataframes to .csv files!
@@ -191,10 +192,10 @@ def fulleval(args):
         average_profiles.to_csv(f'{args.output_path}/{dataset_name}_profiles/average_profiles_{args.dose_point}_.csv', index=False)
     split = int(MLP_profiles.shape[0] * train_val_split)
 
-    MLP_profiles['Metadata_pert_iname'] = list(bigdf['pert_iname'])
-    MLP_profiles['Metadata_moa'] = list(bigdf['moa'])
-    average_profiles['Metadata_pert_iname'] = list(bigdf['pert_iname'])
-    average_profiles['Metadata_moa'] = list(bigdf['moa'])
+    temp_df = bigdf[['Metadata_labels', 'moa', 'pert_iname']][~bigdf.Metadata_labels.duplicated(keep='last')]
+    temp_df = temp_df.rename(columns={'moa': 'Metadata_moa', 'pert_iname': 'Metadata_pert_iname'})
+    MLP_profiles = pd.merge(MLP_profiles, temp_df, on='Metadata_labels')
+    average_profiles = pd.merge(average_profiles, temp_df, on='Metadata_labels')
 
     print('Dropping ', MLP_profiles.shape[0] - MLP_profiles.dropna().reset_index(drop=True).shape[0], 'rows due to NaNs')
     MLP_profiles = MLP_profiles.dropna().reset_index(drop=True)
@@ -293,6 +294,7 @@ if __name__=='__main__':
     # Optional positional argument
     parser.add_argument('find_sister_compounds', nargs='?', const=False, type=bool,
                         help='If True calculate mAP for finding sister compounds, for compound replicates if False.')
+
     # Optional positional argument
     parser.add_argument('dataset_name', nargs='?', const='LINCS', type=str,
                         help='Dataset name')

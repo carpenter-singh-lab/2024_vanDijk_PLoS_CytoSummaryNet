@@ -53,7 +53,7 @@ _enter credentials_
 	conda create -n FAenv python=3.9 scipy=1.8 pytorch umap-learn pandas matplotlib seaborn pycytominer
 	conda activate FAenv
 	conda install datashader bokeh holoviews scikit-image colorcet 
-	pip install kneed sklearn pytorch-metric-learning wandb
+	pip install kneed sklearn pytorch-metric-learning wandb tabulate
 
 	conda env create -f environment.yml
 

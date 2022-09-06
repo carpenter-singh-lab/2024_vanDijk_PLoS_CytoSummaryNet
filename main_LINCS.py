@@ -107,6 +107,7 @@ def train_model_LINCS(args):
         C_metadata = utils.addDataPathsToMetadata(rootDir, C_plate_map, pDir)
         df = C_metadata[np.logical_and(C_metadata['mmoles_per_liter'] > 9, C_metadata['mmoles_per_liter'] < 11)]
         bigdf.append(df)
+
     bigdf = pd.merge(pd.concat(bigdf), repurposing_info, on='broad_sample', how='left')
     bigdf = utils.filterData(bigdf, 'negcon', encode='pert_iname', mode='LINCS')
     shape1 = bigdf.shape[0]
@@ -117,6 +118,7 @@ def train_model_LINCS(args):
     shape3 = bigdf.shape[0]
     print("Removed", shape2-shape3, "unique compound wells.")
     print('Using', shape3, "wells")
+
     Total, _ = utils.train_val_split(bigdf, 1.0, sort=True)
     gTDF = Total.groupby('Metadata_labels')
     TrainDataset = DataloaderTrainV7(Total, nr_cells=initial_cells, nr_sets=nr_sets, groupDF=gTDF)
