@@ -45,8 +45,6 @@ _enter credentials_
 	cd metadata/platemaps/2016_04_01_a549_48hr_batch1
 	curl -o repurposing_info_long.tsv https://raw.githubusercontent.com/broadinstitute/lincs-cell-painting/master/metadata/moa/repurposing_info_long.tsv
 
-
-
 ### Setup conda environment
 	cd ..
 	conda update --all

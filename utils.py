@@ -167,8 +167,10 @@ def sqlite_to_df(
     normalize_args: Any = None,
     metadata_identifier: str = "Metadata_",
     metadata_merge_on: Sequence = ["Metadata_Well"],
+    only_load_high_dosepoints: bool = True,
 ):
-    """Function to convert SQLite file to Pandas DataFrame."""
+    """Function to convert SQLite file to Pandas DataFrame.
+    only_load_high_dosepoints: only loads dose points >3 """
 
     # Define test SQL file
     sql_file = os.path.abspath(data_path) #"sqlite:////" +
@@ -183,6 +185,7 @@ def sqlite_to_df(
         image_cols=image_cols,
         subsample_n=subsample_n,
         strata=strata,
+        metadata_path=metadata_path,
     )
 
     # Merge compartments and meta information into one dataframe
@@ -193,6 +196,7 @@ def sqlite_to_df(
         float_format=float_format,
         single_cell_normalize=single_cell_normalize,
         normalize_args=normalize_args,
+        only_load_high_dosepoints=only_load_high_dosepoints
     )
 
     # In case metadata is provided, merge into existing dataframe

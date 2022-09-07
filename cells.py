@@ -86,6 +86,7 @@ class SingleCells(object):
         fields_of_view="all",
         fields_of_view_feature="Metadata_Site",
         object_feature="Metadata_ObjectNumber",
+        metadata_path=None,  # TODO: edit by Robert van Dijk
     ):
         """Constructor method"""
         # Check compartments specified
@@ -116,6 +117,7 @@ class SingleCells(object):
         self.compartment_linking_cols = compartment_linking_cols
         self.fields_of_view_feature = fields_of_view_feature
         self.object_feature = object_feature
+        self.metadata_path = metadata_path
 
         # Confirm that the compartments and linking cols are formatted properly
         assert_linking_cols_complete(
@@ -244,7 +246,7 @@ class SingleCells(object):
         """
 
         # Extract image metadata
-        image_query = "select {} from image".format( #TODO EDITED by Robert van Dijk
+        image_query = "select {} from image".format(
             ", ".join(np.union1d(self.image_cols, self.strata))
         )
         self.image_df = pd.read_sql(sql=image_query, con=self.conn)
@@ -380,7 +382,7 @@ class SingleCells(object):
 
         self.is_subset_computed = True
 
-    def load_compartment(self, compartment):
+    def load_compartment(self, compartment, only_load_high_dosepoints=True):
         """Creates the compartment dataframe.
 
         Parameters
@@ -408,7 +410,34 @@ class SingleCells(object):
         # Change those columns to np.float32
         df[cols] = df[cols].astype(np.float32)
 
+        # Merge df with Metadata to potentially filter for only high dose points
+        if only_load_high_dosepoints:
+            print('Removing low dose points...')
+
+            # Add image metadata first for Metadata_well access
+            df = self.image_df.merge(df, on=self.merge_cols, how="right")
+
+            # Then load additional information which contains dose point info
+            metadata = pd.read_csv(self.metadata_path, sep='\t')
+            metadata = metadata.rename(columns={"well_position": "Metadata_Well",
+                                              "plate_map_name": "Metadata_plate_map_name",
+                                              "broad_sample": "Metadata_broad_sample",
+                                              "mmoles_per_liter": "Metadata_mmoles_per_liter"})
+            # Select only specified columns
+            _info_meta = [m for m in metadata.columns if m.startswith("Metadata_")]
+
+            # Merge single cell dataframe with dose point info
+            df = df.merge(
+                right=metadata[_info_meta], how="left", on=["Metadata_Well"]
+            )
+
+            # Remove low dose points
+            shape1 = df.shape[0]
+            df = df[df['Metadata_mmoles_per_liter'] < 3]
+            print(f'Removed {shape1-df.shape[0]} cells from a well with dose point lower than 3.')
+
         # End edited code
+
         return df
 
     def aggregate_compartment(
@@ -529,6 +558,13 @@ class SingleCells(object):
 
         """
 
+        # TODO: start code block
+        # Add image data to single cell dataframe
+        if not self.load_image_data:
+            self.load_image()
+            self.load_image_data = True
+        # TODO: end code block
+
         # Load the single cell dataframe by merging on the specific linking columns
         sc_df = ""
         linking_check_cols = []
@@ -554,7 +590,8 @@ class SingleCells(object):
                 ]
 
                 if isinstance(sc_df, str):
-                    initial_df = self.load_compartment(compartment=left_compartment)
+                    initial_df = self.load_compartment(compartment=left_compartment,
+                                                       only_load_high_dosepoints=only_load_high_dosepoints)
 
                     if compute_subsample:
                         # Sample cells proportionally by self.strata
@@ -569,14 +606,16 @@ class SingleCells(object):
                         ).reindex(initial_df.columns, axis="columns")
 
                     sc_df = initial_df.merge(
-                        self.load_compartment(compartment=right_compartment),
+                        self.load_compartment(compartment=right_compartment,
+                                              only_load_high_dosepoints=only_load_high_dosepoints),
                         left_on=self.merge_cols + [left_link_col],
                         right_on=self.merge_cols + [right_link_col],
                         suffixes=merge_suffix,
                     )
                 else:
                     sc_df = sc_df.merge(
-                        self.load_compartment(compartment=right_compartment),
+                        self.load_compartment(compartment=right_compartment,
+                                              only_load_high_dosepoints=only_load_high_dosepoints),
                         left_on=self.merge_cols + [left_link_col],
                         right_on=self.merge_cols + [right_link_col],
                         suffixes=merge_suffix,
@@ -602,16 +641,18 @@ class SingleCells(object):
             zip(full_merge_suffix_original, full_merge_suffix_rename)
         )
 
-        # Add image data to single cell dataframe
-        if not self.load_image_data:
-            self.load_image()
-            self.load_image_data = True
-
-        sc_df = (
-            self.image_df.merge(sc_df, on=self.merge_cols, how="right")
-            .rename(self.linking_col_rename, axis="columns")
-            .rename(self.full_merge_suffix_rename, axis="columns")
-        )
+        # TODO: edit by Robert van Dijk - move code block up
+        # # Add image data to single cell dataframe
+        # if not self.load_image_data:
+        #     self.load_image()
+        #     self.load_image_data = True
+        #
+        # sc_df = (
+        #     self.image_df.merge(sc_df, on=self.merge_cols, how="right")
+        #     .rename(self.linking_col_rename, axis="columns")
+        #     .rename(self.full_merge_suffix_rename, axis="columns")
+        # )
+        # TODO: end code block
         if single_cell_normalize:
             # Infering features is tricky with non-canonical data
             if normalize_args is None:

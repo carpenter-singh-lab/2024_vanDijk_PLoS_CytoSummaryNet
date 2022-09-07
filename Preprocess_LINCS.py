@@ -23,7 +23,7 @@ def preprocessLINCS(args):
         print('Processing plate', platebarcode, 'using metadata file', plate_map_name)
 
         df = sqlite_to_df(path, metadata_path=os.path.join(args.metadatadir, 'platemap', plate_map_name + '.txt'),
-                          compute_subsample=args.subsample)  # Compute_subsample==True will return a chunk of 1000 cells
+                          compute_subsample=args.subsample, only_load_high_dosepoints=args.only_load_high_dosepoints)  # Compute_subsample==True will return a chunk of 1000 cells
         print('Successfully retrieved dataframe')
         feature_column_names = df.columns[~df.columns.str.contains("Metadata")].tolist()
         metadata_column_names = df.columns[df.columns.str.contains("Metadata")].tolist()
@@ -125,6 +125,9 @@ if __name__=='__main__':
     # Optional positional argument
     parser.add_argument('subsample', nargs='?', const=False,
                         help='Compute a subsample of the first 1000 cells in the sqlite file. Usefull for debugging.')
+    # Optional positional argument
+    parser.add_argument('only_load_high_dosepoints', nargs='?', const=True,
+                        help='Only load data with dose pointts larger than 3 uM.')
 
     # Parse arguments
     args = parser.parse_args()

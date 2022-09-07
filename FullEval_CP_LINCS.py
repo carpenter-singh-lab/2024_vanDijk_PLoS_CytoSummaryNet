@@ -114,7 +114,7 @@ def fulleval(args):
         C_metadata = utils.addDataPathsToMetadata(rootDir, C_plate_map, pDir)
         if args.dose_point == '10':
             df = C_metadata[np.logical_and(C_metadata['mmoles_per_liter'] > 9, C_metadata['mmoles_per_liter'] < 11)]
-        elif args.dose_point == '3.33':
+        elif args.dose_point == '3':
             df = C_metadata[np.logical_and(C_metadata['mmoles_per_liter'] > 2.9, C_metadata['mmoles_per_liter'] < 6)]
         bigdf.append(df)
 
