@@ -9,7 +9,7 @@ You can find more details in the FeatureAggregationManuscriptV1.pdf
 
 
 
-# Applying this method for your own dataset on AWS EBS
+# To apply this method yourself on the LINCS dataset
 ### First install required packages:
 	# If starting on an empty AWS EBS volume, otherwise ...
     sudo su
@@ -26,14 +26,14 @@ You can find more details in the FeatureAggregationManuscriptV1.pdf
 	aws configure
 _enter credentials_
 
-### Download all plates (in this example LINCS will be used)
+### Download all LINCS plates
 	cd /aws_scripts
 	cp get_data_LINCS.txt get_data_LINCS.sh 
 	# possibly edit the .sh copy to download a subset of the data with "nano get_data_LINCS.sh" or similar
 	chmod +x get_data_LINCS.sh
 	./get_data_LINCS.sh
 
-### Download the metadata
+### Download the LINCS metadata
 	cd aws_scripts
 	git init
 	git remote add -f origin https://github.com/broadinstitute/lincs-cell-painting.git
@@ -55,14 +55,15 @@ _enter credentials_
 
 	conda env create -f environment.yml
 
-### Preprocess all plates
+### Preprocess all downloaded plates
 	# Edit the lincs_preprocessing_input.txt file; p1: dataset name, p2: sqlite path, p3: metadata path, p4: barcode platemap filename
 	python Preprocess_LINCS.py @script_input_files/lincs_preprocessing_input.txt
 
-### Train the moddel
+### Train the feature aggregation model on the preprocessed plates
 _modify the "script_input_files/main_LINCS_input.txt" file to fit the hyperparameters you are using._
 
 	python main_LINCS.py @script_input_files/main_LINCS_input.txt
+	
 ### Evaluate the trained model 
 _modify the "script_input_files/fulleval_input.txt" file to the type of evaluation you want to do and on which dataset._
 
