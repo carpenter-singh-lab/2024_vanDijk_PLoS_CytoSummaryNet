@@ -652,6 +652,9 @@ class SingleCells(object):
         #     .rename(self.linking_col_rename, axis="columns")
         #     .rename(self.full_merge_suffix_rename, axis="columns")
         # )
+        sc_df = sc_df.rename(self.linking_col_rename, axis="columns")\
+            .rename(self.full_merge_suffix_rename, axis="columns")
+
         # TODO: end code block
         if single_cell_normalize:
             # Infering features is tricky with non-canonical data

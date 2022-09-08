@@ -201,22 +201,25 @@ def sqlite_to_df(
 
     # In case metadata is provided, merge into existing dataframe
     if metadata_path:
-        print('Adding metadata to data')
-        # Load additional information of file
-        df_info = pd.read_csv(metadata_path, sep='\t')
-        df_info = df_info.rename(columns={"well_position": "Metadata_Well",
-                                          "plate_map_name": "Metadata_plate_map_name",
-                                          "broad_sample": "Metadata_broad_sample",
-                                          "mmoles_per_liter": "Metadata_mmoles_per_liter"})
+        if df_merged_sc.columns.str.contains("Metadata_mmoles_per_liter").any():
+            print('Metadata already added.')
+        else:
+            print('Adding metadata to data')
+            # Load additional information of file
+            df_info = pd.read_csv(metadata_path, sep='\t')
+            df_info = df_info.rename(columns={"well_position": "Metadata_Well",
+                                              "plate_map_name": "Metadata_plate_map_name",
+                                              "broad_sample": "Metadata_broad_sample",
+                                              "mmoles_per_liter": "Metadata_mmoles_per_liter"})
 
-        # Select only metadata
-        _info_meta = [m for m in df_info.columns if m.startswith(
-            metadata_identifier)]
+            # Select only metadata
+            _info_meta = [m for m in df_info.columns if m.startswith(
+                metadata_identifier)]
 
-        # Merge single cell dataframe with additional information
-        df_merged_sc = df_merged_sc.merge(
-            right=df_info[_info_meta], how="left", on=metadata_merge_on
-        )
+            # Merge single cell dataframe with additional information
+            df_merged_sc = df_merged_sc.merge(
+                right=df_info[_info_meta], how="left", on=metadata_merge_on
+            )
 
     return df_merged_sc
 
