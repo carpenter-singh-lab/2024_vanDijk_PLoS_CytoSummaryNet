@@ -109,12 +109,17 @@ class DataloaderTrainV7(Dataset):
             for P in paths:
                 with open(P, 'rb') as f:
                     s1 = pickle.load(f)
+                    if s1['cell_features'].shape[0] == 1:
+                        continue
                     sample.append(s1)
             # Extract numpy array
             label = self.df['Metadata_labels'][self.groupDF.groups[idx]].iloc[0]
 
         else:
             raise Warning("No definition for groupDF==None")
+
+        if len(sample) == 0:
+            return [None, None]
 
         sampled_features = []
         for _ in range(self.nr_sets):
@@ -141,8 +146,6 @@ class DataloaderTrainV7(Dataset):
         sampled_features = torch.tensor(sampled_features, dtype=torch.float32)
         labels = torch.tensor([label]*self.nr_sets, dtype=torch.int16)
 
-        if sampled_features.shape[1] == 1:
-            return [None, None]
         return [sampled_features, labels]
 
 
