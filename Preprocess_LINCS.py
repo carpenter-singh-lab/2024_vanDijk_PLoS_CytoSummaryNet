@@ -128,6 +128,9 @@ if __name__=='__main__':
     # Optional positional argument
     parser.add_argument('only_load_high_dosepoints', nargs='?', const=True,
                         help='Only load data with dose pointts larger than 3 uM.')
+    # Optional positional argument
+    parser.add_argument('sqlite_shell_script_path', nargs='?',
+                        help='Path to script containing all shell commands to download sqlite files.')
 
     # Parse arguments
     args = parser.parse_args()
@@ -138,7 +141,22 @@ if __name__=='__main__':
     print(args.metadatadir)
     print(args.metadata_filename)
     print(args.subsample)
+    print(args.sqlite_shell_script_path)
 
-    preprocessLINCS(args)
+    ##% Run powershell command to download sqlite files
+    f = open(args.sqlite_shell_script_path, 'r')
+    file = f.readlines()
+    f.close()
+    commands = [line.strip('\n') for line in file if len(line) > 20][1:]
+    for cmd in commands:
+        # Download sqlite file
+        os.system(cmd)
+        print("Downloaded sqlite file to:", cmd.split(' ')[-1])
+        # Preprocess it into pickle files
+        preprocessLINCS(args)
+        # Remove the sqlite file
+        os.remove(cmd.split(' ')[-1])
+
+
 
 

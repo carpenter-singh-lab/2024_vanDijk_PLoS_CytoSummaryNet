@@ -102,6 +102,8 @@ def train_model_LINCS(args):
         del platemaps[ele]
         del platenames[ele]
 
+    assert len(plateDirs) == len(platenames) == len(platemaps)
+
     bigdf = []
     for i, pDir in enumerate(plateDirs):
         C_plate_map = pd.read_csv(os.path.join(metadata_dir, 'platemap', platemaps[i]+'.txt'), sep='\t')
