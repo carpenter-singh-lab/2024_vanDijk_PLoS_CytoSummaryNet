@@ -242,6 +242,8 @@ def train_model_LINCS(args):
             MLP_profiles = pd.concat(
                 [pd.DataFrame(MLP_profiles.detach().numpy()), pd.Series(MLP_labels.detach().numpy())], axis=1)
             MLP_profiles.columns = [f"f{x}" for x in range(MLP_profiles.shape[1] - 1)] + ['Metadata_label']
+            MLP_profiles = MLP_profiles[MLP_profiles.Metadata_label.duplicated(keep=False)]  # filter out non-replicates
+
             AP = utils.CalculateMAP(MLP_profiles, 'cosine_similarity',
                                     groupby='Metadata_label', percent_matching=False)
             # assign the mAP (no running variable because this is calculated over the entire dataset)
