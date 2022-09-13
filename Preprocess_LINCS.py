@@ -157,6 +157,8 @@ if __name__=='__main__':
         # Remove the sqlite file
         os.remove(cmd.split(' ')[-1])
 
+    print("Finished preprocessing all files!")
+
 
 
 
