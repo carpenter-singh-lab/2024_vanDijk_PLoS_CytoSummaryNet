@@ -147,7 +147,19 @@ if __name__=='__main__':
     f = open(args.sqlite_shell_script_path, 'r')
     file = f.readlines()
     f.close()
-    commands = [line.strip('\n') for line in file if len(line) > 20][1:]
+
+    # Check which files are already downloaded
+    plates = [k.split('.')[0].split('/')[-1] for k in file if len(k) > 20][1:]
+    existing_plates = [k.split('_')[-1] for k in glob.glob(os.path.join('datasets', args.dataset, 'DataLoader_*'))]
+    non_existing_plates = list(set(plates) - set(existing_plates))
+
+    l = []
+    for string in file:
+        l.append(any(substring in string for substring in non_existing_plates))
+    not_downloaded_files = np.array(file)[np.array(l)]
+
+    commands = [line.strip('\n') for line in not_downloaded_files if len(line) > 20][1:]
+
     for cmd in commands:
         # Download sqlite file
         os.system(cmd)

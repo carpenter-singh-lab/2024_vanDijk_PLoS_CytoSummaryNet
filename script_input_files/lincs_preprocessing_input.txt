@@ -3,3 +3,5 @@ LINCS
 /Users/rdijk/Documents/ProjectFA/Phase2/Data/metadata
 barcode_platemap.csv
 True
+0
+sqlite_shell_script
