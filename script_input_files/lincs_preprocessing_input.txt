@@ -2,6 +2,6 @@ LINCS
 /Users/rdijk/Documents/ProjectFA/Phase2/Data/RawData
 /Users/rdijk/Documents/ProjectFA/Phase2/Data/metadata
 barcode_platemap.csv
-True
-0
+subsample
+only_load_high_dosepoints
 sqlite_shell_script
