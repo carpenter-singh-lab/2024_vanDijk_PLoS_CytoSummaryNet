@@ -145,7 +145,7 @@ def fulleval(args):
     print('Calculating Features')
 
     with torch.no_grad():
-        for idx, (points, labels) in enumerate(tqdm(loader)):
+        for (points, labels) in tqdm(loader):
             if points.shape[1] == 1:
                 continue
                 #points = torch.zeros(1, 1, args.model_input_size)
@@ -165,6 +165,8 @@ def fulleval(args):
     average_profiles.columns = [f"Cells_{x}" for x in range(average_profiles.shape[1] - 1)] + ['Metadata_labels']
     print('MLP_profiles shape: ', MLP_profiles.shape)
     print('average_profiles shape: ', average_profiles.shape)
+
+    MLP_profiles = MLP_profiles[MLP_profiles.Metadata_label.duplicated(keep=False)]  # filter out non-replicates
     MLP_profiles.reset_index(drop=True, inplace=True)
     average_profiles.reset_index(drop=True, inplace=True)
 
