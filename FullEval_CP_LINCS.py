@@ -163,13 +163,14 @@ def fulleval(args):
     # Rename feature columns
     MLP_profiles.columns = [f"f{x}" for x in range(MLP_profiles.shape[1] - 1)] + ['Metadata_labels']
     average_profiles.columns = [f"Cells_{x}" for x in range(average_profiles.shape[1] - 1)] + ['Metadata_labels']
-    print('MLP_profiles shape: ', MLP_profiles.shape)
-    print('average_profiles shape: ', average_profiles.shape)
 
     MLP_profiles = MLP_profiles[MLP_profiles.Metadata_labels.duplicated(keep=False)]  # filter out non-replicates
     average_profiles = average_profiles[average_profiles.Metadata_labels.duplicated(keep=False)]  # filter out non-replicates
     MLP_profiles.reset_index(drop=True, inplace=True)
     average_profiles.reset_index(drop=True, inplace=True)
+
+    print('MLP_profiles shape: ', MLP_profiles.shape)
+    print('average_profiles shape: ', average_profiles.shape)
 
     ## Preprocess the average profiles
     scaler = RobustMAD(epsilon=0)
