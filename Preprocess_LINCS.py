@@ -15,7 +15,7 @@ def preprocessLINCS(args):
     barcode_plate_map = pd.read_csv(os.path.join(args.metadatadir, args.metadata_filename))
 
     # Start preprocessing
-    print('Start')
+    print('Start preprocessing')
     for path in sqlite_paths:
         platebarcode = path.split('/')[-1].split('.')[0]
         plate_map_name = \
@@ -103,7 +103,7 @@ def preprocessLINCS(args):
             with open(os.path.join(output_dirName, f'{well[0]}.pkl'), 'wb') as f:
                 pickle.dump(dict, f)
 
-    print('Finished')
+    print('Finished preprocessing')
 
 if __name__=='__main__':
     # Instantiate the parser
@@ -168,6 +168,7 @@ if __name__=='__main__':
         preprocessLINCS(args)
         # Remove the sqlite file
         os.remove(cmd.split(' ')[-1])
+        print(f"Deleted plate {cmd.split(' ')[-1]}")
 
     print("Finished preprocessing all files!")
 
