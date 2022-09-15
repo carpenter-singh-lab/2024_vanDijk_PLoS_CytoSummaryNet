@@ -154,8 +154,8 @@ if __name__=='__main__':
     non_existing_plates = list(set(plates) - set(existing_plates))
 
     l = []
-    for string in file:
-        l.append(any(substring in string for substring in non_existing_plates))
+    for line in file:
+        l.append(any(substring in line for substring in non_existing_plates))
     not_downloaded_files = np.array(file)[np.array(l)]
 
     commands = [line.strip('\n') for line in not_downloaded_files if len(line) > 20][1:]
