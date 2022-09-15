@@ -98,10 +98,13 @@ def fulleval(args):
 
     plateDirs = ['DataLoader_'+x for x in platenames]
 
-    I = platemaps.index('C-7161-01-LM6-013')
-    plateDirs.pop(I)
-    platemaps.pop(I)
-    platenames.pop(I)
+    I = [i for i, y in enumerate(platemaps) if y == "C-7161-01-LM6-013"]
+    for ele in sorted(I, reverse=True):
+        del plateDirs[ele]
+        del platemaps[ele]
+        del platenames[ele]
+
+    assert len(plateDirs) == len(platenames) == len(platemaps)
 
     # Initialize variables
     average_perturbation_map = {}
