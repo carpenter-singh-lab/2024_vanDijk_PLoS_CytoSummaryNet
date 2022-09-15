@@ -167,6 +167,7 @@ def fulleval(args):
     print('average_profiles shape: ', average_profiles.shape)
 
     MLP_profiles = MLP_profiles[MLP_profiles.Metadata_labels.duplicated(keep=False)]  # filter out non-replicates
+    average_profiles = average_profiles[average_profiles.Metadata_labels.duplicated(keep=False)]  # filter out non-replicates
     MLP_profiles.reset_index(drop=True, inplace=True)
     average_profiles.reset_index(drop=True, inplace=True)
 
