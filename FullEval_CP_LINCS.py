@@ -98,7 +98,7 @@ def fulleval(args):
 
     plateDirs = ['DataLoader_'+x for x in platenames]
 
-    I = [i for i, y in enumerate(platemaps) if y == "C-7161-01-LM6-013"]
+    I = [i for i, y in enumerate(platemaps) if y == "C-7161-01-LM6-013" or y == "C-7161-01-LM6-001"]
     for ele in sorted(I, reverse=True):
         del plateDirs[ele]
         del platemaps[ele]
