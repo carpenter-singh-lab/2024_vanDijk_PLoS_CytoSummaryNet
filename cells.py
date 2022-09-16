@@ -434,7 +434,8 @@ class SingleCells(object):
             # Remove low dose points
             shape1 = df.shape[0]
             df = df[df['Metadata_mmoles_per_liter'] > 3]
-            print(f'Removed {shape1-df.shape[0]} cells from a well with dose point lower than 3.')
+            print('Keeping these dosepoints:', df.Metadata_mmoles_per_liter.unique())
+            print(f'Removed {shape1-df.shape[0]} cells from wells with dose point lower than 3.')
 
         # End edited code
 
