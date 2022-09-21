@@ -121,9 +121,13 @@ def train_model_LINCS(args):
     bigdf = bigdf[bigdf.Metadata_labels.duplicated(keep=False)]
     shape3 = bigdf.shape[0]
     print("Removed", shape2-shape3, "unique compound wells.")
-    print('Using', shape3, "wells")
 
     Total, _ = utils.train_val_split(bigdf, 1.0, sort=True)
+    # Only get compounds which replicate >min_replicates times
+    Total = Total[Total['Metadata_labels'].map(Total['Metadata_labels'].value_counts()).gt(args.min_replicates-1)]
+    print("Removed", shape3-Total.shape[0], f"wells with less than {args.min_replicates}")
+    print('Using', Total.shape[0], "wells")
+
     gTDF = Total.groupby('Metadata_labels')
     TrainDataset = DataloaderTrainV7(Total, nr_cells=initial_cells, nr_sets=nr_sets, groupDF=gTDF)
     ValDataset = DataloaderEvalV5(Total)
@@ -312,7 +316,9 @@ if __name__=='__main__':
     # Optional positional argument
     parser.add_argument('kfilters', nargs='?', const=1/2, type=float,
                         help='Times division of the number of filters in the hidden model layers')
-
+    # Optional positional argument
+    parser.add_argument('min_replicates', nargs='?', const=4, type=int,
+                        help='Minimum number of replicates that need to be available for a compound to be used.')
     # Parse arguments
     args = parser.parse_args()
 
@@ -326,5 +332,6 @@ if __name__=='__main__':
     print('bs:', args.bs)
     print('initial_cells:', args.initial_cells)
     print('kfilters:', args.kfilters)
+    print('min. replicates:', args.min_replicates)
 
     train_model_LINCS(args)
