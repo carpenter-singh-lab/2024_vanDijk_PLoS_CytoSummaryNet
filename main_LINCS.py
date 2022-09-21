@@ -121,12 +121,12 @@ def train_model_LINCS(args):
     bigdf = bigdf[bigdf.Metadata_labels.duplicated(keep=False)]
     shape3 = bigdf.shape[0]
     print("Removed", shape2-shape3, "unique compound wells.")
+    # Only get compounds which replicate >min_replicates times
+    bigdf = bigdf[bigdf['Metadata_labels'].map(bigdf['Metadata_labels'].value_counts()).gt(args.min_replicates-1)]
+    print("Removed", shape3-bigdf.shape[0], f"wells with less than {args.min_replicates} replicates")
+    print('Using', bigdf.shape[0], "wells")
 
     Total, _ = utils.train_val_split(bigdf, 1.0, sort=True)
-    # Only get compounds which replicate >min_replicates times
-    Total = Total[Total['Metadata_labels'].map(Total['Metadata_labels'].value_counts()).gt(args.min_replicates-1)]
-    print("Removed", shape3-Total.shape[0], f"wells with less than {args.min_replicates}")
-    print('Using', Total.shape[0], "wells")
 
     gTDF = Total.groupby('Metadata_labels')
     TrainDataset = DataloaderTrainV7(Total, nr_cells=initial_cells, nr_sets=nr_sets, groupDF=gTDF)
