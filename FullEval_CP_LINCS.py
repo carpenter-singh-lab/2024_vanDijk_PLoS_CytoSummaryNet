@@ -222,6 +222,9 @@ def fulleval(args):
     ap_shuffled = utils.CalculateMAP(shuffled_profiles, 'cosine_similarity',
                             groupby=mAP_label, percent_matching=percent_matching)
 
+    ap_mlp['compound'] = ap_mlp.compound.str.replace('|', '/')
+    ap_bm['compound'] = ap_bm.compound.str.replace('|', '/')
+
     print('Total mean mAP MLP:', ap_mlp.AP.mean(), '\nTotal mean precision at R MLP:', ap_mlp['precision at R'].mean())
     print(ap_mlp.sort_values('AP').iloc[-30:, :].round(4).to_markdown(index=False))
     print('\n')
