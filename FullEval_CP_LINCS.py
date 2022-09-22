@@ -20,6 +20,9 @@ import utils
 from pycytominer.operations.transform import RobustMAD
 from pycytominer import feature_select
 
+# Statistics
+import scipy.stats as stats
+
 # Argument parser
 import argparse
 
@@ -226,6 +229,10 @@ def fulleval(args):
     print(ap_bm.sort_values('AP').iloc[-30:, 1:].round(4).to_markdown())
     print('\n')
     print('Total mean mAP shuffled:', ap_shuffled.AP.mean(), '\nTotal mean precision at R shuffled:', ap_shuffled['precision at R'].mean())
+
+    print('\n')
+    # Conduct Welch's t-Test and print the result
+    print("Welch's t-test between mlp mAP and bm mAP:", stats.ttest_ind(np.array(ap_mlp.AP), np.array(ap_bm.AP), equal_var=False))
 
     # WRITE TO FILE
     try:
