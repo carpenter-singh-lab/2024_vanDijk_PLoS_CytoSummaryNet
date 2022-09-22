@@ -220,10 +220,10 @@ def fulleval(args):
                             groupby=mAP_label, percent_matching=percent_matching)
 
     print('Total mean mAP MLP:', ap_mlp.AP.mean(), '\nTotal mean precision at R MLP:', ap_mlp['precision at R'].mean())
-    print(ap_mlp.sort_values('AP').iloc[:, -30:].round(4).to_markdown())
+    print(ap_mlp.sort_values('AP').iloc[-30:, 1:].round(4).to_markdown())
     print('\n')
     print('Total mean mAP BM:', ap_bm.AP.mean(), '\nTotal mean precision at R BM:', ap_bm['precision at R'].mean())
-    print(ap_bm.sort_values('AP').iloc[:, -30:].round(4).to_markdown())
+    print(ap_bm.sort_values('AP').iloc[-30:, 1:].round(4).to_markdown())
     print('\n')
     print('Total mean mAP shuffled:', ap_shuffled.AP.mean(), '\nTotal mean precision at R shuffled:', ap_shuffled['precision at R'].mean())
 
