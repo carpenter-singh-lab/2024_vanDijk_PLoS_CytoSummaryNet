@@ -208,15 +208,20 @@ def fulleval(args):
     MLP_profiles = MLP_profiles.dropna().reset_index(drop=True)
     average_profiles = average_profiles.dropna().reset_index(drop=True)
     print('New size:', MLP_profiles.shape)
+    shuffled_profiles = average_profiles.copy()
+    shuffled_profiles.iloc[:, :-3] = pd.DataFrame.from_records(np.ones(shuffled_profiles.iloc[:, :-3].shape))
 
     ## Calculate mean average precision
     ap_mlp = utils.CalculateMAP(MLP_profiles, 'cosine_similarity',
                             groupby=mAP_label, percent_matching=percent_matching)
     ap_bm = utils.CalculateMAP(average_profiles, 'cosine_similarity',
                             groupby=mAP_label, percent_matching=percent_matching)
+    ap_shuffled = utils.CalculateMAP(shuffled_profiles, 'cosine_similarity',
+                            groupby=mAP_label, percent_matching=percent_matching)
 
     print('Total mean mAP MLP:', ap_mlp.AP.mean(), '\nTotal mean precision at R MLP:', ap_mlp['precision at R'].mean())
     print('Total mean mAP BM:', ap_bm.AP.mean(), '\nTotal mean precision at R BM:', ap_bm['precision at R'].mean())
+    print('Total mean mAP shuffled:', ap_shuffled.AP.mean(), '\nTotal mean precision at R shuffled:', ap_shuffled['precision at R'].mean())
 
     # WRITE TO FILE
     try:
@@ -250,19 +255,33 @@ def fulleval(args):
     f.write('\n')
     f.write(f'Validation samples || mean:{ap_bm.iloc[split:, 1].mean()}\n' + ap_bm.iloc[split:, :].groupby(
         'compound').mean().sort_values(by='AP', ascending=False).to_markdown())
+    f.write('\n')
+    f.write('\n')
+    f.write('Shuffled results')
+    f.write('\n')
+    f.write('Total mean:' + str(ap_shuffled.AP.mean()))
+    f.write('\n')
+    f.write(f'Training samples || mean:{ap_shuffled.iloc[:split, 1].mean()}\n' + ap_shuffled.iloc[:split, :].groupby(
+        'compound').mean().sort_values(by='AP', ascending=False).to_markdown())
+    f.write('\n')
+    f.write(f'Validation samples || mean:{ap_shuffled.iloc[split:, 1].mean()}\n' + ap_shuffled.iloc[split:, :].groupby(
+        'compound').mean().sort_values(by='AP', ascending=False).to_markdown())
     f.close()
 
     # Add to a large dataframe
     if percent_matching:
         allresultsdf =pd.DataFrame({'mAP model': [ap_mlp.iloc[:, 1].mean()],
-                                    'mAP BM': [ap_bm.iloc[:, 1].mean()]})
+                                    'mAP BM': [ap_bm.iloc[:, 1].mean()],
+                                    'mAP shuffled': [ap_shuffled.iloc[:, 1].mean()]})
         sorted_dictionary = {k: [v] for k, v in sorted(average_perturbation_map.items(), key=lambda item: item[1], reverse=True)}
         bestmoas = pd.DataFrame(sorted_dictionary)
     else:
         allresultsdf = pd.DataFrame({'Training mAP model': [ap_mlp.iloc[:split, 1].mean()],
                                      'Training mAP BM': [ap_bm.iloc[:split, 1].mean()],
+                                     'Training mAP shuffled': [ap_shuffled.iloc[:split, 1].mean()],
                                      'Validation mAP model': [ap_mlp.iloc[split:, 1].mean()],
-                                     'Validation mAP BM': [ap_bm.iloc[split:, 1].mean()]})
+                                     'Validation mAP BM': [ap_bm.iloc[split:, 1].mean()],
+                                     'Validation mAP shuffled': [ap_shuffled.iloc[split:, 1].mean()]})
 
     ## Organize all results and save them
     PLATES = [x.split('_')[-1] for x in plateDirs]
@@ -270,7 +289,7 @@ def fulleval(args):
     allresultsdf['plate'] = '_'.join(PLATES)
 
     allresultsdf = allresultsdf.set_index('plate')
-    print(allresultsdf.round(2).to_markdown())
+    print(allresultsdf.round(4).to_markdown())
 
     if percent_matching:
         allresultsdf.to_csv(f'{args.output_path}/{dataset_name}_moa_map.csv')

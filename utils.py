@@ -25,6 +25,10 @@ from sklearn.metrics import average_precision_score
 import copy
 from itertools import islice
 
+# Precision at K
+from sklearn.utils import column_or_1d
+from sklearn.utils.multiclass import type_of_target
+
 # filter noisy data
 from dataloader_pickles import DataloaderEvalV5, DataloaderTrainV6
 import torch.utils.data as data
@@ -363,6 +367,7 @@ def CalculateMAP(df, distance='euclidean', groupby='Metadata_labels', percent_ma
             labels.values[:] = 0
             labels[index] = 1
         AP = average_precision_score(labels, row)
+        AP /= sum(labels)  # normalize AP by number of positive labels
         well_APs.append(AP)
 
         if percent_matching:
@@ -382,8 +387,7 @@ def CalculateMAP(df, distance='euclidean', groupby='Metadata_labels', percent_ma
 
 
 def precision_at_k(y_true, y_score, k, pos_label=1):
-    from sklearn.utils import column_or_1d
-    from sklearn.utils.multiclass import type_of_target
+
 
     y_true_type = type_of_target(y_true)
     if not (y_true_type == "binary"):
