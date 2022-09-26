@@ -337,7 +337,7 @@ def CalculateMAP(df, distance='euclidean', groupby='Metadata_labels', percent_ma
 
     np.fill_diagonal(dist.values, -1)
     well_APs = []
-    PatKs = []
+    PatRs = []
 
     if percent_matching:
         df.reset_index(drop=True, inplace=True)
@@ -366,17 +366,16 @@ def CalculateMAP(df, distance='euclidean', groupby='Metadata_labels', percent_ma
             labels = copy.deepcopy(row)
             labels.values[:] = 0
             labels[index] = 1
+
+        # Calculate AP
         AP = average_precision_score(labels, row)
-        AP /= sum(labels)  # normalize AP by number of positive labels
-        well_APs.append(AP)
+        AP_corrected = AP - (sum(labels)/len(labels))  # correct AP by subtracting the random baseline
+        well_APs.append(AP_corrected)
+        # Calculate P@R
+        PatR = precision_at_k(labels, row, k=int(sum(labels)))
+        PatRs.append(PatR)
 
-        if percent_matching:
-            PatK = precision_at_k(labels, row, k=4)  # 4 because all sister compounds
-        else:
-            PatK = precision_at_k(labels, row, k=3)  # 3 because one is masked
-        PatKs.append(PatK)
-
-    scores = pd.DataFrame(zip(compound_names, well_APs, PatKs), columns=['compound', 'AP', 'precision at R'])
+    scores = pd.DataFrame(zip(compound_names, well_APs, PatRs), columns=['compound', 'AP', 'precision at R'])
 
     # plt.figure(figsize=(14, 10), dpi=300)
     # # plot the heatmap
