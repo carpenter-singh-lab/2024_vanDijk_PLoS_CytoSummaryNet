@@ -226,10 +226,10 @@ def fulleval(args):
     ap_bm['compound'] = ap_bm.compound.str.replace('|', '/')
 
     print('Total mean mAP MLP:', ap_mlp.AP.mean(), '\nTotal mean precision at R MLP:', ap_mlp['precision at R'].mean())
-    print(ap_mlp.sort_values('AP').groupby('compound').iloc[-30:, :].round(4).to_markdown(index=False))
+    print(ap_mlp.groupby('compound').mean().sort_values('AP').iloc[-30:, :].round(4).to_markdown())
     print('\n')
     print('Total mean mAP BM:', ap_bm.AP.mean(), '\nTotal mean precision at R BM:', ap_bm['precision at R'].mean())
-    print(ap_bm.sort_values('AP').groupby('compound').iloc[-30:, :].round(4).to_markdown(index=False))
+    print(ap_bm.groupby('compound').mean().sort_values('AP').iloc[-30:, :].round(4).to_markdown())
     print('\n')
     print('Total mean mAP shuffled:', ap_shuffled.AP.mean(), '\nTotal mean precision at R shuffled:', ap_shuffled['precision at R'].mean())
 
