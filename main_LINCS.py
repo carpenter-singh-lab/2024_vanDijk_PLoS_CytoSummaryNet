@@ -62,7 +62,7 @@ def train_model_LINCS(args):
 
     lr = args.lr  # learning rate
     epochs = args.epochs  # maximum number of epochs
-    nr_sets = args.nr_sets  # number of sets you sample per well
+    nr_sets = args.nr_sets  # number of sets you sample per compound group
     BS = args.bs  # 54 for grouped // batch size as passed to the model (nr of wells that you sample per batch)
     true_BS = int(nr_sets*BS) # true number of sets that the model will see per batch
     print(f'True batch size is {true_BS}')
