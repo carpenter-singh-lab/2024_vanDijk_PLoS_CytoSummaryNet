@@ -134,3 +134,6 @@ aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/workspace/backend/2016_0
 aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/workspace/backend/2016_04_01_a549_48hr_batch1/SQ00015224/SQ00015224.sqlite aws_scripts/sqlite_files/SQ00015224.sqlite
 aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/workspace/backend/2016_04_01_a549_48hr_batch1/SQ00015229/SQ00015229.sqlite aws_scripts/sqlite_files/SQ00015229.sqlite
 aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/workspace/backend/2016_04_01_a549_48hr_batch1/SQ00015230/SQ00015230.sqlite aws_scripts/sqlite_files/SQ00015230.sqlite
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/workspace/backend/2016_04_01_a549_48hr_batch1/SQ00015231/SQ00015231.sqlite aws_scripts/sqlite_files/SQ00015231.sqlite
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/workspace/backend/2016_04_01_a549_48hr_batch1/SQ00015232/SQ00015232.sqlite aws_scripts/sqlite_files/SQ00015232.sqlite
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/workspace/backend/2016_04_01_a549_48hr_batch1/SQ00015233/SQ00015233.sqlite aws_scripts/sqlite_files/SQ00015233.sqlite
