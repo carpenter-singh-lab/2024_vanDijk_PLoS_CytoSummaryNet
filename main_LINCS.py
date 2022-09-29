@@ -77,30 +77,24 @@ def train_model_LINCS(args):
     load_model = False
     weight_decay = 'AdamW default'
 
-    remove_columns = {'Cells_RadialDistribution_FracAtD_DNA_1of4’', '‘Cells_RadialDistribution_FracAtD_DNA_2of4’',
-                      '‘Cells_RadialDistribution_FracAtD_DNA_3of4’', '‘Cells_RadialDistribution_FracAtD_DNA_4of4’',
-                      '‘Cells_RadialDistribution_MeanFrac_DNA_1of4’', '‘Cells_RadialDistribution_MeanFrac_DNA_2of4’',
-                      '‘Cells_RadialDistribution_MeanFrac_DNA_3of4’', '‘Cells_RadialDistribution_MeanFrac_DNA_4of4’',
-                      '‘Cells_RadialDistribution_RadialCV_DNA_1of4’', '‘Cells_RadialDistribution_RadialCV_DNA_2of4’',
-                      '‘Cells_RadialDistribution_RadialCV_DNA_3of4’', '‘Cells_RadialDistribution_RadialCV_DNA_4of4’',
-                      '‘Cytoplasm_RadialDistribution_FracAtD_DNA_1of4’',
-                      '‘Cytoplasm_RadialDistribution_FracAtD_DNA_2of4’',
-                      '‘Cytoplasm_RadialDistribution_FracAtD_DNA_3of4’',
-                      '‘Cytoplasm_RadialDistribution_FracAtD_DNA_4of4’',
-                      '‘Cytoplasm_RadialDistribution_MeanFrac_DNA_1of4’',
-                      '‘Cytoplasm_RadialDistribution_MeanFrac_DNA_2of4’',
-                      '‘Cytoplasm_RadialDistribution_MeanFrac_DNA_3of4’',
-                      '‘Cytoplasm_RadialDistribution_MeanFrac_DNA_4of4’',
-                      '‘Cytoplasm_RadialDistribution_RadialCV_DNA_1of4’',
-                      '‘Cytoplasm_RadialDistribution_RadialCV_DNA_2of4’',
-                      '‘Cytoplasm_RadialDistribution_RadialCV_DNA_3of4’',
-                      '‘Cytoplasm_RadialDistribution_RadialCV_DNA_4of4’',
-                      '‘Nuclei_RadialDistribution_FracAtD_DNA_1of4’', '‘Nuclei_RadialDistribution_FracAtD_DNA_2of4’',
-                      '‘Nuclei_RadialDistribution_FracAtD_DNA_3of4’', '‘Nuclei_RadialDistribution_FracAtD_DNA_4of4’',
-                      '‘Nuclei_RadialDistribution_MeanFrac_DNA_1of4’', '‘Nuclei_RadialDistribution_MeanFrac_DNA_2of4’',
-                      '‘Nuclei_RadialDistribution_MeanFrac_DNA_3of4’', '‘Nuclei_RadialDistribution_MeanFrac_DNA_4of4’',
-                      '‘Nuclei_RadialDistribution_RadialCV_DNA_1of4’', '‘Nuclei_RadialDistribution_RadialCV_DNA_2of4’',
-                      '‘Nuclei_RadialDistribution_RadialCV_DNA_3of4’', '‘Nuclei_RadialDistribution_RadialCV_DNA_4of4’'}
+    remove_columns = {'Cells_RadialDistribution_FracAtD_DNA_1of4', 'Cells_RadialDistribution_FracAtD_DNA_2of4',
+                       'Cells_RadialDistribution_FracAtD_DNA_3of4', 'Cells_RadialDistribution_FracAtD_DNA_4of4',
+                       'Cells_RadialDistribution_MeanFrac_DNA_1of4', 'Cells_RadialDistribution_MeanFrac_DNA_2of4',
+                       'Cells_RadialDistribution_MeanFrac_DNA_3of4', 'Cells_RadialDistribution_MeanFrac_DNA_4of4',
+                       'Cells_RadialDistribution_RadialCV_DNA_1of4', 'Cells_RadialDistribution_RadialCV_DNA_2of4',
+                       'Cells_RadialDistribution_RadialCV_DNA_3of4', 'Cells_RadialDistribution_RadialCV_DNA_4of4',
+                       'Cytoplasm_RadialDistribution_FracAtD_DNA_1of4', 'Cytoplasm_RadialDistribution_FracAtD_DNA_2of4',
+                       'Cytoplasm_RadialDistribution_FracAtD_DNA_3of4', 'Cytoplasm_RadialDistribution_FracAtD_DNA_4of4',
+                       'Cytoplasm_RadialDistribution_MeanFrac_DNA_1of4', 'Cytoplasm_RadialDistribution_MeanFrac_DNA_2of4',
+                       'Cytoplasm_RadialDistribution_MeanFrac_DNA_3of4', 'Cytoplasm_RadialDistribution_MeanFrac_DNA_4of4',
+                       'Cytoplasm_RadialDistribution_RadialCV_DNA_1of4', 'Cytoplasm_RadialDistribution_RadialCV_DNA_2of4',
+                       'Cytoplasm_RadialDistribution_RadialCV_DNA_3of4', 'Cytoplasm_RadialDistribution_RadialCV_DNA_4of4',
+                       'Nuclei_RadialDistribution_FracAtD_DNA_1of4', 'Nuclei_RadialDistribution_FracAtD_DNA_2of4',
+                       'Nuclei_RadialDistribution_FracAtD_DNA_3of4', 'Nuclei_RadialDistribution_FracAtD_DNA_4of4',
+                       'Nuclei_RadialDistribution_MeanFrac_DNA_1of4', 'Nuclei_RadialDistribution_MeanFrac_DNA_2of4',
+                       'Nuclei_RadialDistribution_MeanFrac_DNA_3of4', 'Nuclei_RadialDistribution_MeanFrac_DNA_4of4',
+                       'Nuclei_RadialDistribution_RadialCV_DNA_1of4', 'Nuclei_RadialDistribution_RadialCV_DNA_2of4',
+                       'Nuclei_RadialDistribution_RadialCV_DNA_3of4', 'Nuclei_RadialDistribution_RadialCV_DNA_4of4'}
 
     #%% Load all data
     rootDir = r'datasets/LINCS'  # path to datasets
