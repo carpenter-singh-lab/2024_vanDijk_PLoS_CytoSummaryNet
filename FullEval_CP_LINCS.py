@@ -101,13 +101,16 @@ def fulleval(args):
 
     plateDirs = ['DataLoader_'+x for x in platenames]
 
-    I = [i for i, y in enumerate(platemaps) if y == "C-7161-01-LM6-013" or y == "C-7161-01-LM6-001"]
-    for ele in sorted(I, reverse=True):
-        del plateDirs[ele]
-        del platemaps[ele]
-        del platenames[ele]
+    if True:
+        holdouts = ['SQ00015116', 'SQ00015117', 'SQ00015118', 'SQ00015119', 'SQ00015120', 'SQ00015121', 'SQ00015122',
+                    'SQ00015123', 'SQ00015125', 'SQ00015126']  # with 1745 features
+        I = [i for i, y in enumerate(platenames) if y in holdouts]
+        for ele in sorted(I, reverse=True):
+            del plateDirs[ele]
+            del platemaps[ele]
+            del platenames[ele]
 
-    assert len(plateDirs) == len(platenames) == len(platemaps)
+        assert len(plateDirs) == len(platenames) == len(platemaps)
 
     # Initialize variables
     average_perturbation_map = {}

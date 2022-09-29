@@ -26,13 +26,6 @@ You can find more details in the FeatureAggregationManuscriptV1.pdf
 	aws configure
 _enter credentials_
 
-### Download all LINCS plates
-	cd /aws_scripts
-	cp get_data_LINCS.txt get_data_LINCS.sh 
-	# possibly edit the .sh copy to download a subset of the data with "nano get_data_LINCS.sh" or similar
-	chmod +x get_data_LINCS.sh
-	./get_data_LINCS.sh
-
 ### Download the LINCS metadata
 	cd aws_scripts
 	git init
@@ -55,8 +48,10 @@ _enter credentials_
 
 	conda env create -f environment.yml
 
-### Preprocess all downloaded plates
-	# Edit the lincs_preprocessing_input.txt file; p1: dataset name, p2: sqlite path, p3: metadata path, p4: barcode platemap filename
+### Download and preprocess all LINCS plates from batch 1
+_edit the lincs_preprocessing_input.txt file; p1: dataset name, p2: sqlite path, p3: metadata path, p4: barcode platemap filename_
+_possibly edit the get_data_LINCS.txt file to download a subset of the data with "nano /aws_scripts/get_data_LINCS.txt"_
+	
 	python Preprocess_LINCS.py @script_input_files/lincs_preprocessing_input.txt
 
 ### Train the feature aggregation model on the preprocessed plates

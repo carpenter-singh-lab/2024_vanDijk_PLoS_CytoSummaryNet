@@ -17,13 +17,14 @@ import random
 
 class DataloaderEvalV5(Dataset):
     """ Dataloader used for loading single pickle files for cell feature aggregation (bs=1). """
-    def __init__(self, df, preprocess=False):
+    def __init__(self, df, preprocess=False, remove_columns=None):
         """
         Args:
             df: dataframe of all metadata and paths to the pickle files per plate
         """
         self.df = df
         self.dataprep = preprocess
+        self.remove_columns = remove_columns
 
     def __len__(self):
         return len(self.df)
@@ -35,6 +36,10 @@ class DataloaderEvalV5(Dataset):
         with open(self.df.iloc[:, 1][idx], 'rb') as f:
             sample1 = pickle.load(f)
         # extract numpy array
+        if sample1['cell_features'].shape[1] == 1781 and self.remove_columns is not None:
+            current_columns = set(sample1['cell_features'].columns)
+            sample1['cell_features'] = sample1['cell_features'][list(current_columns - self.remove_columns)]
+
         features = sample1['cell_features']
         well_position = sample1['well_position']
 
@@ -74,7 +79,7 @@ class DataloaderTrainV7(Dataset):
     Dataloader used for loading pickle files on the fly from the laoder during the training.
      Data augmentation is possible, not implemented yet. """
 
-    def __init__(self, df, nr_cells=400, nr_sets=3, groupDF=None, compensator=0):
+    def __init__(self, df, nr_cells=400, nr_sets=3, groupDF=None, compensator=0, remove_columns=None):
         """
         Args:
             df: dataframe of all metadata and paths to the pickle files per plate
@@ -87,6 +92,7 @@ class DataloaderTrainV7(Dataset):
         self.groupDF = groupDF
         self.compensator = compensator
         self.nr_sets = nr_sets
+        self.remove_columns = None
 
     def __len__(self):
         if self.groupDF is not None:
@@ -111,6 +117,9 @@ class DataloaderTrainV7(Dataset):
                     s1 = pickle.load(f)
                     if s1['cell_features'].shape[0] == 1:
                         continue
+                    if s1['cell_features'].shape[1] == 1781 and self.remove_columns is not None:
+                        current_columns = set(s1['cell_features'].columns)
+                        s1['cell_features'] = s1['cell_features'][list(current_columns-self.remove_columns)]
                     sample.append(s1)
             # Extract numpy array
             label = self.df['Metadata_labels'][self.groupDF.groups[idx]].iloc[0]
@@ -124,9 +133,9 @@ class DataloaderTrainV7(Dataset):
         sampled_features = []
         for _ in range(self.nr_sets):
             # Generate random number of wells to combine into one sample
-            nr_wells = np.random.randint(1, 3, 1) # either 1 or 2 wells combined
+            nr_wells = np.random.randint(1, 3, 1)  # either 1 or 2 wells combined
             if nr_wells <= len(sample):
-                which_wells = np.random.choice(len(sample), nr_wells, replace=False) # sampling without replacement
+                which_wells = np.random.choice(len(sample), nr_wells, replace=False)  # sampling without replacement
             else:
                 which_wells = [0]
             temp = [sample[x] for x in which_wells]

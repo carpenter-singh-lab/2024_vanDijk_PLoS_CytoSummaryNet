@@ -77,6 +77,31 @@ def train_model_LINCS(args):
     load_model = False
     weight_decay = 'AdamW default'
 
+    remove_columns = {'Cells_RadialDistribution_FracAtD_DNA_1of4’', '‘Cells_RadialDistribution_FracAtD_DNA_2of4’',
+                      '‘Cells_RadialDistribution_FracAtD_DNA_3of4’', '‘Cells_RadialDistribution_FracAtD_DNA_4of4’',
+                      '‘Cells_RadialDistribution_MeanFrac_DNA_1of4’', '‘Cells_RadialDistribution_MeanFrac_DNA_2of4’',
+                      '‘Cells_RadialDistribution_MeanFrac_DNA_3of4’', '‘Cells_RadialDistribution_MeanFrac_DNA_4of4’',
+                      '‘Cells_RadialDistribution_RadialCV_DNA_1of4’', '‘Cells_RadialDistribution_RadialCV_DNA_2of4’',
+                      '‘Cells_RadialDistribution_RadialCV_DNA_3of4’', '‘Cells_RadialDistribution_RadialCV_DNA_4of4’',
+                      '‘Cytoplasm_RadialDistribution_FracAtD_DNA_1of4’',
+                      '‘Cytoplasm_RadialDistribution_FracAtD_DNA_2of4’',
+                      '‘Cytoplasm_RadialDistribution_FracAtD_DNA_3of4’',
+                      '‘Cytoplasm_RadialDistribution_FracAtD_DNA_4of4’',
+                      '‘Cytoplasm_RadialDistribution_MeanFrac_DNA_1of4’',
+                      '‘Cytoplasm_RadialDistribution_MeanFrac_DNA_2of4’',
+                      '‘Cytoplasm_RadialDistribution_MeanFrac_DNA_3of4’',
+                      '‘Cytoplasm_RadialDistribution_MeanFrac_DNA_4of4’',
+                      '‘Cytoplasm_RadialDistribution_RadialCV_DNA_1of4’',
+                      '‘Cytoplasm_RadialDistribution_RadialCV_DNA_2of4’',
+                      '‘Cytoplasm_RadialDistribution_RadialCV_DNA_3of4’',
+                      '‘Cytoplasm_RadialDistribution_RadialCV_DNA_4of4’',
+                      '‘Nuclei_RadialDistribution_FracAtD_DNA_1of4’', '‘Nuclei_RadialDistribution_FracAtD_DNA_2of4’',
+                      '‘Nuclei_RadialDistribution_FracAtD_DNA_3of4’', '‘Nuclei_RadialDistribution_FracAtD_DNA_4of4’',
+                      '‘Nuclei_RadialDistribution_MeanFrac_DNA_1of4’', '‘Nuclei_RadialDistribution_MeanFrac_DNA_2of4’',
+                      '‘Nuclei_RadialDistribution_MeanFrac_DNA_3of4’', '‘Nuclei_RadialDistribution_MeanFrac_DNA_4of4’',
+                      '‘Nuclei_RadialDistribution_RadialCV_DNA_1of4’', '‘Nuclei_RadialDistribution_RadialCV_DNA_2of4’',
+                      '‘Nuclei_RadialDistribution_RadialCV_DNA_3of4’', '‘Nuclei_RadialDistribution_RadialCV_DNA_4of4’'}
+
     #%% Load all data
     rootDir = r'datasets/LINCS'  # path to datasets
     plateDirs = [x[0] for x in os.walk(rootDir)][1:]
@@ -96,12 +121,14 @@ def train_model_LINCS(args):
 
     plateDirs = ['DataLoader_'+x for x in platenames]
 
-    # Plates with this platemap: "C-7161-01-LM6-001" contain 1745 features instead of 1781
-    I = [i for i, y in enumerate(platemaps) if y == "C-7161-01-LM6-013" or y == "C-7161-01-LM6-001"]
-    for ele in sorted(I, reverse=True):
-        del plateDirs[ele]
-        del platemaps[ele]
-        del platenames[ele]
+    if True:
+        holdouts = ['SQ00015116', 'SQ00015117', 'SQ00015118', 'SQ00015119', 'SQ00015120', 'SQ00015121', 'SQ00015122',
+                    'SQ00015123', 'SQ00015125', 'SQ00015126']  # with 1745 features
+        I = [i for i, y in enumerate(platenames) if y in holdouts]
+        for ele in sorted(I, reverse=True):
+            del plateDirs[ele]
+            del platemaps[ele]
+            del platenames[ele]
 
     assert len(plateDirs) == len(platenames) == len(platemaps)
 
@@ -129,8 +156,9 @@ def train_model_LINCS(args):
     Total, _ = utils.train_val_split(bigdf, 1.0, sort=True)
 
     gTDF = Total.groupby('Metadata_labels')
-    TrainDataset = DataloaderTrainV7(Total, nr_cells=initial_cells, nr_sets=nr_sets, groupDF=gTDF)
-    ValDataset = DataloaderEvalV5(Total)
+    TrainDataset = DataloaderTrainV7(Total, nr_cells=initial_cells, nr_sets=nr_sets, groupDF=gTDF,
+                                     remove_columns=remove_columns)
+    ValDataset = DataloaderEvalV5(Total, remove_columns=remove_columns)
 
     trainloader = data.DataLoader(TrainDataset, batch_size=BS, shuffle=True, collate_fn=utils.my_collate,
                                         drop_last=False, pin_memory=False, num_workers=NUM_WORKERS)
@@ -193,7 +221,7 @@ def train_model_LINCS(args):
     print(utils.now() + "Start training")
     best_val = 0
 
-    for e in range(E, E+epochs):
+    for e in range(E, epochs):
         time.sleep(0.5)
         model.train()
         tr_loss = 0.0
