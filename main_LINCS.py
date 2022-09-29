@@ -121,7 +121,7 @@ def train_model_LINCS(args):
 
     plateDirs = ['DataLoader_'+x for x in platenames]
 
-    if True:
+    if False:
         holdouts = ['SQ00015116', 'SQ00015117', 'SQ00015118', 'SQ00015119', 'SQ00015120', 'SQ00015121', 'SQ00015122',
                     'SQ00015123', 'SQ00015125', 'SQ00015126']  # with 1745 features
         I = [i for i, y in enumerate(platenames) if y in holdouts]
