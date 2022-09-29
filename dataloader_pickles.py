@@ -92,7 +92,7 @@ class DataloaderTrainV7(Dataset):
         self.groupDF = groupDF
         self.compensator = compensator
         self.nr_sets = nr_sets
-        self.remove_columns = None
+        self.remove_columns = remove_columns
 
     def __len__(self):
         if self.groupDF is not None:
