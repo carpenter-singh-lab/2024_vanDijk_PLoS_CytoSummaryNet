@@ -37,7 +37,10 @@ class DataloaderEvalV5(Dataset):
             sample1 = pickle.load(f)
         # extract numpy array
         if sample1['cell_features'].shape[1] == 1781 and self.remove_columns is not None:
-            sample1['cell_features'] = sample1['cell_features'].drop(self.remove_columns, axis=1)
+            if sample1['cell_features'].shape[0] == 1:
+                sample1['cell_features'] = np.zeros((1, 1745))
+            else:
+                sample1['cell_features'] = sample1['cell_features'].drop(self.remove_columns, axis=1)
 
         features = sample1['cell_features']
         well_position = sample1['well_position']
