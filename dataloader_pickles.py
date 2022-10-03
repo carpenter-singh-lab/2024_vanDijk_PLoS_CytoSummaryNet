@@ -37,8 +37,7 @@ class DataloaderEvalV5(Dataset):
             sample1 = pickle.load(f)
         # extract numpy array
         if sample1['cell_features'].shape[1] == 1781 and self.remove_columns is not None:
-            current_columns = set(sample1['cell_features'].columns)
-            sample1['cell_features'] = sample1['cell_features'][list(current_columns - self.remove_columns)]
+            sample1['cell_features'] = sample1['cell_features'].drop(self.remove_columns, axis=1)
 
         features = sample1['cell_features']
         well_position = sample1['well_position']
@@ -118,8 +117,7 @@ class DataloaderTrainV7(Dataset):
                     if s1['cell_features'].shape[0] == 1:
                         continue
                     if s1['cell_features'].shape[1] == 1781 and self.remove_columns is not None:
-                        current_columns = set(s1['cell_features'].columns)
-                        s1['cell_features'] = s1['cell_features'][list(current_columns-self.remove_columns)]
+                        s1['cell_features'] = s1['cell_features'].drop(self.remove_columns, axis=1)
                     sample.append(s1)
             # Extract numpy array
             label = self.df['Metadata_labels'][self.groupDF.groups[idx]].iloc[0]
