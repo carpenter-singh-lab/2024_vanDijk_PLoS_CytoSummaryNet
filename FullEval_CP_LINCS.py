@@ -82,6 +82,26 @@ def fulleval(args):
     model.eval()
 
 
+    remove_columns = {'Cells_RadialDistribution_FracAtD_DNA_1of4', 'Cells_RadialDistribution_FracAtD_DNA_2of4',
+                       'Cells_RadialDistribution_FracAtD_DNA_3of4', 'Cells_RadialDistribution_FracAtD_DNA_4of4',
+                       'Cells_RadialDistribution_MeanFrac_DNA_1of4', 'Cells_RadialDistribution_MeanFrac_DNA_2of4',
+                       'Cells_RadialDistribution_MeanFrac_DNA_3of4', 'Cells_RadialDistribution_MeanFrac_DNA_4of4',
+                       'Cells_RadialDistribution_RadialCV_DNA_1of4', 'Cells_RadialDistribution_RadialCV_DNA_2of4',
+                       'Cells_RadialDistribution_RadialCV_DNA_3of4', 'Cells_RadialDistribution_RadialCV_DNA_4of4',
+                       'Cytoplasm_RadialDistribution_FracAtD_DNA_1of4', 'Cytoplasm_RadialDistribution_FracAtD_DNA_2of4',
+                       'Cytoplasm_RadialDistribution_FracAtD_DNA_3of4', 'Cytoplasm_RadialDistribution_FracAtD_DNA_4of4',
+                       'Cytoplasm_RadialDistribution_MeanFrac_DNA_1of4', 'Cytoplasm_RadialDistribution_MeanFrac_DNA_2of4',
+                       'Cytoplasm_RadialDistribution_MeanFrac_DNA_3of4', 'Cytoplasm_RadialDistribution_MeanFrac_DNA_4of4',
+                       'Cytoplasm_RadialDistribution_RadialCV_DNA_1of4', 'Cytoplasm_RadialDistribution_RadialCV_DNA_2of4',
+                       'Cytoplasm_RadialDistribution_RadialCV_DNA_3of4', 'Cytoplasm_RadialDistribution_RadialCV_DNA_4of4',
+                       'Nuclei_RadialDistribution_FracAtD_DNA_1of4', 'Nuclei_RadialDistribution_FracAtD_DNA_2of4',
+                       'Nuclei_RadialDistribution_FracAtD_DNA_3of4', 'Nuclei_RadialDistribution_FracAtD_DNA_4of4',
+                       'Nuclei_RadialDistribution_MeanFrac_DNA_1of4', 'Nuclei_RadialDistribution_MeanFrac_DNA_2of4',
+                       'Nuclei_RadialDistribution_MeanFrac_DNA_3of4', 'Nuclei_RadialDistribution_MeanFrac_DNA_4of4',
+                       'Nuclei_RadialDistribution_RadialCV_DNA_1of4', 'Nuclei_RadialDistribution_RadialCV_DNA_2of4',
+                       'Nuclei_RadialDistribution_RadialCV_DNA_3of4', 'Nuclei_RadialDistribution_RadialCV_DNA_4of4'}
+
+
     ## Load all data
     rootDir = fr'datasets/{dataset_name}'
     plateDirs = [x[0] for x in os.walk(rootDir)][1:]
@@ -139,7 +159,7 @@ def fulleval(args):
     print('Using', shape3, "wells")
 
     Total, _ = utils.train_val_split(bigdf, 1.0, sort=True)
-    ValDataset = DataloaderEvalV5(Total)
+    ValDataset = DataloaderEvalV5(Total,  remove_columns=remove_columns)
     loader = data.DataLoader(ValDataset, batch_size=1, shuffle=False,
                                    drop_last=False, pin_memory=False, num_workers=NUM_WORKERS)
 
