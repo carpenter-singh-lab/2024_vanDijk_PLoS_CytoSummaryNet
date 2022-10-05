@@ -2,7 +2,7 @@ apex==0.9.10dev
 dask==2022.1.0
 kneed==0.7.0
 matplotlib==3.5.1
-numpy==1.21.5
+numpy==1.22.0
 pandas==1.4.1
 plotly==5.5.0
 pyarrow==6.0.1
