@@ -63,14 +63,35 @@ _possibly edit the get_data_LINCS.txt file to download a subset of the data with
 	python Preprocess_LINCS.py @script_input_files/lincs_preprocessing_input.txt
 
 ### Train the feature aggregation model on the preprocessed plates
-_modify the "script_input_files/main_LINCS_input.txt" file to the hyperparameters that you want to use._
+_modify the "script_input_files/main_LINCS_input.txt" file to the hyperparameters that you want to use:_
+- p1: metadata path
+- p2: wandb mode parameter
+- p3: number of input features model
+- p4: learning rate
+- p5: epochs
+- p6: number of sets per compound type
+- p7: batch size (note: true batch size = p6*p7)
+- p8: mean of the gaussian distribution used to sample cells (sd=800)
+- p9: kFilters
+- p10: minimum number of replicates for compounds to be included (default=0)
 
-	python main_LINCS.py @script_input_files/main_LINCS_input.txt
+
+
+	    python main_LINCS.py @script_input_files/main_LINCS_input.txt
 	
 ### Evaluate the trained model 
-_modify the "script_input_files/fulleval_input.txt" file to the type of evaluation you want to do and on which dataset._
+_modify the "script_input_files/fulleval_input.txt" file to the type of evaluation you want to do and on which dataset:_
+- p1: number of input features model
+- p2: kFilters
+- p3: save newly inferred profiles as csv - boolean
+- p4: evaluation mode: replicate prediction (empty) or MoA prediction (1)
+- p5: dataset name
+- p6: model directory
+- p7: metadata path
+- p8: dose point to evaluate on (10 or 3)
+- p9: output directory
 	
-	python FullEval_CP_LINCS.py @script_input_files/fulleval_input.txt
+		python FullEval_CP_LINCS.py @script_input_files/fulleval_input.txt
 
 
 
