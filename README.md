@@ -49,7 +49,12 @@ _enter credentials_
 	conda env create -f environment.yml
 
 ### Download and preprocess all LINCS plates from batch 1
-_edit the lincs_preprocessing_input.txt file; p1: dataset name, p2: sqlite path, p3: metadata path, p4: barcode platemap filename_
+_edit the lincs_preprocessing_input.txt file:_
+_p1: dataset name_
+_p2: sqlite path_
+_p3: metadata path_
+_p4: barcode platemap filename_
+
 _possibly edit the get_data_LINCS.txt file to download a subset of the data with "nano /aws_scripts/get_data_LINCS.txt"_
 	
 	python Preprocess_LINCS.py @script_input_files/lincs_preprocessing_input.txt
