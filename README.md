@@ -50,10 +50,13 @@ _enter credentials_
 
 ### Download and preprocess all LINCS plates from batch 1
 _edit the lincs_preprocessing_input.txt file:_
-_p1: dataset name_
-_p2: sqlite path_
-_p3: metadata path_
-_p4: barcode platemap filename_
+- p1: dataset name 
+- p2: sqlite path 
+- p3: metadata path 
+- p4: barcode platemap filename 
+- p5: boolean for subsample (used for developing code)
+- p6: boolean for only download dose point 10 and 3.33 uM
+- p7: path to aws commands text file (get_data_LINCS.txt)
 
 _possibly edit the get_data_LINCS.txt file to download a subset of the data with "nano /aws_scripts/get_data_LINCS.txt"_
 	
