@@ -49,7 +49,7 @@ _enter credentials_
 	conda env create -f environment.yml
 
 ### Download and preprocess all LINCS plates from batch 1
-_edit the lincs_preprocessing_input.txt file:_
+_edit the lincs_preprocessing_input.txt file, note that empty lines correspond to a False boolean:_
 - p1: dataset name 
 - p2: sqlite path 
 - p3: metadata path 
@@ -63,7 +63,7 @@ _possibly edit the get_data_LINCS.txt file to download a subset of the data with
 	python Preprocess_LINCS.py @script_input_files/lincs_preprocessing_input.txt
 
 ### Train the feature aggregation model on the preprocessed plates
-_modify the "script_input_files/main_LINCS_input.txt" file to fit the hyperparameters you are using._
+_modify the "script_input_files/main_LINCS_input.txt" file to the hyperparameters that you want to use._
 
 	python main_LINCS.py @script_input_files/main_LINCS_input.txt
 	

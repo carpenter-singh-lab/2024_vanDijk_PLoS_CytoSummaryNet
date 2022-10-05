@@ -1,7 +1,7 @@
 LINCS
-/Users/rdijk/Documents/ProjectFA/Phase2/Data/RawData
-/Users/rdijk/Documents/ProjectFA/Phase2/Data/metadata
+aws_scripts/sqlite_files
+aws_scripts/metadata/platemaps/2016_04_01_a549_48hr_batch1
 barcode_platemap.csv
-subsample
-only_load_high_dosepoints
-sqlite_shell_script
+
+True
+aws_scripts/get_data_LINCS.txt

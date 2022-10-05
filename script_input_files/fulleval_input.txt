@@ -1,9 +1,9 @@
-1783
+1745
 0.5
-False
-False
+0
+1
 LINCS
 wandb/latest-run
-/Users/rdijk/Documents/ProjectFA/Phase2/Data/metadata
+aws_scripts/metadata/platemaps/2016_04_01_a549_48hr_batch1
 10
 results
