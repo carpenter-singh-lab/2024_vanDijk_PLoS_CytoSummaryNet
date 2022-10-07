@@ -64,7 +64,7 @@ class DataloaderEvalV5(Dataset):
         elif sample1['cell_features'].shape[1] == 1781 and sample1['cell_features'].shape[0] == 1:
             sample1['cell_features'] = np.zeros((1, 1781))
 
-        if self.remove_noisy_cells:
+        if self.remove_noisy_cells and sample1['cell_features'].shape[0] != 1:
             sample1['denoised_cell_features'] = clean_cells(sample1['cell_features'])
 
         features = sample1['cell_features']
