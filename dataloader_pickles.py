@@ -60,8 +60,12 @@ class DataloaderEvalV5(Dataset):
                     sample1['denoised_cell_features'] = np.zeros((1, 1745))
             else:
                 sample1['cell_features'] = sample1['cell_features'].drop(self.remove_columns, axis=1)
-                if self.remove_noisy_cells:
-                    sample1['denoised_cell_features'] = clean_cells(sample1['cell_features'])
+
+        elif sample1['cell_features'].shape[1] == 1781 and sample1['cell_features'].shape[0] == 1:
+            sample1['cell_features'] = np.zeros((1, 1781))
+
+        if self.remove_noisy_cells:
+            sample1['denoised_cell_features'] = clean_cells(sample1['cell_features'])
 
         features = sample1['cell_features']
         label = self.df['Metadata_labels'][idx]
@@ -71,8 +75,6 @@ class DataloaderEvalV5(Dataset):
             features = features.to_numpy()
         features = features[~np.isnan(features).any(axis=1)]
 
-        # if features.shape[0] < 1:
-        #     features = np.zeros((1, features.shape[1]))
 
         if self.dataprep == 'normalize':
             features -= features.mean()
