@@ -13,11 +13,27 @@ from pycytominer.operations.transform import RobustMAD
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 import random
+from scipy import stats
+
+
+def clean_cells(df):
+    top_corr_feats = ['Cells_AreaShape_MeanRadius',
+                      'Cells_AreaShape_MaximumRadius', 'Cells_AreaShape_MedianRadius', 'Cells_AreaShape_Area']
+                        # Cytoplasm_Correlation_K_DNA_Brightfield
+    bot_corr_feats = ['Cells_Intensity_MeanIntensityEdge_DNA', 'Cytoplasm_Intensity_MeanIntensityEdge_DNA',
+                      'Cytoplasm_Intensity_UpperQuartileIntensity_DNA', 'Cytoplasm_Intensity_MeanIntensity_DNA',
+                      ]
+                        # Cytoplasm_Correlation_K_Brightfield_DNA
+
+    # Remove cells with lowest values (zscore<X) and remove cells with highest values (zscore<X)
+    df = df[(stats.zscore(df[top_corr_feats]) > -2).all(axis=1) & (stats.zscore(df[bot_corr_feats]) < 2).all(axis=1)]
+
+    return df
 
 
 class DataloaderEvalV5(Dataset):
     """ Dataloader used for loading single pickle files for cell feature aggregation (bs=1). """
-    def __init__(self, df, preprocess=False, remove_columns=None):
+    def __init__(self, df, preprocess=False, remove_columns=None, remove_noisy_cells=False):
         """
         Args:
             df: dataframe of all metadata and paths to the pickle files per plate
@@ -25,6 +41,7 @@ class DataloaderEvalV5(Dataset):
         self.df = df
         self.dataprep = preprocess
         self.remove_columns = remove_columns
+        self.remove_noisy_cells = remove_noisy_cells
 
     def __len__(self):
         return len(self.df)
@@ -39,22 +56,23 @@ class DataloaderEvalV5(Dataset):
         if sample1['cell_features'].shape[1] == 1781 and self.remove_columns is not None:
             if sample1['cell_features'].shape[0] == 1:
                 sample1['cell_features'] = np.zeros((1, 1745))
+                if self.remove_noisy_cells:
+                    sample1['denoised_cell_features'] = np.zeros((1, 1745))
             else:
                 sample1['cell_features'] = sample1['cell_features'].drop(self.remove_columns, axis=1)
+                if self.remove_noisy_cells:
+                    sample1['denoised_cell_features'] = clean_cells(sample1['cell_features'])
 
         features = sample1['cell_features']
-        well_position = sample1['well_position']
-
         label = self.df['Metadata_labels'][idx]
 
         # Remove possible NaNs
         if isinstance(features, pd.DataFrame):
             features = features.to_numpy()
         features = features[~np.isnan(features).any(axis=1)]
-        assert ~np.isnan(features).any()
 
-        if features.shape[0] < 1:
-            features = np.zeros((1, features.shape[1]))
+        # if features.shape[0] < 1:
+        #     features = np.zeros((1, features.shape[1]))
 
         if self.dataprep == 'normalize':
             features -= features.mean()
@@ -68,9 +86,13 @@ class DataloaderEvalV5(Dataset):
 
         # Append to list of sampled features
         features = torch.tensor(features, dtype=torch.float32)
-
         label = torch.tensor(label, dtype=torch.int16)
 
+        if self.remove_noisy_cells:
+            denoised_features = sample1['denoised_cell_features'].to_numpy()
+            denoised_features = denoised_features[~np.isnan(denoised_features).any(axis=1)]
+            denoised_features = torch.tensor(denoised_features, dtype=torch.float32)
+            return [features, label, denoised_features]
 
         return [features, label]
 

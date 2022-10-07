@@ -82,6 +82,8 @@ def fulleval(args):
     model.eval()
 
 
+    remove_noisy_cells = True
+
     if input_dim == 1745:
         remove_columns = ['Cells_RadialDistribution_FracAtD_DNA_1of4', 'Cells_RadialDistribution_FracAtD_DNA_2of4',
                            'Cells_RadialDistribution_FracAtD_DNA_3of4', 'Cells_RadialDistribution_FracAtD_DNA_4of4',
@@ -162,7 +164,7 @@ def fulleval(args):
     print('Using', shape3, "wells")
 
     Total, _ = utils.train_val_split(bigdf, 1.0, sort=True)
-    ValDataset = DataloaderEvalV5(Total,  remove_columns=remove_columns)
+    ValDataset = DataloaderEvalV5(Total,  remove_columns=remove_columns, remove_noisy_cells=remove_noisy_cells)
     loader = data.DataLoader(ValDataset, batch_size=1, shuffle=False,
                                    drop_last=False, pin_memory=False, num_workers=NUM_WORKERS)
 
@@ -170,11 +172,12 @@ def fulleval(args):
     ## Create feature dataframes
     MLP_profiles = pd.DataFrame()
     average_profiles = pd.DataFrame()
+    filtered_average_profiles = pd.DataFrame()
 
     print('Calculating Features')
 
     with torch.no_grad():
-        for (points, labels) in tqdm(loader):
+        for (points, labels, filtered_points) in tqdm(loader):
             if points.shape[1] == 1:
                 continue
                 #points = torch.zeros(1, 1, args.model_input_size)
@@ -188,18 +191,28 @@ def fulleval(args):
             c2 = pd.concat([pd.DataFrame(points.mean(dim=1)), pd.Series(labels)], axis=1)
             average_profiles = pd.concat([average_profiles, c2])
 
+            # Calculate filtered benchmark
+            c3 = pd.concat([pd.DataFrame(filtered_points.mean(dim=1)), pd.Series(labels)], axis=1)
+            filtered_average_profiles = pd.concat([filtered_average_profiles, c3])
+
+
     ## Rename columns and normalize features
     # Rename feature columns
     MLP_profiles.columns = [f"f{x}" for x in range(MLP_profiles.shape[1] - 1)] + ['Metadata_labels']
     average_profiles.columns = [f"Cells_{x}" for x in range(average_profiles.shape[1] - 1)] + ['Metadata_labels']
+    filtered_average_profiles.columns = [f"Cells_{x}" for x in range(filtered_average_profiles.shape[1] - 1)] + ['Metadata_labels']
 
     MLP_profiles = MLP_profiles[MLP_profiles.Metadata_labels.duplicated(keep=False)]  # filter out non-replicates
     average_profiles = average_profiles[average_profiles.Metadata_labels.duplicated(keep=False)]  # filter out non-replicates
+    filtered_average_profiles = filtered_average_profiles[filtered_average_profiles.Metadata_labels.duplicated(keep=False)]  # filter out non-replicates
+
     MLP_profiles.reset_index(drop=True, inplace=True)
     average_profiles.reset_index(drop=True, inplace=True)
+    filtered_average_profiles.reset_index(drop=True, inplace=True)
 
     print('MLP_profiles shape: ', MLP_profiles.shape)
     print('average_profiles shape: ', average_profiles.shape)
+    print('filtered_average_profiles shape: ', filtered_average_profiles.shape)
 
     ## Preprocess the average profiles
     scaler = RobustMAD(epsilon=0)
@@ -210,6 +223,15 @@ def fulleval(args):
                                                                          "drop_na_columns",
                                                                          "blocklist"])
     average_profiles = pd.concat([features, average_profiles.iloc[:, -1]], axis=1)
+
+    scaler = RobustMAD(epsilon=0)
+    fitted_scaler = scaler.fit(filtered_average_profiles.iloc[:, :-1])
+    features = fitted_scaler.transform(filtered_average_profiles.iloc[:, :-1])
+    features = feature_select(filtered_average_profiles.iloc[:, :-1], operation=["variance_threshold",
+                                                                         "correlation_threshold",
+                                                                         "drop_na_columns",
+                                                                         "blocklist"])
+    filtered_average_profiles = pd.concat([features, filtered_average_profiles.iloc[:, -1]], axis=1)
 
     ## Save all the dataframes to .csv files!
     try:
@@ -224,18 +246,21 @@ def fulleval(args):
 
 
     if save_features_to_csv:
-        MLP_profiles.to_csv(f'{args.output_path}/{dataset_name}_profiles/MLP_profiles_{args.dose_point}_.csv', index=False)
-        average_profiles.to_csv(f'{args.output_path}/{dataset_name}_profiles/average_profiles_{args.dose_point}_.csv', index=False)
+        MLP_profiles.to_csv(f'{args.output_path}/{dataset_name}_profiles/MLP_profiles_{args.dose_point}.csv', index=False)
+        average_profiles.to_csv(f'{args.output_path}/{dataset_name}_profiles/average_profiles_{args.dose_point}.csv', index=False)
+        filtered_average_profiles.to_csv(f'{args.output_path}/{dataset_name}_profiles/filtered_average_profiles_{args.dose_point}.csv', index=False)
     split = int(MLP_profiles.shape[0] * train_val_split)
 
     temp_df = bigdf[['Metadata_labels', 'moa', 'pert_iname']][~bigdf.Metadata_labels.duplicated(keep='last')]
     temp_df = temp_df.rename(columns={'moa': 'Metadata_moa', 'pert_iname': 'Metadata_pert_iname'})
     MLP_profiles = pd.merge(MLP_profiles, temp_df, on='Metadata_labels')
     average_profiles = pd.merge(average_profiles, temp_df, on='Metadata_labels')
+    filtered_average_profiles = pd.merge(filtered_average_profiles, temp_df, on='Metadata_labels')
 
     print('Dropping ', MLP_profiles.shape[0] - MLP_profiles.dropna().reset_index(drop=True).shape[0], 'rows due to NaNs')
     MLP_profiles = MLP_profiles.dropna().reset_index(drop=True)
     average_profiles = average_profiles.dropna().reset_index(drop=True)
+    filtered_average_profiles = filtered_average_profiles.dropna().reset_index(drop=True)
     print('New size:', MLP_profiles.shape)
     shuffled_profiles = average_profiles.copy()
     shuffled_profiles.iloc[:, :-3] = pd.DataFrame.from_records(np.ones(shuffled_profiles.iloc[:, :-3].shape))
@@ -245,17 +270,27 @@ def fulleval(args):
                             groupby=mAP_label, percent_matching=percent_matching)
     ap_bm = utils.CalculateMAP(average_profiles, 'cosine_similarity',
                             groupby=mAP_label, percent_matching=percent_matching)
+    ap_bm_filtered = utils.CalculateMAP(filtered_average_profiles, 'cosine_similarity',
+                            groupby=mAP_label, percent_matching=percent_matching)
     ap_shuffled = utils.CalculateMAP(shuffled_profiles, 'cosine_similarity',
                             groupby=mAP_label, percent_matching=percent_matching)
 
     ap_mlp['compound'] = ap_mlp.compound.str.replace('|', '/')
     ap_bm['compound'] = ap_bm.compound.str.replace('|', '/')
+    ap_bm_filtered['compound'] = ap_bm_filtered.compound.str.replace('|', '/')
+
+    ap_mlp.groupby('compound').mean().to_csv(f'{args.output_path}/{dataset_name}_profiles/MLP_mAP_{args.dose_point}.csv', index=False)
+    ap_bm.groupby('compound').mean().to_csv(f'{args.output_path}/{dataset_name}_profiles/average_mAP_{args.dose_point}.csv', index=False)
+    ap_bm_filtered.groupby('compound').mean().to_csv(f'{args.output_path}/{dataset_name}_profiles/filtered_average_mAP_{args.dose_point}.csv', index=False)
 
     print('Total mean mAP MLP:', ap_mlp.AP.mean(), '\nTotal mean precision at R MLP:', ap_mlp['precision at R'].mean())
     print(ap_mlp.groupby('compound').mean().sort_values('AP').iloc[-30:, :].round(4).to_markdown())
     print('\n')
     print('Total mean mAP BM:', ap_bm.AP.mean(), '\nTotal mean precision at R BM:', ap_bm['precision at R'].mean())
     print(ap_bm.groupby('compound').mean().sort_values('AP').iloc[-30:, :].round(4).to_markdown())
+    print('\n')
+    print('Total mean mAP filtered BM:', ap_bm_filtered.AP.mean(), '\nTotal mean precision at R BM:', ap_bm_filtered['precision at R'].mean())
+    print(ap_bm_filtered.groupby('compound').mean().sort_values('AP').iloc[-30:, :].round(4).to_markdown())
     print('\n')
     print('Total mean mAP shuffled:', ap_shuffled.AP.mean(), '\nTotal mean precision at R shuffled:', ap_shuffled['precision at R'].mean())
 
@@ -313,15 +348,18 @@ def fulleval(args):
     if percent_matching:
         allresultsdf =pd.DataFrame({'mAP model': [ap_mlp.iloc[:, 1].mean()],
                                     'mAP BM': [ap_bm.iloc[:, 1].mean()],
+                                    'mAP filtered BM': [ap_bm_filtered.iloc[:, 1].mean()],
                                     'mAP shuffled': [ap_shuffled.iloc[:, 1].mean()]})
         sorted_dictionary = {k: [v] for k, v in sorted(average_perturbation_map.items(), key=lambda item: item[1], reverse=True)}
         bestmoas = pd.DataFrame(sorted_dictionary)
     else:
         allresultsdf = pd.DataFrame({'Training mAP model': [ap_mlp.iloc[:split, 1].mean()],
                                      'Training mAP BM': [ap_bm.iloc[:split, 1].mean()],
+                                     'Training mAP filtered BM': [ap_bm_filtered.iloc[:split, 1].mean()],
                                      'Training mAP shuffled': [ap_shuffled.iloc[:split, 1].mean()],
                                      'Validation mAP model': [ap_mlp.iloc[split:, 1].mean()],
                                      'Validation mAP BM': [ap_bm.iloc[split:, 1].mean()],
+                                     'Validation mAP filtered BM': [ap_bm_filtered.iloc[split:, 1].mean()],
                                      'Validation mAP shuffled': [ap_shuffled.iloc[split:, 1].mean()]})
 
     ## Organize all results and save them

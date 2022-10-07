@@ -94,5 +94,15 @@ _modify the "script_input_files/fulleval_input.txt" file to the type of evaluati
 		python FullEval_CP_LINCS.py @script_input_files/fulleval_input.txt
 
 
+### Create paper figures
+	mkdir notebooks
+	cd notebooks
+	git init 
+	git remote add -f origin https://github.com/broadinstitute/lincs-profiling-complementarity.git
+	git config core.sparseCheckout true
+	echo "6.paper_figures/figure4_percentmatching.ipynb" >> .git/info/sparse-checkout
+	git pull origin master
+
+
 
 
