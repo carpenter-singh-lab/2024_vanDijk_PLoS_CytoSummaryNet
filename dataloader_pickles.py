@@ -92,8 +92,8 @@ class DataloaderEvalV5(Dataset):
 
         if self.remove_noisy_cells:
             if isinstance(sample1['denoised_cell_features'], pd.DataFrame):
-                denoised_features = sample1['denoised_cell_features'].to_numpy()
-            denoised_features = denoised_features[~np.isnan(denoised_features).any(axis=1)]
+                sample1['denoised_cell_features'] = sample1['denoised_cell_features'].to_numpy()
+            denoised_features = sample1['denoised_cell_features'][~np.isnan(sample1['denoised_cell_features']).any(axis=1)]
             denoised_features = torch.tensor(denoised_features, dtype=torch.float32)
             return [features, label, denoised_features]
 
