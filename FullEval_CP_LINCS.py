@@ -280,9 +280,9 @@ def fulleval(args):
     ap_bm_filtered['compound'] = ap_bm_filtered.compound.str.replace('|', '/')
 
     # Save results
-    ap_mlp.count = [1]*len(ap_mlp)
-    ap_bm.count = [1]*len(ap_bm)
-    ap_bm_filtered.count = [1]*len(ap_bm_filtered)
+    ap_mlp['count'] = [1]*len(ap_mlp)
+    ap_bm['count'] = [1]*len(ap_bm)
+    ap_bm_filtered['count'] = [1]*len(ap_bm_filtered)
 
     ap_mlp.groupby('compound').agg({'AP': 'mean', 'count': 'sum'}).to_csv(f'{args.output_path}/{dataset_name}_profiles/MLP_mAP_{args.dose_point}.csv')
     ap_bm.groupby('compound').agg({'AP': 'mean', 'count': 'sum'}).to_csv(f'{args.output_path}/{dataset_name}_profiles/average_mAP_{args.dose_point}.csv')
