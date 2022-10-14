@@ -280,9 +280,13 @@ def fulleval(args):
     ap_bm_filtered['compound'] = ap_bm_filtered.compound.str.replace('|', '/')
 
     # Save results
-    ap_mlp.groupby('compound').mean().to_csv(f'{args.output_path}/{dataset_name}_profiles/MLP_mAP_{args.dose_point}.csv')
-    ap_bm.groupby('compound').mean().to_csv(f'{args.output_path}/{dataset_name}_profiles/average_mAP_{args.dose_point}.csv')
-    ap_bm_filtered.groupby('compound').mean().to_csv(f'{args.output_path}/{dataset_name}_profiles/filtered_average_mAP_{args.dose_point}.csv')
+    ap_mlp.count = [1]*len(ap_mlp)
+    ap_bm.count = [1]*len(ap_bm)
+    ap_bm_filtered.count = [1]*len(ap_bm_filtered)
+
+    ap_mlp.groupby('compound').agg({'AP': 'mean', 'count': 'sum'}).to_csv(f'{args.output_path}/{dataset_name}_profiles/MLP_mAP_{args.dose_point}.csv')
+    ap_bm.groupby('compound').agg({'AP': 'mean', 'count': 'sum'}).to_csv(f'{args.output_path}/{dataset_name}_profiles/average_mAP_{args.dose_point}.csv')
+    ap_bm_filtered.groupby('compound').agg({'AP': 'mean', 'count': 'sum'}).to_csv(f'{args.output_path}/{dataset_name}_profiles/filtered_average_mAP_{args.dose_point}.csv')
 
     print('Total mean mAP MLP:', ap_mlp.AP.mean(), '\nTotal mean precision at R MLP:', ap_mlp['precision at R'].mean())
     print(ap_mlp.groupby('compound').mean().sort_values('AP').iloc[-30:, :].round(4).to_markdown())

@@ -1,89 +1,91 @@
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f01p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f01p01-ch1sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f01p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f01p01-ch2sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f01p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f01p01-ch3sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f01p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f01p01-ch4sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f01p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f01p01-ch5sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f02p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f02p01-ch1sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f02p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f02p01-ch2sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f02p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f02p01-ch3sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f02p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f02p01-ch4sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f02p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f02p01-ch5sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f03p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f03p01-ch1sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f03p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f03p01-ch2sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f03p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f03p01-ch3sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f03p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f03p01-ch4sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f03p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f03p01-ch5sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f04p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f04p01-ch1sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f04p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f04p01-ch2sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f04p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f04p01-ch3sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f04p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f04p01-ch4sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f04p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f04p01-ch5sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f05p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f05p01-ch1sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f05p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f05p01-ch2sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f05p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f05p01-ch3sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f05p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f05p01-ch4sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f05p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f05p01-ch5sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f06p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f06p01-ch1sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f06p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f06p01-ch2sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f06p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f06p01-ch3sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f06p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f06p01-ch4sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f06p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f06p01-ch5sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f07p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f07p01-ch1sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f07p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f07p01-ch2sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f07p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f07p01-ch3sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f07p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f07p01-ch4sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f07p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f07p01-ch5sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f08p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f08p01-ch1sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f08p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f08p01-ch2sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f08p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f08p01-ch3sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f08p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f08p01-ch4sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f08p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f08p01-ch5sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f09p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f09p01-ch1sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f09p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f09p01-ch2sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f09p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f09p01-ch3sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f09p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f09p01-ch4sk1fk1fl1.tiff
-aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015106__2016-05-05T22_30_28-Measurement1/Images/r01c07f09p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r01c07f09p01-ch5sk1fk1fl1.tiff
-r01c08f01p01-ch1sk1fk1fl1.tiff
-r01c08f01p01-ch2sk1fk1fl1.tiff
-r01c08f01p01-ch3sk1fk1fl1.tiff
-r01c08f01p01-ch4sk1fk1fl1.tiff
-r01c08f01p01-ch5sk1fk1fl1.tiff
-r01c08f02p01-ch1sk1fk1fl1.tiff
-r01c08f02p01-ch2sk1fk1fl1.tiff
-r01c08f02p01-ch3sk1fk1fl1.tiff
-r01c08f02p01-ch4sk1fk1fl1.tiff
-r01c08f02p01-ch5sk1fk1fl1.tiff
-r01c08f03p01-ch1sk1fk1fl1.tiff
-r01c08f03p01-ch2sk1fk1fl1.tiff
-r01c08f03p01-ch3sk1fk1fl1.tiff
-r01c08f03p01-ch4sk1fk1fl1.tiff
-r01c08f03p01-ch5sk1fk1fl1.tiff
-r01c08f04p01-ch1sk1fk1fl1.tiff
-r01c08f04p01-ch2sk1fk1fl1.tiff
-r01c08f04p01-ch3sk1fk1fl1.tiff
-r01c08f04p01-ch4sk1fk1fl1.tiff
-r01c08f04p01-ch5sk1fk1fl1.tiff
-r01c08f05p01-ch1sk1fk1fl1.tiff
-r01c08f05p01-ch2sk1fk1fl1.tiff
-r01c08f05p01-ch3sk1fk1fl1.tiff
-r01c08f05p01-ch4sk1fk1fl1.tiff
-r01c08f05p01-ch5sk1fk1fl1.tiff
-r01c08f06p01-ch1sk1fk1fl1.tiff
-r01c08f06p01-ch2sk1fk1fl1.tiff
-r01c08f06p01-ch3sk1fk1fl1.tiff
-r01c08f06p01-ch4sk1fk1fl1.tiff
-r01c08f06p01-ch5sk1fk1fl1.tiff
-r01c08f07p01-ch1sk1fk1fl1.tiff
-r01c08f07p01-ch2sk1fk1fl1.tiff
-r01c08f07p01-ch3sk1fk1fl1.tiff
-r01c08f07p01-ch4sk1fk1fl1.tiff
-r01c08f07p01-ch5sk1fk1fl1.tiff
-r01c08f08p01-ch1sk1fk1fl1.tiff
-r01c08f08p01-ch2sk1fk1fl1.tiff
-r01c08f08p01-ch3sk1fk1fl1.tiff
-r01c08f08p01-ch4sk1fk1fl1.tiff
-r01c08f08p01-ch5sk1fk1fl1.tiff
-r01c08f09p01-ch1sk1fk1fl1.tiff
-r01c08f09p01-ch2sk1fk1fl1.tiff
-r01c08f09p01-ch3sk1fk1fl1.tiff
-r01c08f09p01-ch4sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f01p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f01p01-ch1sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f01p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f01p01-ch2sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f01p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f01p01-ch3sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f01p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f01p01-ch4sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f01p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f01p01-ch5sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f02p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f02p01-ch1sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f02p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f02p01-ch2sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f02p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f02p01-ch3sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f02p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f02p01-ch4sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f02p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f02p01-ch5sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f03p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f03p01-ch1sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f03p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f03p01-ch2sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f03p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f03p01-ch3sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f03p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f03p01-ch4sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f03p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f03p01-ch5sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f04p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f04p01-ch1sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f04p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f04p01-ch2sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f04p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f04p01-ch3sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f04p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f04p01-ch4sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f04p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f04p01-ch5sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f05p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f05p01-ch1sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f05p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f05p01-ch2sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f05p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f05p01-ch3sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f05p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f05p01-ch4sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f05p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f05p01-ch5sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f06p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f06p01-ch1sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f06p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f06p01-ch2sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f06p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f06p01-ch3sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f06p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f06p01-ch4sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f06p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f06p01-ch5sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f07p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f07p01-ch1sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f07p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f07p01-ch2sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f07p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f07p01-ch3sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f07p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f07p01-ch4sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f07p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f07p01-ch5sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f08p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f08p01-ch1sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f08p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f08p01-ch2sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f08p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f08p01-ch3sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f08p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f08p01-ch4sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f08p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f08p01-ch5sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f09p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f09p01-ch1sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f09p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f09p01-ch2sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f09p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f09p01-ch3sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f09p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f09p01-ch4sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c13f09p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c13f09p01-ch5sk1fk1fl1.tiff
+
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f01p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f01p01-ch1sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f01p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f01p01-ch2sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f01p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f01p01-ch3sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f01p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f01p01-ch4sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f01p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f01p01-ch5sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f02p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f02p01-ch1sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f02p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f02p01-ch2sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f02p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f02p01-ch3sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f02p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f02p01-ch4sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f02p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f02p01-ch5sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f03p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f03p01-ch1sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f03p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f03p01-ch2sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f03p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f03p01-ch3sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f03p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f03p01-ch4sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f03p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f03p01-ch5sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f04p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f04p01-ch1sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f04p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f04p01-ch2sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f04p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f04p01-ch3sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f04p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f04p01-ch4sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f04p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f04p01-ch5sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f05p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f05p01-ch1sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f05p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f05p01-ch2sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f05p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f05p01-ch3sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f05p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f05p01-ch4sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f05p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f05p01-ch5sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f06p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f06p01-ch1sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f06p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f06p01-ch2sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f06p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f06p01-ch3sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f06p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f06p01-ch4sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f06p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f06p01-ch5sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f07p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f07p01-ch1sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f07p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f07p01-ch2sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f07p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f07p01-ch3sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f07p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f07p01-ch4sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f07p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f07p01-ch5sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f08p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f08p01-ch1sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f08p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f08p01-ch2sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f08p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f08p01-ch3sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f08p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f08p01-ch4sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f08p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f08p01-ch5sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f09p01-ch1sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f09p01-ch1sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f09p01-ch2sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f09p01-ch2sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f09p01-ch3sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f09p01-ch3sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f09p01-ch4sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f09p01-ch4sk1fk1fl1.tiff
+aws s3 cp s3://cellpainting-gallery/cpg0004-lincs/broad/images/2016_04_01_a549_48hr_batch1/images/SQ00015131__2016-03-25T17_23_46-Measurement1/Images/r05c14f09p01-ch5sk1fk1fl1.tiff aws_scripts/sqlite_files/r05c14f09p01-ch5sk1fk1fl1.tiff
