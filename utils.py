@@ -370,6 +370,8 @@ def CalculateMAP(df, distance='euclidean', groupby='Metadata_labels', percent_ma
         # Calculate AP
         AP = average_precision_score(labels, row)
         AP_corrected = AP - (sum(labels)/len(labels))  # correct AP by subtracting the random baseline
+        if AP_corrected < 0:
+            AP_corrected = 0
         well_APs.append(AP_corrected)
         # Calculate P@R
         PatR = precision_at_k(labels, row, k=int(sum(labels)))
