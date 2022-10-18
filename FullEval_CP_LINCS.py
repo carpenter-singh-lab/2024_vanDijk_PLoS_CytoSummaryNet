@@ -284,9 +284,17 @@ def fulleval(args):
     ap_bm['count'] = [1]*len(ap_bm)
     ap_bm_filtered['count'] = [1]*len(ap_bm_filtered)
 
-    ap_mlp.groupby('compound').agg({'AP': 'mean', 'count': 'sum'}).to_csv(f'{args.output_path}/{dataset_name}_profiles/MLP_mAP_{args.dose_point}.csv')
-    ap_bm.groupby('compound').agg({'AP': 'mean', 'count': 'sum'}).to_csv(f'{args.output_path}/{dataset_name}_profiles/average_mAP_{args.dose_point}.csv')
-    ap_bm_filtered.groupby('compound').agg({'AP': 'mean', 'count': 'sum'}).to_csv(f'{args.output_path}/{dataset_name}_profiles/filtered_average_mAP_{args.dose_point}.csv')
+    try:
+        os.mkdir(f'{args.output_path}/{dataset_name}')
+    except:
+        pass
+    ap_mlp.groupby('compound').agg({'AP': 'mean', 'count': 'sum'}).to_csv(f'{args.output_path}/{dataset_name}/MLP_mAP_{args.dose_point}_{encoding_label}.csv')
+    ap_bm.groupby('compound').agg({'AP': 'mean', 'count': 'sum'}).to_csv(f'{args.output_path}/{dataset_name}/average_mAP_{args.dose_point}_{encoding_label}.csv')
+    ap_bm_filtered.groupby('compound').agg({'AP': 'mean', 'count': 'sum'}).to_csv(f'{args.output_path}/{dataset_name}/filtered_average_mAP_{args.dose_point}_{encoding_label}.csv')
+
+    ap_mlp.to_csv(f'{args.output_path}/{dataset_name}/raw_MLP_mAP_{args.dose_point}_{encoding_label}.csv')
+    ap_bm.to_csv(f'{args.output_path}/{dataset_name}/raw_average_mAP_{args.dose_point}_{encoding_label}.csv')
+    ap_bm_filtered.to_csv(f'{args.output_path}/{dataset_name}/raw_filtered_average_mAP_{args.dose_point}_{encoding_label}.csv')
 
     print('Total mean mAP MLP:', ap_mlp.AP.mean(), '\nTotal mean precision at R MLP:', ap_mlp['precision at R'].mean())
     print(ap_mlp.groupby('compound').mean().sort_values('AP').iloc[-30:, :].round(4).to_markdown())
@@ -418,7 +426,7 @@ if __name__=='__main__':
     parser.add_argument('dose_point', nargs='?', const='10', type=str,
                         help='Dose point for which to calculate the metrics. Either 10 or 3.33 uM')
     # Optional positional argument
-    parser.add_argument('output_path', nargs='?', const='Results', type=str, help='Path to save all output files')
+    parser.add_argument('output_path', nargs='?', const='FinalModelResults/mAP', type=str, help='Path to save all output files')
 
     # Parse arguments
     args = parser.parse_args()
