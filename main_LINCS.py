@@ -133,7 +133,10 @@ def train_model_LINCS(args):
     for i, pDir in enumerate(plateDirs):
         C_plate_map = pd.read_csv(os.path.join(metadata_dir, 'platemap', platemaps[i]+'.txt'), sep='\t')
         C_metadata = utils.addDataPathsToMetadata(rootDir, C_plate_map, pDir)
-        df = C_metadata[np.logical_and(C_metadata['mmoles_per_liter'] > 9, C_metadata['mmoles_per_liter'] < 11)]
+        if args.dose_point == '10':
+            df = C_metadata[np.logical_and(C_metadata['mmoles_per_liter'] > 9, C_metadata['mmoles_per_liter'] < 11)]
+        elif args.dose_point == '3':
+            df = C_metadata[np.logical_and(C_metadata['mmoles_per_liter'] > 2.9, C_metadata['mmoles_per_liter'] < 6)]
         bigdf.append(df)
 
     bigdf = pd.merge(pd.concat(bigdf), repurposing_info, on='broad_sample', how='left')
@@ -341,6 +344,9 @@ if __name__=='__main__':
     # Optional positional argument
     parser.add_argument('kfilters', nargs='?', const=1/2, type=float,
                         help='Times division of the number of filters in the hidden model layers')
+    # Optional positional argument
+    parser.add_argument('dose_point', nargs='?', const='3', type=float,
+                        help='Specify which dose point to use (10 or 3 --> 3.33).')
     # Optional positional argument
     parser.add_argument('min_replicates', nargs='?', const=4, type=int,
                         help='Minimum number of replicates that need to be available for a compound to be used.')
