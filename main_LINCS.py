@@ -345,7 +345,7 @@ if __name__=='__main__':
     parser.add_argument('kfilters', nargs='?', const=1/2, type=float,
                         help='Times division of the number of filters in the hidden model layers')
     # Optional positional argument
-    parser.add_argument('dose_point', nargs='?', const='3', type=float,
+    parser.add_argument('dose_point', nargs='?', const='3', type=str,
                         help='Specify which dose point to use (10 or 3 --> 3.33).')
     # Optional positional argument
     parser.add_argument('min_replicates', nargs='?', const=4, type=int,
