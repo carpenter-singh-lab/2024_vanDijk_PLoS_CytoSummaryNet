@@ -153,7 +153,7 @@ if __name__=='__main__':
     f.close()
 
     # Check which files are already downloaded
-    plates = [k.split('.')[0].split('/')[-1] for k in file if len(k) > 20][1:]
+    plates = [k.split('.')[0].split('/')[-1] for k in file if len(k) > 20]
     existing_plates = [k.split('_')[-1] for k in glob.glob(os.path.join('datasets', args.dataset, 'DataLoader_*'))]
     non_existing_plates = list(set(plates) - set(existing_plates))
 
