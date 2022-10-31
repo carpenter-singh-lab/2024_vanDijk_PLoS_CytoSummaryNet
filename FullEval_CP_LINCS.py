@@ -215,6 +215,8 @@ def fulleval(args):
     print('filtered_average_profiles shape: ', filtered_average_profiles.shape)
 
     ## Preprocess the average profiles
+    import time
+    st = time.time()
     scaler = RobustMAD(epsilon=0)
     fitted_scaler = scaler.fit(average_profiles.iloc[:, :-1])
     features = fitted_scaler.transform(average_profiles.iloc[:, :-1])
@@ -223,6 +225,8 @@ def fulleval(args):
                                                                          "drop_na_columns",
                                                                          "blocklist"])
     average_profiles = pd.concat([features, average_profiles.iloc[:, -1]], axis=1)
+    et = time.time()
+    print('Average preprocessing time is ', et - st)
 
     scaler = RobustMAD(epsilon=0)
     fitted_scaler = scaler.fit(filtered_average_profiles.iloc[:, :-1])

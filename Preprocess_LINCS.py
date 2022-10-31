@@ -8,6 +8,7 @@ import pickle
 import gc
 import argparse
 import string
+import time
 
 def preprocessLINCS(args):
     # Intialize paths
@@ -24,6 +25,7 @@ def preprocessLINCS(args):
 
         df = sqlite_to_df(path, metadata_path=os.path.join(args.metadatadir, 'platemap', plate_map_name + '.txt'),
                           compute_subsample=args.subsample, only_load_high_dosepoints=args.only_load_high_dosepoints)  # Compute_subsample==True will return a chunk of 1000 cells
+        st = time.time()
         print('Successfully retrieved dataframe')
         feature_column_names = df.columns[~df.columns.str.contains("Metadata")].tolist()
         metadata_column_names = df.columns[df.columns.str.contains("Metadata")].tolist()
@@ -103,6 +105,8 @@ def preprocessLINCS(args):
             with open(os.path.join(output_dirName, f'{well[0]}.pkl'), 'wb') as f:
                 pickle.dump(dict, f)
 
+        et = time.time()
+        print('Preprocessing time model is ', et - st)
     print('Finished preprocessing')
 
 if __name__=='__main__':
