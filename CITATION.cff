@@ -2,9 +2,23 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 authors:
   - family-names: "van Dijk"
-    given-names: "Robert"
+    given-names: "R."
     orcid: "https://orcid.org/0000-0003-4982-9648"
-title: "Contrastive learning based point set aggregation for image-based cell profiling"
+  - family-names: "Arevalo"
+    given-names: "J."
+  - family-names: "Babadi"
+    given-names: "B."
+  - family-names: "Carpenter"
+    given-names: "A. E."
+  - family-names: "Singh"
+    given-names: "S."
+title: "Capturing cell heterogeneity in representations of cell populations for image-based profiling using contrastive learning"
 version: 2.0.4
-date-released: 2022-06-24
-url: "https://github.com/broadinstitute/FeatureAggregation_single_cell"
+date-released: 2024-11-01
+url: "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012547"
+doi: "https://doi.org/10.1371/journal.pcbi.1012547"
+repository-code: "https://github.com/carpenter-singh-lab/2024_vanDijk_PLoS_CytoSummaryNet"
+journal: "PLOS Computational Biology"
+volume: "20"
+issue: "11"
+page: "e1012547"

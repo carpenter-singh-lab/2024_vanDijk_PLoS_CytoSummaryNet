@@ -41,7 +41,7 @@ for filename in plateDirs:
     features = scaler.transform(features)
 
     # Some row of wells to iterate over
-    filename2 = '/Users/rdijk/Documents/Data/RawData/Stain2/JUMP-MOA_compound_platemap_with_metadata.csv'
+    filename2 = '/inputs/cpg0001_metadata/JUMP-MOA_compound_platemap_with_metadata.csv'
     wells = pd.read_csv(filename2, usecols=['well_position'])
 
     output_dirName = f'datasets/{dataset}/DataLoader_{plate}'

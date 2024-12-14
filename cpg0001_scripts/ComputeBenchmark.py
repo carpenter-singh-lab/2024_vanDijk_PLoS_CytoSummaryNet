@@ -11,10 +11,10 @@ import numpy as np
 import torch
 
 # Custom libraries
-from utils import CalculatePercentReplicating
+src.utils import CalculatePercentReplicating
 from pycytominer.operations.transform import RobustMAD
 from pycytominer import feature_select
-import utils_benchmark
+import src.utils_benchmark as utils_benchmark
 import utils
 
 NUM_WORKERS = 0
@@ -32,7 +32,7 @@ percent_matching = False
 rootdir = f'/Users/rdijk/Documents/Data/ProcessedData/{dataset_name}/profiles'
 plateDirs = glob.glob(os.path.join(rootdir, '*.csv'))
 
-metadata = pd.read_csv('/Users/rdijk/Documents/Data/RawData/Stain2/JUMP-MOA_compound_platemap_with_metadata.csv',
+metadata = pd.read_csv('/inputs/cpg0001_metadata/JUMP-MOA_compound_platemap_with_metadata.csv',
                        index_col=False)
 commonFeatureNames = pd.read_csv('/Users/rdijk/Documents/Data/RawData/CommonFeatureNames.csv', index_col=False)
 commonFeatureNames = [x.split('.')[1] for x in commonFeatureNames.iloc[:, 0]]

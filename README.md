@@ -1,12 +1,15 @@
-# 
-# Contrastive learning for feature aggregation in image-based cell profiling (on an AWS instance)
-We propose a Deep Sets based method that learns the best way of aggregating single-cell feature data into a profile that better predicts a compound’s mechanism of action compared to average profiling. This is achieved by applying weakly supervised contrastive learning in a multiple instance learning setting. The proposed model provides a more accessible method for aggregating single-cell feature data than previous studies while significantly improving upon the average profiling baseline. 
+# Introduction  
 
+This repository contains the code to reproduce the model training, inference, and analysis presented in the paper:  
+**"Capturing cell heterogeneity in representations of cell populations for image-based profiling using contrastive learning"**  
+*(van Dijk, R., Arevalo, J., Babadi, B., Carpenter, A. E., & Singh, S., 2024, PLOS Computational Biology)*.  
+[Read the full paper here](https://doi.org/10.1371/journal.pcbi.1012547).  
 
-All of the scripts that were used to develop, train, and evaluate the model are shown here. The scripts for computing the figures can be found in the jupyter notebooks folder.
+We propose a Deep Sets-based method that learns the optimal way of aggregating single-cell feature data into a profile, improving the prediction of a compound’s mechanism of action compared to traditional average profiling. This is achieved through weakly supervised contrastive learning in a multiple-instance learning setting. Our approach offers a more accessible and effective method for aggregating single-cell feature data than previous studies, significantly outperforming the average profiling baseline.  
 
-You can find more details in the FeatureAggregationManuscriptV1.pdf
-
+This repository provides:  
+- Scripts for developing, training, and evaluating the model.  
+- Jupyter notebooks for generating the figures and reproducing the results presented in the paper. 
 
 
 # To apply this method yourself on the LINCS dataset
@@ -95,14 +98,6 @@ _modify the "script_input_files/fulleval_input.txt" file to the type of evaluati
 
 
 ### Create paper figures
-	mkdir notebooks
-	cd notebooks
-	git init 
-	git remote add -f origin https://github.com/broadinstitute/lincs-profiling-complementarity.git
-	git config core.sparseCheckout true
-	echo "6.paper_figures/figure4_percentmatching.ipynb" >> .git/info/sparse-checkout
-	git pull origin master
-
-
+Inside the paper_figures folder you will find all the jupyter notebook to reproduce the figures shown in this paper. 
 
 

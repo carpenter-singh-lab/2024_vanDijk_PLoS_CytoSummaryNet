@@ -1,4 +1,4 @@
-program: main11_sweep.py
+program: main_sweep.py
 method: bayes
 metric:
   goal: maximize

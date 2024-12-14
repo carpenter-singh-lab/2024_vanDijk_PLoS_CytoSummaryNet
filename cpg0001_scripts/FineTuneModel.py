@@ -19,7 +19,7 @@ from pytorch_metric_learning import losses, distances
 # Custom libraries
 import wandb
 from networks.SimpleMLPs import MLPsumV2
-from dataloader_pickles import DataloaderTrainV7, DataloaderEvalV5
+from src.dataloader_pickles import DataloaderTrainV7, DataloaderEvalV5
 import utils
 
 NUM_WORKERS = os.cpu_count()
@@ -66,7 +66,7 @@ for tr_fraction in tr_fraction_list:
 
     ##% Load all data
     rootDir = r'/Users/rdijk/PycharmProjects/featureAggregation/datasets/Stain5'
-    metadata = pd.read_csv('/Users/rdijk/Documents/Data/RawData/Stain2/JUMP-MOA_compound_platemap_with_metadata.csv',
+    metadata = pd.read_csv('/inputs/cpg0001_metadata/JUMP-MOA_compound_platemap_with_metadata.csv',
                            index_col=False)
     plateDirs = [x[0] for x in os.walk(rootDir)][1:]
 

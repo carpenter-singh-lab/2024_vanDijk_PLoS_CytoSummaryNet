@@ -121,7 +121,7 @@ plateDirs = plateDirs + plateDirs2 + plateDirs3 + plateDirs4 + plateDirs5
 #  '/Users/rdijk/PycharmProjects/featureAggregation/outputs/MLP_profiles_BR00112197standard.csv']
 
 
-metadata = pd.read_csv('/Users/rdijk/Documents/Data/RawData/Stain2/JUMP-MOA_compound_platemap_with_metadata.csv',
+metadata = pd.read_csv('/inputs/cpg0001_metadata/JUMP-MOA_compound_platemap_with_metadata.csv',
                        index_col=False)
 
 metadata = metadata.sort_values(by='pert_iname')

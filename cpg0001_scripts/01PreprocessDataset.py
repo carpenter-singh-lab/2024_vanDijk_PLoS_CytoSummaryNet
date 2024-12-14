@@ -5,7 +5,6 @@ import numpy as np
 
 plate = 'SQ00015223'
 
-#csv_file = f'/Users/rdijk/Documents/Data/ProcessedData/Stain3/{plate}.csv'
 csv_file = fr'/Users/rdijk/Documents/ProjectFA/Phase2/Data/ProcessedData/{plate}.csv'
 
 parquet_file = csv_file[:-3] + 'parquet'
