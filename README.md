@@ -8,8 +8,9 @@ This repository contains the code to reproduce the model training, inference, an
 We propose a Deep Sets-based method that learns the optimal way of aggregating single-cell feature data into a profile, improving the prediction of a compound’s mechanism of action compared to traditional average profiling. This is achieved through weakly supervised contrastive learning in a multiple-instance learning setting. Our approach offers a more accessible and effective method for aggregating single-cell feature data than previous studies, significantly outperforming the average profiling baseline.  
 
 This repository provides:  
-- Scripts for developing, training, and evaluating the model.  
-- Jupyter notebooks for generating the figures and reproducing the results presented in the paper. 
+- building_blocks: Scripts for building your own pipeline for developing, training, and evaluating the model, we recommend to use these if you plan on implementing CytoSummaryNet on your own dataset.
+- src: Scripts for reproducing the results for cpg0001 and cpg0004.
+- paper_figures: Jupyter notebooks for generating the figures and reproducing the results presented in the paper.
 
 
 # To apply this method yourself on the LINCS dataset
