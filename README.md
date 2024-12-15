@@ -8,11 +8,18 @@ This repository contains the code to reproduce the model training, inference, an
 We propose a Deep Sets-based method that learns the optimal way of aggregating single-cell feature data into a profile, improving the prediction of a compound’s mechanism of action compared to traditional average profiling. This is achieved through weakly supervised contrastive learning in a multiple-instance learning setting. Our approach offers a more accessible and effective method for aggregating single-cell feature data than previous studies, significantly outperforming the average profiling baseline.  
 
 This repository provides:  
-- Scripts for developing, training, and evaluating the model.  
-- Jupyter notebooks for generating the figures and reproducing the results presented in the paper. 
+- building_blocks: Scripts for building your own pipeline for developing, training, and evaluating the model, we recommend to use these if you plan on implementing CytoSummaryNet on your own dataset.
+- src: Scripts for reproducing the results for cpg0001 and cpg0004.
+- paper_figures: Jupyter notebooks for generating the figures and reproducing the results presented in the paper.
 
+# To build your own pipeline
+TODO
 
-# To apply this method yourself on the LINCS dataset
+# Reproducing the paper results
+## To reproduce the figures shown in this paper
+Inside the paper_figures folder you will find all the jupyter notebook to reproduce the figures shown in this paper. 
+
+## To reproduce the results of this method for the cpg0004 dataset
 ### First install required packages:
 	# If starting on an empty AWS EBS volume, otherwise ...
     sudo su
@@ -63,7 +70,8 @@ _edit the lincs_preprocessing_input.txt file, note that empty lines correspond t
 
 _possibly edit the get_data_LINCS.txt file to download a subset of the data with "nano /aws_scripts/get_data_LINCS.txt"_
 	
-	python Preprocess_LINCS.py @script_input_files/lincs_preprocessing_input.txt
+ 	export PYTHONPATH=$PYTHONPATH:$(pwd)
+	python src/Preprocess_LINCS.py @script_input_files/lincs_preprocessing_input.txt
 
 ### Train the feature aggregation model on the preprocessed plates
 _modify the "script_input_files/main_LINCS_input.txt" file to the hyperparameters that you want to use:_
@@ -79,8 +87,8 @@ _modify the "script_input_files/main_LINCS_input.txt" file to the hyperparameter
 - p10: minimum number of replicates for compounds to be included (default=0)
 
 
-
-	    python main_LINCS.py @script_input_files/main_LINCS_input.txt
+ 	    export PYTHONPATH=$PYTHONPATH:$(pwd)
+	    python src/main_LINCS.py @script_input_files/main_LINCS_input.txt
 	
 ### Evaluate the trained model 
 _modify the "script_input_files/fulleval_input.txt" file to the type of evaluation you want to do and on which dataset:_
@@ -93,11 +101,10 @@ _modify the "script_input_files/fulleval_input.txt" file to the type of evaluati
 - p7: metadata path
 - p8: dose point to evaluate on (10 or 3)
 - p9: output directory
-	
-		python FullEval_CP_LINCS.py @script_input_files/fulleval_input.txt
+
+		export PYTHONPATH=$PYTHONPATH:$(pwd)
+		python src/FullEval_CP_LINCS.py @script_input_files/fulleval_input.txt
 
 
-### Create paper figures
-Inside the paper_figures folder you will find all the jupyter notebook to reproduce the figures shown in this paper. 
 
 
