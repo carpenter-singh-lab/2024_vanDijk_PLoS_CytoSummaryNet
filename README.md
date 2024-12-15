@@ -8,12 +8,61 @@ This repository contains the code to reproduce the model training, inference, an
 We propose a Deep Sets-based method that learns the optimal way of aggregating single-cell feature data into a profile, improving the prediction of a compound’s mechanism of action compared to traditional average profiling. This is achieved through weakly supervised contrastive learning in a multiple-instance learning setting. Our approach offers a more accessible and effective method for aggregating single-cell feature data than previous studies, significantly outperforming the average profiling baseline.  
 
 This repository provides:  
-- building_blocks: Scripts for building your own pipeline for developing, training, and evaluating the model, we recommend to use these if you plan on implementing CytoSummaryNet on your own dataset.
-- src: Scripts for reproducing the results for cpg0001 and cpg0004.
-- paper_figures: Jupyter notebooks for generating the figures and reproducing the results presented in the paper.
+- **`building_blocks/`**: Scripts for building your own pipeline for developing, training, and evaluating the model. We recommend using these if you plan on implementing CytoSummaryNet on your own dataset.
+- **`src/`**: Scripts for reproducing the results for `cpg0001` and `cpg0004`.
+- **`paper_figures/`**: Jupyter notebooks for generating the figures and reproducing the results presented in the paper.
 
-# To build your own pipeline
-TODO
+---
+
+# To Build Your Own Pipeline  
+
+This repository includes modular components in the `building_blocks/` directory to help you implement your own version of CytoSummaryNet on your dataset. Below is an overview of the main components and where to get started:
+
+## **Key Components**  
+
+### 1. **Dataset Class and Collate Function**  
+- **File**: `building_blocks/dataset.py`  
+- **Description**: This file defines the PyTorch `Dataset` class and collate function for handling single-cell data. It includes data augmentation strategies, imbalanced label handling, and grouping functionality for efficient data loading.  
+- **Getting Started**:  
+  - Define your dataset by creating a DataFrame with file paths to pickle files and labels.  
+  - Use the `TemplateDataset` class to load your data and perform data augmentation as needed.  
+  - Mock tests for the dataset are available in `building_blocks/tests/test_dataset.py`.
+
+### 2. **Model Architecture**  
+- **File**: `building_blocks/models.py`  
+- **Description**: This file implements CytoSummaryNet, a modular and parameterizable PyTorch model designed to aggregate single-cell features into population-level representations.  
+- **Getting Started**:  
+  - Use the `CytoSummaryNet` class to initialize your model.  
+  - Customize input dimensions, layer configurations, and pooling strategies based on your dataset.  
+  - Unit tests for the model architecture are available in `building_blocks/tests/test_model.py`.
+
+### 3. **Training Loop**  
+- **File**: `building_blocks/engine.py`  
+- **Description**: This file defines the training loop, including loss computation, backpropagation, and validation. It is designed to integrate seamlessly with the dataset and model components.  
+- **Getting Started**:  
+  - Use the `train_loop` function to train your model.  
+  - Provide it with your `DataLoader`, `CytoSummaryNet` model, loss function, and optimizer.  
+  - Mock tests for the training loop are available in `building_blocks/tests/test_engine.py`.
+
+### 4. **Full Pipeline Integration**  
+- **File**: `building_blocks/tests/test_cytosummarynet.py`  
+- **Description**: This test integrates all components (`dataset.py`, `models.py`, `engine.py`) to ensure they work together seamlessly.  
+- **Getting Started**:  
+  - Follow this script to see how the dataset, model, and training loop interact.  
+  - Use it as a template for implementing your own end-to-end pipeline.
+
+---
+
+## **Pointers for Implementation**
+
+- Start by understanding your dataset and preprocessing it to match the format expected by `TemplateDataset`.  
+- Define model hyperparameters (e.g., input dimensions, layers, pooling method) in `CytoSummaryNet` to suit your data. The hyperaparameters defined in the paper are a good starting point.  
+- Use the `train_loop` function to train the model, ensuring that your data, model, and loss function are compatible.  
+- Explore and adapt the tests under `building_blocks/tests` to validate and debug your implementation.  
+
+---
+
+We hope these building blocks make it easier for you to implement CytoSummaryNet on your own dataset. If you encounter issues or have questions, please feel free to open an issue on this repository.  
 
 # Reproducing the paper results
 ## To reproduce the figures shown in this paper
