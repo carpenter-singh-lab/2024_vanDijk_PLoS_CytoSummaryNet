@@ -70,7 +70,7 @@ _edit the lincs_preprocessing_input.txt file, note that empty lines correspond t
 
 _possibly edit the get_data_LINCS.txt file to download a subset of the data with "nano /aws_scripts/get_data_LINCS.txt"_
 	
-	python Preprocess_LINCS.py @script_input_files/lincs_preprocessing_input.txt
+	python src/Preprocess_LINCS.py @script_input_files/lincs_preprocessing_input.txt
 
 ### Train the feature aggregation model on the preprocessed plates
 _modify the "script_input_files/main_LINCS_input.txt" file to the hyperparameters that you want to use:_
@@ -87,7 +87,7 @@ _modify the "script_input_files/main_LINCS_input.txt" file to the hyperparameter
 
 
 
-	    python main_LINCS.py @script_input_files/main_LINCS_input.txt
+	    python src/main_LINCS.py @script_input_files/main_LINCS_input.txt
 	
 ### Evaluate the trained model 
 _modify the "script_input_files/fulleval_input.txt" file to the type of evaluation you want to do and on which dataset:_
@@ -101,7 +101,7 @@ _modify the "script_input_files/fulleval_input.txt" file to the type of evaluati
 - p8: dose point to evaluate on (10 or 3)
 - p9: output directory
 	
-		python FullEval_CP_LINCS.py @script_input_files/fulleval_input.txt
+		python src/FullEval_CP_LINCS.py @script_input_files/fulleval_input.txt
 
 
 
