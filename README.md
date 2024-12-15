@@ -12,8 +12,14 @@ This repository provides:
 - src: Scripts for reproducing the results for cpg0001 and cpg0004.
 - paper_figures: Jupyter notebooks for generating the figures and reproducing the results presented in the paper.
 
+# To build your own pipeline
+TODO
 
-# To apply this method yourself on the LINCS dataset
+# Reproducing the paper results
+## To reproduce the figures shown in this paper
+Inside the paper_figures folder you will find all the jupyter notebook to reproduce the figures shown in this paper. 
+
+## To reproduce the results of this method for the cpg0004 dataset
 ### First install required packages:
 	# If starting on an empty AWS EBS volume, otherwise ...
     sudo su
@@ -98,7 +104,5 @@ _modify the "script_input_files/fulleval_input.txt" file to the type of evaluati
 		python FullEval_CP_LINCS.py @script_input_files/fulleval_input.txt
 
 
-### Create paper figures
-Inside the paper_figures folder you will find all the jupyter notebook to reproduce the figures shown in this paper. 
 
 
