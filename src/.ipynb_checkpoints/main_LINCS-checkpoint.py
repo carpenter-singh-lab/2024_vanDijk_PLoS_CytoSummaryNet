@@ -320,7 +320,7 @@ if __name__=='__main__':
                         type=str,
                         help='Specify the path where the barcode_platemap and platemaps directory are located.')
     # Optional positional argument
-    parser.add_argument('wandb_mode', nargs='?', const='dryrun', type=str,
+    parser.add_argument('wandb_mode', nargs='?', const='online', type=str,
                         help='Sync the data with the wandb server with "online" or run offline with "dryrun".')
     # Optional positional argument
     parser.add_argument('model_input_size', nargs='?', const=1781, type=int,

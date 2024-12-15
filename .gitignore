@@ -9,7 +9,7 @@ figures/
 outputs/
 Jupyter_scripts/Saliencies/
 results/
-
+.ipynb_checkpoints/
 
 # History files
 .Rhistory
