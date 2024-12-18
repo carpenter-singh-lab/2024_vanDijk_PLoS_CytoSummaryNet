@@ -1,6 +1,6 @@
 [project]
 name = "cytosummarynet"
-version = "0.0.2"
+version = "0.0.3"
 description = "Capturing cell heterogeneity in representations of cell populations for image-based profiling using contrastive learning"
 readme = "README.md"
 authors = [
