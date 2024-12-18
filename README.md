@@ -1,6 +1,6 @@
 # CytoSummaryNet
 
-This repository implements `CytoSummaryNet` the method described in "Capturing cell heterogeneity in representations of cell populations for image-based profiling using contrastive learning" (van Dijk et al., 2024, PLOS Computational Biology).
+This repository implements `CytoSummaryNet` the method described in "Capturing cell heterogeneity in representations of cell populations for image-based profiling using contrastive learning" ([van Dijk et al., 2024, PLOS Computational Biology](https://doi.org/10.1371/journal.pcbi.1012547)).
 
 `CytoSummaryNet` learns an optimal way to aggregate single-cell features into population-level profiles, outperforming traditional averaging on tasks like mechanism-of-action prediction.
 
