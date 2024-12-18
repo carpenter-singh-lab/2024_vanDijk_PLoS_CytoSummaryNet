@@ -48,7 +48,8 @@ def train_loop(
                 trainloader.dataset.nr_cells = CELLS
 
         tr_loss /= idx + 1
-        wandb.log({"Train Loss": tr_loss}, step=e)
+        if wandb:
+            wandb.log({"Train Loss": tr_loss}, step=e)
 
         # Validation
         model.eval()
@@ -63,9 +64,11 @@ def train_loop(
             print("Saving best validation model checkpoint...")
             torch.save(model.state_dict(), os.path.join(save_path, "model_bestval.pth"))
 
-        wandb.log(
-            {"Val loss": val_loss, "Val mAP": val_mAP, "best_val_mAP": best_val}, step=e
-        )
+        if wandb:
+            wandb.log(
+                {"Val loss": val_loss, "Val mAP": val_mAP, "best_val_mAP": best_val},
+                step=e,
+            )
 
         torch.save(
             {
