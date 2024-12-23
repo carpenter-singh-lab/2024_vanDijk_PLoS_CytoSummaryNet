@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-from sqlalchemy import create_engine
 from pycytominer import aggregate, normalize
 import sqlite3
 from pycytominer.cyto_utils import (
@@ -136,7 +135,7 @@ class SingleCells(object):
         # self.engine = create_engine(self.file_or_conn)
         # self.conn = self.engine.connect()
 
-        self.conn = sqlite3.connect(self.file_or_conn) #TODO edited by Robert van Dijk
+        self.conn = sqlite3.connect(self.file_or_conn)  # TODO edited by Robert van Dijk
 
         # Throw an error if both subsample_frac and subsample_n is set
         self._check_subsampling()
@@ -258,9 +257,10 @@ class SingleCells(object):
             self.image_df = self.image_df.query(
                 f"{self.fields_of_view_feature}==@self.fields_of_view"
             )
-        self.image_df['Metadata_Well'] = self.image_df['Image_FileName_CellOutlines'].str[:3]
-        self.image_df.drop(['Image_FileName_CellOutlines'], axis=1, inplace=True)
-
+        self.image_df["Metadata_Well"] = self.image_df[
+            "Image_FileName_CellOutlines"
+        ].str[:3]
+        self.image_df.drop(["Image_FileName_CellOutlines"], axis=1, inplace=True)
 
     def count_cells(self, compartment="cells", count_subset=False):
         """Determine how many cells are measured per well.
@@ -327,7 +327,6 @@ class SingleCells(object):
             self.set_subsample_random_state(random_state)
 
         if self.subsample_frac == 1:
-
             output_df = pd.DataFrame.sample(
                 df,
                 n=self.subsample_n,
@@ -404,7 +403,6 @@ class SingleCells(object):
         else:
             df = next(pd.read_sql(sql=compartment_query, con=self.conn, chunksize=1000))
 
-
         # Get columns that contain np.float64
         cols = df.select_dtypes(include=[np.float64]).columns
         # Change those columns to np.float32
@@ -412,30 +410,34 @@ class SingleCells(object):
 
         # Merge df with Metadata to potentially filter for only high dose points
         if only_load_high_dosepoints:
-            print('Removing low dose points...')
+            print("Removing low dose points...")
 
             # Add image metadata first for Metadata_well access
             df = self.image_df.merge(df, on=self.merge_cols, how="right")
 
             # Then load additional information which contains dose point info
-            metadata = pd.read_csv(self.metadata_path, sep='\t')
-            metadata = metadata.rename(columns={"well_position": "Metadata_Well",
-                                              "plate_map_name": "Metadata_plate_map_name",
-                                              "broad_sample": "Metadata_broad_sample",
-                                              "mmoles_per_liter": "Metadata_mmoles_per_liter"})
+            metadata = pd.read_csv(self.metadata_path, sep="\t")
+            metadata = metadata.rename(
+                columns={
+                    "well_position": "Metadata_Well",
+                    "plate_map_name": "Metadata_plate_map_name",
+                    "broad_sample": "Metadata_broad_sample",
+                    "mmoles_per_liter": "Metadata_mmoles_per_liter",
+                }
+            )
             # Select only specified columns
             _info_meta = [m for m in metadata.columns if m.startswith("Metadata_")]
 
             # Merge single cell dataframe with dose point info
-            df = df.merge(
-                right=metadata[_info_meta], how="left", on=["Metadata_Well"]
-            )
+            df = df.merge(right=metadata[_info_meta], how="left", on=["Metadata_Well"])
 
             # Remove low dose points
             shape1 = df.shape[0]
-            df = df[df['Metadata_mmoles_per_liter'] > 3]
-            print('Keeping these dosepoints:', df.Metadata_mmoles_per_liter.unique())
-            print(f'Removed {shape1-df.shape[0]} cells from wells with dose point lower than 3.')
+            df = df[df["Metadata_mmoles_per_liter"] > 3]
+            print("Keeping these dosepoints:", df.Metadata_mmoles_per_liter.unique())
+            print(
+                f"Removed {shape1-df.shape[0]} cells from wells with dose point lower than 3."
+            )
 
         # End edited code
 
@@ -517,7 +519,7 @@ class SingleCells(object):
                 .count()
                 .reset_index()
                 .rename(
-                    columns={f"{self.fields_of_view_feature}": f"Metadata_Site_Count"}
+                    columns={f"{self.fields_of_view_feature}": "Metadata_Site_Count"}
                 )
             )
 
@@ -591,8 +593,10 @@ class SingleCells(object):
                 ]
 
                 if isinstance(sc_df, str):
-                    initial_df = self.load_compartment(compartment=left_compartment,
-                                                       only_load_high_dosepoints=only_load_high_dosepoints)
+                    initial_df = self.load_compartment(
+                        compartment=left_compartment,
+                        only_load_high_dosepoints=only_load_high_dosepoints,
+                    )
 
                     if compute_subsample:
                         # Sample cells proportionally by self.strata
@@ -607,21 +611,25 @@ class SingleCells(object):
                         ).reindex(initial_df.columns, axis="columns")
 
                     sc_df = initial_df.merge(
-                        self.load_compartment(compartment=right_compartment,
-                                              only_load_high_dosepoints=only_load_high_dosepoints),
+                        self.load_compartment(
+                            compartment=right_compartment,
+                            only_load_high_dosepoints=only_load_high_dosepoints,
+                        ),
                         left_on=self.merge_cols + [left_link_col],
                         right_on=self.merge_cols + [right_link_col],
                         suffixes=merge_suffix,
                     )
                 else:
                     sc_df = sc_df.merge(
-                        self.load_compartment(compartment=right_compartment,
-                                              only_load_high_dosepoints=only_load_high_dosepoints),
+                        self.load_compartment(
+                            compartment=right_compartment,
+                            only_load_high_dosepoints=only_load_high_dosepoints,
+                        ),
                         left_on=self.merge_cols + [left_link_col],
                         right_on=self.merge_cols + [right_link_col],
                         suffixes=merge_suffix,
                     )
-                print('Current df size:', sc_df.shape)
+                print("Current df size:", sc_df.shape)
                 linking_check_cols.append(linking_check)
 
         # Add metadata prefix to merged suffixes
@@ -653,8 +661,9 @@ class SingleCells(object):
         #     .rename(self.linking_col_rename, axis="columns")
         #     .rename(self.full_merge_suffix_rename, axis="columns")
         # )
-        sc_df = sc_df.rename(self.linking_col_rename, axis="columns")\
-            .rename(self.full_merge_suffix_rename, axis="columns")
+        sc_df = sc_df.rename(self.linking_col_rename, axis="columns").rename(
+            self.full_merge_suffix_rename, axis="columns"
+        )
 
         # TODO: end code block
         if single_cell_normalize:
