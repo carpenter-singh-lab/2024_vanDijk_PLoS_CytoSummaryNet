@@ -6,7 +6,7 @@ repos:
   - id: check-added-large-files
     args: ['--maxkb=10240']
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.7.2
+  rev: v0.8.4
   hooks:
     - id: ruff
       types_or: [ python, pyi ]
