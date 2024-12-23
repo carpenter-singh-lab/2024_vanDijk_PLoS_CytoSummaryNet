@@ -52,22 +52,27 @@ hyperparameter_defaults = dict(
     output_dim=1024,
     cell_layers=1,
     proj_layers=2,
-    reduction='sum',
-    weight_decay='AdamW default',
-    dropout=0.0
+    reduction="sum",
+    weight_decay="AdamW default",
+    dropout=0.0,
 )
-wandb.init(project="FeatureAggregation", tags=['Sweep'], config=hyperparameter_defaults)
+wandb.init(project="FeatureAggregation", tags=["Sweep"], config=hyperparameter_defaults)
 wandb.define_metric("Val loss", summary="min")
 wandb.define_metric("Val mAP", summary="max")
 config = wandb.config
-config['nr_cells'] = (config['initial_cells'], config['cell_variance']),  # INTEGER or TUPLE (median, std) for gaussian // (1100, 300)
+config["nr_cells"] = (
+    (config["initial_cells"], config["cell_variance"]),
+)  # INTEGER or TUPLE (median, std) for gaussian // (1100, 300)
 
 # %% Load all data
-rootDir = r'/Users/rdijk/PycharmProjects/featureAggregation/datasets/Stain3'
-metadata = pd.read_csv('/inputs/cpg0001_metadata/JUMP-MOA_compound_platemap_with_metadata.csv', index_col=False)
+rootDir = r"/Users/rdijk/PycharmProjects/featureAggregation/datasets/Stain3"
+metadata = pd.read_csv(
+    "/inputs/cpg0001_metadata/JUMP-MOA_compound_platemap_with_metadata.csv",
+    index_col=False,
+)
 plateDirs = [x[0] for x in os.walk(rootDir)][1:]
 
-plates = ['BR00115134_FS', 'BR00115125_FS', 'BR00115133highexp_FS']
+plates = ["BR00115134_FS", "BR00115125_FS", "BR00115133highexp_FS"]
 
 plateDirs = [x for x in plateDirs if any(substr in x for substr in plates)]
 
@@ -75,35 +80,64 @@ TrainLoaders = []
 ValLoaders = []
 for i, pDir in enumerate(plateDirs):
     C_metadata = utils.addDataPathsToMetadata(rootDir, metadata, pDir)
-    df = utils.filterData(C_metadata, 'negcon', encode='pert_iname')
+    df = utils.filterData(C_metadata, "negcon", encode="pert_iname")
     TrainTotal, _ = utils.train_val_split(df, 0.8)
     ValTotal, _ = utils.train_val_split(df, 1.0)
 
-    gTDF = TrainTotal.groupby('Metadata_labels')
-    trainset = DataloaderTrainV7(TrainTotal, nr_cells=config['initial_cells'], nr_sets=config['nr_sets'], groupDF=gTDF)
-    TrainLoaders.append(data.DataLoader(trainset, batch_size=config['BS'], shuffle=True, collate_fn=utils.my_collate,
-                                        drop_last=False, pin_memory=False, num_workers=NUM_WORKERS))
+    gTDF = TrainTotal.groupby("Metadata_labels")
+    trainset = DataloaderTrainV7(
+        TrainTotal,
+        nr_cells=config["initial_cells"],
+        nr_sets=config["nr_sets"],
+        groupDF=gTDF,
+    )
+    TrainLoaders.append(
+        data.DataLoader(
+            trainset,
+            batch_size=config["BS"],
+            shuffle=True,
+            collate_fn=utils.my_collate,
+            drop_last=False,
+            pin_memory=False,
+            num_workers=NUM_WORKERS,
+        )
+    )
     valset = DataloaderEvalV5(ValTotal)
-    ValLoaders.append(data.DataLoader(valset, batch_size=1, shuffle=False,
-                                      drop_last=False, pin_memory=False, num_workers=NUM_WORKERS))
+    ValLoaders.append(
+        data.DataLoader(
+            valset,
+            batch_size=1,
+            shuffle=False,
+            drop_last=False,
+            pin_memory=False,
+            num_workers=NUM_WORKERS,
+        )
+    )
 
 
 # %% Setup models
-model = MLPsumV2(input_dim=config['input_dim'], latent_dim=config['latent_dim'], output_dim=config['output_dim'],
-                 k=config['kFilters'], dropout=config['dropout'], cell_layers=config['cell_layers'],
-                 proj_layers=config['proj_layers'], reduction=config['reduction'])
+model = MLPsumV2(
+    input_dim=config["input_dim"],
+    latent_dim=config["latent_dim"],
+    output_dim=config["output_dim"],
+    k=config["kFilters"],
+    dropout=config["dropout"],
+    cell_layers=config["cell_layers"],
+    proj_layers=config["proj_layers"],
+    reduction=config["reduction"],
+)
 if torch.cuda.is_available():
     model.cuda()
 # %% Setup optimizer
-optimizer = optim.AdamW(model.parameters(), lr=config['lr'])
+optimizer = optim.AdamW(model.parameters(), lr=config["lr"])
 loss_func = losses.SupConLoss(distance=distances.CosineSimilarity())
 
-wandb.watch(model, loss_func, log='all', log_freq=10)
+wandb.watch(model, loss_func, log="all", log_freq=10)
 
 # %% Start training
 best_val = 0
 
-for e in tqdm(range(config['epochs'])):
+for e in tqdm(range(config["epochs"])):
     model.train()
     tr_loss = 0.0
     for idx, data in enumerate(zip(TrainLoaders[0], TrainLoaders[1], TrainLoaders[2])):
@@ -127,14 +161,18 @@ for e in tqdm(range(config['epochs'])):
         optimizer.zero_grad()
 
         # RESET NR_CELLS
-        if isinstance(config['nr_cells'], tuple):
-            CELLS = int(np.random.normal(config['nr_cells'][0], config['nr_cells'][1], 1))
+        if isinstance(config["nr_cells"], tuple):
+            CELLS = int(
+                np.random.normal(config["nr_cells"][0], config["nr_cells"][1], 1)
+            )
             while CELLS < 100 or CELLS % 2 != 0:
-                CELLS = int(np.random.normal(config['nr_cells'][0], config['nr_cells'][1], 1))
+                CELLS = int(
+                    np.random.normal(config["nr_cells"][0], config["nr_cells"][1], 1)
+                )
             for z in range(len(TrainLoaders)):
                 TrainLoaders[z].dataset.nr_cells = CELLS
 
-    tr_loss /= (idx + 1)
+    tr_loss /= idx + 1
     wandb.log({"Train Loss": tr_loss}, step=e)  # send data to wandb.ai
 
     # Validation
@@ -146,7 +184,7 @@ for e in tqdm(range(config['epochs'])):
         for dataloader_idx in range(len(ValLoaders)):
             MLP_profiles = torch.tensor([], dtype=torch.float32)
             MLP_labels = torch.tensor([], dtype=torch.int16)
-            for (points, labels) in ValLoaders[dataloader_idx]:
+            for points, labels in ValLoaders[dataloader_idx]:
                 feats, _ = model(points)
                 # Append everything to dataframes
                 MLP_profiles = torch.cat([MLP_profiles, feats])
@@ -156,10 +194,21 @@ for e in tqdm(range(config['epochs'])):
 
             # Calculate mAP
             MLP_profiles = pd.concat(
-                [pd.DataFrame(MLP_profiles.detach().numpy()), pd.Series(MLP_labels.detach().numpy())], axis=1)
-            MLP_profiles.columns = [f"f{x}" for x in range(MLP_profiles.shape[1] - 1)] + ['Metadata_label']
-            AP = utils.CalculateMAP(MLP_profiles, 'cosine_similarity',
-                                    groupby='Metadata_label', percent_matching=False)
+                [
+                    pd.DataFrame(MLP_profiles.detach().numpy()),
+                    pd.Series(MLP_labels.detach().numpy()),
+                ],
+                axis=1,
+            )
+            MLP_profiles.columns = [
+                f"f{x}" for x in range(MLP_profiles.shape[1] - 1)
+            ] + ["Metadata_label"]
+            AP = utils.CalculateMAP(
+                MLP_profiles,
+                "cosine_similarity",
+                groupby="Metadata_label",
+                percent_matching=False,
+            )
 
             temp_mAPs.append(AP.AP.iloc[288:].mean())
 
@@ -170,6 +219,6 @@ for e in tqdm(range(config['epochs'])):
     if val_mAP > best_val:
         best_val = val_mAP
 
-    wandb.log({"Val loss": val_loss, "Val mAP": val_mAP, "best_val_mAP": best_val}, step=e)  # send data to wandb.ai
-
-
+    wandb.log(
+        {"Val loss": val_loss, "Val mAP": val_mAP, "best_val_mAP": best_val}, step=e
+    )  # send data to wandb.ai
