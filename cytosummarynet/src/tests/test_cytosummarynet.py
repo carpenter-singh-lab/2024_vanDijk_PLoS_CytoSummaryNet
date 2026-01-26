@@ -106,6 +106,6 @@ def test_integrated_pipeline(
 
         # Check if model parameters have changed after training
         for initial, trained in zip(initial_params, trained_model.parameters()):
-            assert not torch.equal(
-                initial, trained
-            ), "Model parameters did not update during training!"
+            assert not torch.equal(initial, trained), (
+                "Model parameters did not update during training!"
+            )

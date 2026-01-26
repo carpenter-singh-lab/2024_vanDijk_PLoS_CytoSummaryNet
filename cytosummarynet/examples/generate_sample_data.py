@@ -42,7 +42,7 @@ def generate_sample_data(
         data_dict = {"cell_features": cell_features}
 
         # Create file path
-        file_path = output_path / f"well{i+1}.pkl"
+        file_path = output_path / f"well{i + 1}.pkl"
         file_paths.append(str(file_path))
 
         # Assign label (alternating between 0 and 1)
